@@ -1,6 +1,7 @@
 package com.ydhnwb.paperlessapp.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.ManageActivity
 import com.ydhnwb.paperlessapp.models.Store
 import kotlinx.android.synthetic.main.list_item_store.view.*
 
@@ -38,6 +40,9 @@ class StoreAdapter(var stores : List<Store>, var context: Context) : RecyclerVie
         fun bind(store : Store, context : Context){
             itemView.store_name.text = store.name
             itemView.store_logo.load(store.store_logo)
+            itemView.setOnClickListener {
+                context.startActivity(Intent(context, ManageActivity::class.java))
+            }
         }
         fun bindMore(context: Context){
             itemView.setOnClickListener {
