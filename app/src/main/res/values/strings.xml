@@ -118,6 +118,11 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
-    <string name="title_activity_store">StoreActivity</string>
+    <string name="title_activity_store"> </string>
+    <string name="store_name">Nama toko</string>
+    <string name="store_desc">Deskripsi toko</string>
+    <string name="store_phone">Telepon</string>
+    <string name="store_address">Alamat toko</string>
+    <string name="store_create">Buat toko</string>
 
 </resources>

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.StoreActivity
 import com.ydhnwb.paperlessapp.adapters.StoreAdapter
 import com.ydhnwb.paperlessapp.contracts.fragments.DashboardFragmentContract
 import com.ydhnwb.paperlessapp.models.Store
@@ -25,7 +26,7 @@ class DashboardFragment(private var mainPresenter : MainActivityPresenter?) : Fr
         presenter.allMyStores()
         presenter.allOtherStore()
         view.add_store.setOnClickListener {
-            //addstore
+            startActivity(Intent(activity, StoreActivity::class.java))
         }
     }
 
