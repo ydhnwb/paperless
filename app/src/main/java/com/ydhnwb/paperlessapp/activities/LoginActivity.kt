@@ -9,8 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.ydhnwb.paperlessapp.R
-import com.ydhnwb.paperlessapp.contracts.activities.LoginActivityContract
-import com.ydhnwb.paperlessapp.presenters.activities.LoginActivityPresenter
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.UserState
 import com.ydhnwb.paperlessapp.viewmodels.UserViewModel
@@ -102,7 +100,7 @@ class LoginActivity : AppCompatActivity() {
         btn_login.setOnClickListener {
             val email = et_email.text.toString().trim()
             val passw = et_password.text.toString().trim()
-            if (userViewModel.validate(null, email, passw)){
+            if (userViewModel.validate(null, email, passw, null)){
                 userViewModel.login(email, passw)
             }
         }

@@ -15,7 +15,7 @@ class UserViewModel : ViewModel(){
     private var api = ApiClient.instance()
 
 
-    fun validate(name : String?, email: String, password: String) : Boolean{
+    fun validate(name : String?, email: String, password: String, confirmPassword : String?) : Boolean{
         state.value = UserState.Reset
         if(name != null){
             if(name.isEmpty()){
@@ -41,6 +41,18 @@ class UserViewModel : ViewModel(){
             state.value = UserState.Validate(password = "Password tidak valid")
             return false
         }
+        if(confirmPassword != null){
+            if (confirmPassword.isEmpty()){
+                state.value = UserState.ShowToast("Isi semua form terlebih dahulu")
+                return false
+            }
+
+            if(!confirmPassword.equals(password)){
+                state.value = UserState.Validate(confirmPassword = "Konfirmasi password tidak cocok")
+                return false
+            }
+        }
+
         return true
     }
 
@@ -72,13 +84,41 @@ class UserViewModel : ViewModel(){
         })
     }
 
+
+    fun register(name: String, email: String, password: String) {
+        state.value = UserState.IsLoading(true)
+        api.register(name, email, password).enqueue(object : Callback<WrappedResponse<User>>{
+            override fun onFailure(call: Call<WrappedResponse<User>>, t: Throwable) {
+                println(t.message)
+                state.value = UserState.Error(t.message)
+                state.value = UserState.IsLoading(false)
+            }
+
+            override fun onResponse(call: Call<WrappedResponse<User>>, response: Response<WrappedResponse<User>>) {
+                if(response.isSuccessful){
+                    val b = response.body()
+                    b?.let {
+                        if(it.status!!){
+                            state.value = UserState.Success(email)
+                        }else{
+                            state.value = UserState.Failed(it.message.toString())
+                        }
+                    }
+                }else{
+                    state.value = UserState.Failed("Tidak membuat akun. Mungkin email sudah pernah didaftarkan")
+                }
+                state.value = UserState.IsLoading(false)
+            }
+        })
+    }
+
     fun getUIState() = state
 }
 
 sealed class UserState{
     data class Error(var err : String?) : UserState()
     data class ShowToast(var message : String) : UserState()
-    data class Validate(var name : String? = null, var email : String? = null, var password : String? = null) : UserState()
+    data class Validate(var name : String? = null, var email : String? = null, var password : String? = null, var confirmPassword : String? = null) : UserState()
     data class IsLoading(var state :Boolean = false) : UserState()
     data class Success(var token :String) : UserState()
     data class Failed(var message :String) : UserState()

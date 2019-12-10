@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Store(
     @SerializedName("id") var id : Int?,
-    @SerializedName("user_id") var user_id : Int?,
+    @SerializedName("owner_id") var owner_id : Int?,
     @SerializedName("name") var name : String?,
     @SerializedName("description") var description : String?,
     @SerializedName("email") var email : String?,
