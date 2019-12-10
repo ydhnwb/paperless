@@ -30,12 +30,7 @@ class StoreActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK && requestCode == 100 && data != null){
             val path = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
-            print(path[0]+ " uhuy")
             store_logo.load(File(path[0]))
-            Toast.makeText(this@StoreActivity, path[0], Toast.LENGTH_LONG).show()
-        }else{
-            Toast.makeText(this@StoreActivity, " hehe", Toast.LENGTH_LONG).show()
-            print("else ")
         }
     }
 }
