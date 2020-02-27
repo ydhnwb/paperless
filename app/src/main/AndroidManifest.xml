@@ -24,10 +24,7 @@
             android:name=".activities.StoreActivity"
             android:label="@string/title_activity_store"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.CreateStoreActivity"
-            android:label="@string/title_activity_create_store"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.IntroActivity" />
         <activity android:name=".activities.LoginActivity" />

@@ -46,7 +46,7 @@ class IntroActivity : AppIntro2(){
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
         PaperlessUtil.setFirstTime(this@IntroActivity, false).also {
-            startActivity(Intent(this@IntroActivity, MainActivity::class.java))
+            startActivity(Intent(this@IntroActivity, LoginActivity::class.java))
             finish()
         }
     }

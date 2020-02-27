@@ -7,7 +7,7 @@ import android.view.ContextThemeWrapper
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.UserState
@@ -21,7 +21,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         supportActionBar?.hide()
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         userViewModel.getUIState().observe(this, Observer {
             handleState(it)
         })
@@ -55,10 +55,6 @@ class LoginActivity : AppCompatActivity() {
                 }else{
                     hideLoading()
                 }
-            }
-            is UserState.Error -> {
-                toast(it.err.toString())
-                hideLoading()
             }
             is UserState.Success -> {
                 hideLoading()

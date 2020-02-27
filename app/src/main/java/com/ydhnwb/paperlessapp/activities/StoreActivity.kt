@@ -21,7 +21,7 @@ class StoreActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         toolbar.setNavigationOnClickListener { finish() }
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener { _ ->
             Pix.start(this@StoreActivity, Options.init().setRequestCode(100));
         }
     }
@@ -30,7 +30,9 @@ class StoreActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK && requestCode == 100 && data != null){
             val path = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
-            store_logo.load(File(path[0]))
+            path?.let {
+                store_logo.load(File(path[0]))
+            }
         }
     }
 }

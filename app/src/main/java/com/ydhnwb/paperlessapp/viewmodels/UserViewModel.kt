@@ -56,13 +56,12 @@ class UserViewModel : ViewModel(){
         return true
     }
 
-
     fun login(email: String, password: String) {
         state.value = UserState.IsLoading(true)
         api.login(email, password).enqueue(object : Callback<WrappedResponse<User>> {
             override fun onFailure(call: Call<WrappedResponse<User>>, t: Throwable) {
                 println(t.message)
-                state.value = UserState.Error(t.message)
+                state.value = UserState.ShowToast(t.message.toString())
                 state.value = UserState.IsLoading(false)
             }
 
@@ -84,13 +83,12 @@ class UserViewModel : ViewModel(){
         })
     }
 
-
     fun register(name: String, email: String, password: String) {
         state.value = UserState.IsLoading(true)
         api.register(name, email, password).enqueue(object : Callback<WrappedResponse<User>>{
             override fun onFailure(call: Call<WrappedResponse<User>>, t: Throwable) {
                 println(t.message)
-                state.value = UserState.Error(t.message)
+                state.value = UserState.ShowToast(t.message.toString())
                 state.value = UserState.IsLoading(false)
             }
 
@@ -116,7 +114,6 @@ class UserViewModel : ViewModel(){
 }
 
 sealed class UserState{
-    data class Error(var err : String?) : UserState()
     data class ShowToast(var message : String) : UserState()
     data class Validate(var name : String? = null, var email : String? = null, var password : String? = null, var confirmPassword : String? = null) : UserState()
     data class IsLoading(var state :Boolean = false) : UserState()

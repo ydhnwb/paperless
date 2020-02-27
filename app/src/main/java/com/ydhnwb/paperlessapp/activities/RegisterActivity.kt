@@ -2,10 +2,11 @@ package com.ydhnwb.paperlessapp.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.viewmodels.UserState
 import com.ydhnwb.paperlessapp.viewmodels.UserViewModel
@@ -18,7 +19,7 @@ class RegisterActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         supportActionBar?.hide()
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         userViewModel.getUIState().observe(this, Observer {
             handleState(it)
         })
@@ -63,10 +64,6 @@ class RegisterActivity : AppCompatActivity(){
             is UserState.IsLoading -> {
                 isLoading(it.state)
             }
-            is UserState.Error -> {
-                toast(it.err.toString())
-                isLoading(false)
-            }
             is UserState.Success -> {
                 isLoading(false)
                 success(it.token)
@@ -77,7 +74,7 @@ class RegisterActivity : AppCompatActivity(){
     private fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 
     private fun success(email : String) {
-        AlertDialog.Builder(this).apply {
+        AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialogTheme)).apply {
             setMessage("Kami telah mengirim email ke $email. Pastikan anda telah memverifikasi email sebelum login")
             setPositiveButton("Mengerti"){ d, _ ->
                 d.cancel()

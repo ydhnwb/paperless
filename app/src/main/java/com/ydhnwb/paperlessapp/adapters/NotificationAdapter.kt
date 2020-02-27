@@ -12,10 +12,16 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Notification
 import kotlinx.android.synthetic.main.list_item_notification.view.*
 
-class NotificationAdapter(private var context: Context, private var notifications : List<Notification>) : RecyclerView.Adapter<NotificationAdapter.ViewHolder>(){
+class NotificationAdapter(private var notifications : MutableList<Notification>, private var context: Context) : RecyclerView.Adapter<NotificationAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_notification, parent, false))
 
     override fun getItemCount() = notifications.size
+
+    fun updateList(nfs : List<Notification>){
+        notifications.clear()
+        notifications.addAll(nfs)
+        notifyDataSetChanged()
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(context, notifications[position])
 

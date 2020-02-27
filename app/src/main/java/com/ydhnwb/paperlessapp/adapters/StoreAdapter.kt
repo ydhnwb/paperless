@@ -13,7 +13,8 @@ import com.ydhnwb.paperlessapp.activities.ManageActivity
 import com.ydhnwb.paperlessapp.models.Store
 import kotlinx.android.synthetic.main.list_item_store.view.*
 
-class StoreAdapter(var stores : List<Store>, var context: Context) : RecyclerView.Adapter<StoreAdapter.ViewHolder>(){
+class StoreAdapter(private var stores : MutableList<Store>, private var context: Context) : RecyclerView.Adapter<StoreAdapter.ViewHolder>(){
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : ViewHolder {
         return if(viewType == 1){
             ViewHolder(LayoutInflater.from(context).inflate(R.layout.list_item_store_more, parent, false))
@@ -22,11 +23,15 @@ class StoreAdapter(var stores : List<Store>, var context: Context) : RecyclerVie
         }
 
     }
+    fun updateList(sts : List<Store>){
+        stores.clear()
+        stores.addAll(sts)
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount() = stores.size
 
-    override fun getItemViewType(position: Int): Int {
-        return if(stores.size-1 == position){ 1 }else {0}
-    }
+    override fun getItemViewType(position: Int): Int { return if(stores.size-1 == position){ 1 }else {0} }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (getItemViewType(position) != 1){

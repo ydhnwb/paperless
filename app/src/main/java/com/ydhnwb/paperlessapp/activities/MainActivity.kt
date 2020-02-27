@@ -9,17 +9,14 @@ import com.ydhnwb.paperlessapp.fragments.DashboardFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
 import android.widget.Toast
-import com.ydhnwb.paperlessapp.contracts.activities.MainActivityContract
 import com.ydhnwb.paperlessapp.fragments.NotificationFragment
 import com.ydhnwb.paperlessapp.fragments.ProfileFragment
-import com.ydhnwb.paperlessapp.presenters.activities.MainActivityPresenter
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 
 
-class MainActivity : AppCompatActivity(), MainActivityContract.View {
+class MainActivity : AppCompatActivity() {
     companion object{ var navStatus = -1 }
     private var fragment : Fragment? = null
-    private val presenter = MainActivityPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +30,12 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
                 runOnUiThread { startActivity(Intent(this@MainActivity, IntroActivity::class.java).also {
                     finish()
                 })}
+            }else{
+                if(PaperlessUtil.getToken(this).equals("UNDEFINED")){
+                    runOnUiThread { startActivity(Intent(this, LoginActivity::class.java)).also {
+                        finish()
+                    } }
+                }
             }
         }).start()
     }
@@ -41,19 +44,19 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         when(item.itemId){
             R.id.navigation_dashboard -> {
                 if(navStatus != 0){
-                    fragment = DashboardFragment(presenter)
+                    fragment = DashboardFragment()
                     navStatus = 0
                 }
             }
             R.id.navigation_explore -> {
                 if(navStatus != 1){
-                    fragment = DashboardFragment(presenter)
+                    fragment = DashboardFragment()
                     navStatus = 1
                 }
             }
             R.id.navigation_notifications -> {
                 if(navStatus != 2){
-                    fragment = NotificationFragment(presenter)
+                    fragment = NotificationFragment()
                     navStatus = 2
                 }
             }
@@ -65,12 +68,12 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             }
             else -> {
                 navStatus = 0
-                fragment = DashboardFragment(presenter)
+                fragment = DashboardFragment()
             }
         }
         if(fragment == null){
             navStatus = 0
-            fragment = DashboardFragment(presenter)
+            fragment = DashboardFragment()
         }
 
         val fragmentManager = supportFragmentManager
@@ -80,13 +83,5 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         true
     }
 
-    override fun showIntro() {}
-
-    override fun showLogin() {}
-
-    override fun showSheet() {}
-
-    override fun closeSheet() {}
-
-    override fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    private fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
