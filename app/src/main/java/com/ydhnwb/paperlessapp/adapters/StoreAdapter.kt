@@ -56,7 +56,8 @@ class StoreAdapter(private var stores : MutableList<Store>, private var context:
         fun bind(store : Store, context : Context){
             itemView.store_name.text = store.name.toString()
             println("${ApiClient.END_POINT}/${store.store_logo}")
-            itemView.store_logo.load("${ApiClient.END_POINT}images/${store.store_logo}")
+//            itemView.store_logo.load("${ApiClient.END_POINT}images/${store.store_logo}")
+            itemView.store_logo.load("https://cdn.vox-cdn.com/thumbor/SVEQv9ZyogzkPLs4PwTCh1NBCHg=/0x0:2048x1365/1200x800/filters:focal(861x520:1187x846)/cdn.vox-cdn.com/uploads/chorus_image/image/59488337/20786021_1964885550462647_3189575152413374824_o.0.jpg")
             itemView.setOnClickListener {
                 context.startActivity(Intent(context, ManageActivity::class.java))
             }

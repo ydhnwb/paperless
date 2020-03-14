@@ -130,13 +130,13 @@ class StoreViewModel : ViewModel(){
     fun fetchOtherStore(){
         state.value = StoreState.IsLoading(true, true)
         val list= mutableListOf<Store>()
-        for(i in 0..6){
-            list.add(Store().apply {
-                id = i
-                name = "Toko lain $i"
-                store_logo = "https://cdn.vox-cdn.com/thumbor/SVEQv9ZyogzkPLs4PwTCh1NBCHg=/0x0:2048x1365/1200x800/filters:focal(861x520:1187x846)/cdn.vox-cdn.com/uploads/chorus_image/image/59488337/20786021_1964885550462647_3189575152413374824_o.0.jpg"
-            })
-        }
+//        for(i in 0..6){
+//            list.add(Store().apply {
+//                id = i
+//                name = "Toko lain $i"
+//                store_logo = "https://cdn.vox-cdn.com/thumbor/SVEQv9ZyogzkPLs4PwTCh1NBCHg=/0x0:2048x1365/1200x800/filters:focal(861x520:1187x846)/cdn.vox-cdn.com/uploads/chorus_image/image/59488337/20786021_1964885550462647_3189575152413374824_o.0.jpg"
+//            })
+//        }
         otherStore.postValue(list)
         state.value = StoreState.IsLoading(false, true)
     }

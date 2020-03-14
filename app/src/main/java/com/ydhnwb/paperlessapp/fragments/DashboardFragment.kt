@@ -24,8 +24,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         storeViewModel = ViewModelProvider(this).get(StoreViewModel::class.java)
-        storeViewModel.fetchOtherStore()
-        storeViewModel.fetchStore(PaperlessUtil.getToken(activity!!))
         storeViewModel.listenToMyStore().observe(viewLifecycleOwner, Observer {
             attachToMyStores(it)
         })
@@ -86,13 +84,16 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        storeViewModel.fetchOtherStore()
+        storeViewModel.fetchStore(PaperlessUtil.getToken(activity!!))
+
+    }
+
     private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
-
     private fun isMyStoreLoading(state: Boolean) { if(state){ view!!.loading_mystore.visibility = View.VISIBLE }else { view!!.loading_mystore.visibility = View.GONE } }
-
     private fun isOtherStoreLoading(state: Boolean) { if(state){ view!!.loading_other_store.visibility = View.VISIBLE }else { view!!.loading_other_store.visibility = View.GONE } }
-
     private fun showEmptyMyStore(state: Boolean) { if(state){ view!!.empty_store.visibility = View.VISIBLE }else { view!!.empty_store.visibility = View.GONE } }
-
     private fun showEmptyOtherStore(state: Boolean) { if(state){ view!!.empty_other_store.visibility = View.VISIBLE }else{ view!!.empty_other_store.visibility = View.GONE } }
 }
