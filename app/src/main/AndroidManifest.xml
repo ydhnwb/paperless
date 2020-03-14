@@ -17,14 +17,18 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.CreateStoreActivity"
+            android:label="@string/title_activity_create_store"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activities.ResetPasswordActivity"
+            android:label="@string/title_activity_reset_password"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activities.ManageActivity"
             android:label="@string/title_activity_manage"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".activities.StoreActivity"
-            android:label="@string/title_activity_store"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.IntroActivity" />
         <activity android:name=".activities.LoginActivity" />

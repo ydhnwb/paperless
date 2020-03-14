@@ -36,10 +36,6 @@ class RegisterActivity : AppCompatActivity(){
 
     private fun handleState(it : UserState){
         when(it){
-            is UserState.Failed -> {
-                isLoading(false)
-                toast(it.message)
-            }
             is UserState.Validate -> {
                 it.name?.let {
                     errorName(it)

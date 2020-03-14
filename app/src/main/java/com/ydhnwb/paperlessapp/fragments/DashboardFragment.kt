@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
-import com.ydhnwb.paperlessapp.activities.StoreActivity
+import com.ydhnwb.paperlessapp.activities.CreateStoreActivity
 import com.ydhnwb.paperlessapp.adapters.StoreAdapter
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.viewmodels.StoreState
@@ -35,7 +35,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
             handleUIState(it)
         })
         view.add_store.setOnClickListener {
-            startActivity(Intent(activity, StoreActivity::class.java))
+            startActivity(Intent(activity, CreateStoreActivity::class.java))
         }
     }
 

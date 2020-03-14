@@ -14,7 +14,6 @@ class UserViewModel : ViewModel(){
     private var state : SingleLiveEvent<UserState> = SingleLiveEvent()
     private var api = ApiClient.instance()
 
-
     fun validate(name : String?, email: String, password: String, confirmPassword : String?) : Boolean{
         state.value = UserState.Reset
         if(name != null){
@@ -27,12 +26,10 @@ class UserViewModel : ViewModel(){
                 return false
             }
         }
-
         if(email.isEmpty() || password.isEmpty()) {
             state.value = UserState.ShowToast("Isi semua form terlebih dahulu")
             return false
         }
-
         if (!PaperlessUtil.isValidEmail(email)){
             state.value = UserState.Validate(email = "Email tidak valid")
             return false
@@ -46,7 +43,6 @@ class UserViewModel : ViewModel(){
                 state.value = UserState.ShowToast("Isi semua form terlebih dahulu")
                 return false
             }
-
             if(!confirmPassword.equals(password)){
                 state.value = UserState.Validate(confirmPassword = "Konfirmasi password tidak cocok")
                 return false
@@ -72,7 +68,7 @@ class UserViewModel : ViewModel(){
                         if(it.status!!){
                             state.value = UserState.Success("Bearer ${it.data!!.api_token}")
                         }else{
-                            state.value = UserState.Failed(it.message.toString())
+                            state.value = UserState.ShowToast(it.message.toString())
                         }
                     }
                 }else{
@@ -99,11 +95,11 @@ class UserViewModel : ViewModel(){
                         if(it.status!!){
                             state.value = UserState.Success(email)
                         }else{
-                            state.value = UserState.Failed(it.message.toString())
+                            state.value = UserState.ShowToast(it.message.toString())
                         }
                     }
                 }else{
-                    state.value = UserState.Failed("Tidak membuat akun. Mungkin email sudah pernah didaftarkan")
+                    state.value = UserState.Popup("Tidak membuat akun. Mungkin email sudah pernah didaftarkan")
                 }
                 state.value = UserState.IsLoading(false)
             }
@@ -118,7 +114,6 @@ sealed class UserState{
     data class Validate(var name : String? = null, var email : String? = null, var password : String? = null, var confirmPassword : String? = null) : UserState()
     data class IsLoading(var state :Boolean = false) : UserState()
     data class Success(var token :String) : UserState()
-    data class Failed(var message :String) : UserState()
     data class Popup(var message : String) : UserState()
     object Reset : UserState()
 }

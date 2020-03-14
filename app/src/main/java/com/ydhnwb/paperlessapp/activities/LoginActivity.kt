@@ -27,14 +27,11 @@ class LoginActivity : AppCompatActivity() {
         })
         login()
         btn_register.setOnClickListener { startActivity(Intent(this@LoginActivity, RegisterActivity::class.java)) }
+        btn_forgot_password.setOnClickListener { startActivity(Intent(this, ResetPasswordActivity::class.java)) }
     }
 
     private fun handleState(it : UserState){
         when(it){
-            is UserState.Failed -> {
-                hideLoading()
-                toast(it.message)
-            }
             is UserState.Validate -> {
                 it.email?.let {
                     emailError(it)

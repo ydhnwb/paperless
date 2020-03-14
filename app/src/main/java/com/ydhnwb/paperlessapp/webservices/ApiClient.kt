@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit
 
 class ApiClient {
     companion object {
-        const val END_POINT = "https://paperless-app.herokuapp.com/"
-        private const val ENDPOINT = "https://paperless-app.herokuapp.com/api/"
+        const val END_POINT = "https://paperless-project.herokuapp.com/"
+        private const val ENDPOINT = "https://paperless-project.herokuapp.com/api/"
         private var retrofit : Retrofit? = null
         private val client = OkHttpClient.Builder().apply {
             writeTimeout(60, TimeUnit.SECONDS)

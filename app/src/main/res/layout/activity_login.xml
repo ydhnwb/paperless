@@ -71,7 +71,6 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
-
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
         android:text="@string/btn_login"
