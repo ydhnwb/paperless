@@ -12,6 +12,7 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.CreateStoreActivity
 import com.ydhnwb.paperlessapp.adapters.StoreAdapter
 import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.StoreState
 import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
@@ -24,7 +25,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
         setupUI()
         storeViewModel = ViewModelProvider(this).get(StoreViewModel::class.java)
         storeViewModel.fetchOtherStore()
-        storeViewModel.fetchStore()
+        storeViewModel.fetchStore(PaperlessUtil.getToken(activity!!))
         storeViewModel.listenToMyStore().observe(viewLifecycleOwner, Observer {
             attachToMyStores(it)
         })

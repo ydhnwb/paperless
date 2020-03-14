@@ -23,7 +23,7 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlackSteel"
-                    android:text="Toko anda"
+                    android:text="@string/info_your_store"
                     android:layout_alignParentStart="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>

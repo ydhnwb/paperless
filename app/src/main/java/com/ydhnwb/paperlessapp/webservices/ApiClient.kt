@@ -2,6 +2,7 @@ package com.ydhnwb.paperlessapp.webservices
 
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
+import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -51,5 +52,7 @@ interface ApiService {
     @POST("v1/own/store")
     fun store_create(@Header("Authorization") token : String, @Part("name") name : RequestBody, @Part("description") description : RequestBody,
                      @Part("email") email : RequestBody, @Part("phone") phone : RequestBody, @Part("address") address : RequestBody,
-                     @Part("rating") rating : RequestBody, @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
+                     @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
+    @GET("v1/own/store")
+    fun store_get(@Header("Authorization") token : String) : Call<WrappedListResponse<Store>>
 }

@@ -26,7 +26,7 @@
     <string name="pref_payment">Pembayaran</string>
     <string name="pref_privacy">Privasi</string>
     <string name="pref_store">Toko</string>
-    <string name="title_activity_create_store"></string>
+    <string name="title_activity_create_store">Buat toko</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -149,5 +149,14 @@
     <string name="title_reset">Reset password</string>
     <string name="reset_desc">Masukkan email anda yang terdaftar dalam aplikasi ini</string>
     <string name="btn_send_verif">Kirim verifikasi</string>
+    <string name="btn_add_image">Tambahkan foto</string>
+    <string name="hint_store_name">Masukkan nama toko</string>
+    <string name="hint_store_description">Deskripsi toko</string>
+    <string name="hint_store_phone">Nomor telepon toko</string>
+    <string name="hint_store_address">Alamat toko</string>
+    <string name="btn_create_store">Buat toko</string>
+    <string name="info_store_created">Toko berhasil dibuat</string>
+    <string name="hint_store_image">Store image</string>
+    <string name="info_your_store">Milik anda</string>
 
 </resources>

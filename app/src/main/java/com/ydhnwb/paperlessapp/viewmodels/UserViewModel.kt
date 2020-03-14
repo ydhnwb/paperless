@@ -65,7 +65,7 @@ class UserViewModel : ViewModel(){
                 if(response.isSuccessful){
                     val b = response.body()
                     b?.let{
-                        if(it.status!!){
+                        if(it.status){
                             state.value = UserState.Success("Bearer ${it.data!!.api_token}")
                         }else{
                             state.value = UserState.ShowToast(it.message.toString())
@@ -92,7 +92,7 @@ class UserViewModel : ViewModel(){
                 if(response.isSuccessful){
                     val b = response.body()
                     b?.let {
-                        if(it.status!!){
+                        if(it.status){
                             state.value = UserState.Success(email)
                         }else{
                             state.value = UserState.ShowToast(it.message.toString())

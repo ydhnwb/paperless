@@ -11,6 +11,7 @@ import coil.api.load
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.ManageActivity
 import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.webservices.ApiClient
 import kotlinx.android.synthetic.main.list_item_store.view.*
 
 class StoreAdapter(private var stores : MutableList<Store>, private var context: Context) : RecyclerView.Adapter<StoreAdapter.ViewHolder>(){
@@ -31,7 +32,17 @@ class StoreAdapter(private var stores : MutableList<Store>, private var context:
 
     override fun getItemCount() = stores.size
 
-    override fun getItemViewType(position: Int): Int { return if(stores.size-1 == position){ 1 }else {0} }
+    override fun getItemViewType(i: Int): Int {
+        return if(itemCount > 5){
+            if(itemCount == i+1){
+                1
+            }else{
+                0
+            }
+        }else {
+            0
+        }
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (getItemViewType(position) != 1){
@@ -43,8 +54,9 @@ class StoreAdapter(private var stores : MutableList<Store>, private var context:
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         fun bind(store : Store, context : Context){
-            itemView.store_name.text = store.name
-            itemView.store_logo.load(store.store_logo)
+            itemView.store_name.text = store.name.toString()
+            println("${ApiClient.END_POINT}/${store.store_logo}")
+            itemView.store_logo.load("${ApiClient.END_POINT}images/${store.store_logo}")
             itemView.setOnClickListener {
                 context.startActivity(Intent(context, ManageActivity::class.java))
             }
