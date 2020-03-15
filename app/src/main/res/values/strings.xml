@@ -162,5 +162,7 @@
     <string name="menu_etalase">Etalase</string>
     <string name="menu_product">Produk</string>
     <string name="menu_employee">Karyawan</string>
+    <string name="lorem">Lorem ipsum dolor sit amet</string>
+    <string name="lorem_long">Lorem ipsum dolor sit amet consectuer. Lorem ipsum dolor sit amet.</string>
 
 </resources>
