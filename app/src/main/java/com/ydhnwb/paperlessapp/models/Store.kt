@@ -1,7 +1,10 @@
 package com.ydhnwb.paperlessapp.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Store(
     @SerializedName("id") var id : Int?,
     @SerializedName("owner_id") var owner_id : Int?,
@@ -13,7 +16,7 @@ data class Store(
     @SerializedName("rating") var rating : Float?,
     @SerializedName("store_logo") var store_logo : String?
 
-) {
+) : Parcelable{
     constructor() : this(null, null, null, null, null, null,null,
         null, null)
 }

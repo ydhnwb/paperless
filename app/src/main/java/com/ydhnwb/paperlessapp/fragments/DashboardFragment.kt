@@ -88,7 +88,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
         super.onResume()
         storeViewModel.fetchOtherStore()
         storeViewModel.fetchStore(PaperlessUtil.getToken(activity!!))
-
     }
 
     private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()

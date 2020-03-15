@@ -8,5 +8,6 @@ import kotlinx.android.parcel.Parcelize
 data class Product(
     @SerializedName("id") var id : Int? = null,
     @SerializedName("owner") var ownerId : Int? = null,
-    @SerializedName("name") var name : String? = null
+    @SerializedName("name") var name : String? = null,
+    @SerializedName("image") var image : String? = null
 ) : Parcelable

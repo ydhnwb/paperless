@@ -158,5 +158,9 @@
     <string name="info_store_created">Toko berhasil dibuat</string>
     <string name="hint_store_image">Store image</string>
     <string name="info_your_store">Milik anda</string>
+    <string name="info_image">Image</string>
+    <string name="menu_etalase">Etalase</string>
+    <string name="menu_product">Produk</string>
+    <string name="menu_employee">Karyawan</string>
 
 </resources>
