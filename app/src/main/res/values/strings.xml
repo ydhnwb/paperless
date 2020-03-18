@@ -164,5 +164,6 @@
     <string name="menu_employee">Karyawan</string>
     <string name="lorem">Lorem ipsum dolor sit amet</string>
     <string name="lorem_long">Lorem ipsum dolor sit amet consectuer. Lorem ipsum dolor sit amet.</string>
+    <string name="info_see_detail">Lihat detail</string>
 
 </resources>

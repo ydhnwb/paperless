@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:background="?attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:weightSum="1"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_centerInParent="true"
+                    android:layout_width="64dp"
+                    android:scaleType="centerCrop"
+                    android:id="@+id/employee_image"
+                    android:src="@drawable/ic_doodle_monocular"
+                    android:layout_height="64dp"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:layout_weight="0.7"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/employee_name"
+                    android:maxLines="1"
+                    android:textColor="@color/colorBlackSteel"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="@string/lorem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/employee_role"
+                    android:layout_marginTop="4dp"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:text="@string/lorem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/employee_more"
+                android:layout_weight="0.1"
+                android:background="@null"
+                android:src="@drawable/ic_more_vert_black_24dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:background="@color/colorGrey"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+    </LinearLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

@@ -65,4 +65,5 @@ dependencies {
     implementation 'com.fxn769:pix:1.4.4'
 
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
