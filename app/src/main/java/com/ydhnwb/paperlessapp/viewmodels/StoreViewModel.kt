@@ -205,6 +205,35 @@ class StoreViewModel : ViewModel(){
         state.value = StoreState.IsLoading(false, true)
     }
 
+    fun storeDelete(token: String, storeId: String){
+        try{
+            api.store_delete(token, storeId).enqueue(object: Callback<WrappedResponse<Store>>{
+                override fun onFailure(call: Call<WrappedResponse<Store>>, t: Throwable) {
+                    println("onFailure storeDelete -> ${t.message.toString()}")
+                    state.value = StoreState.IsLoading()
+                    state.value = StoreState.ShowToast(t.message.toString())
+                }
+
+                override fun onResponse(call: Call<WrappedResponse<Store>>, response: Response<WrappedResponse<Store>>) {
+                    if(response.isSuccessful){
+                        val b = response.body() as WrappedResponse
+                        if(b.status){
+                            state.value = StoreState.ShowToast("Berhasil dihapus")
+                            state.value = StoreState.Success()
+                        }else{
+                            state.value = StoreState.ShowToast("Tidak dapat menghapus")
+                        }
+                    }else{
+                        state.value = StoreState.ShowToast("Terjadi kesalahan saat menghapus")
+                    }
+                }
+            })
+        }catch (e:Exception){
+            println(e.message)
+            state.value = StoreState.ShowToast(e.message.toString())
+            state.value = StoreState.IsLoading(false)
+        }
+    }
 
     fun listenToMyStore() = myStores
     fun listenToOtherStore() = otherStore
@@ -213,6 +242,7 @@ class StoreViewModel : ViewModel(){
 
 
 sealed class StoreState{
+    object Deleted : StoreState()
     data class Success(var params : String? = null) : StoreState()
     data class ShowToast(var message : String) : StoreState()
     data class IsLoading(var isLoading : Boolean = false, var isOther : Boolean = false) : StoreState()

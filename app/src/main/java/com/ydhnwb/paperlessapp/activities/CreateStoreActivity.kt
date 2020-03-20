@@ -129,7 +129,7 @@ class CreateStoreActivity : AppCompatActivity() {
         }
     }
 
-    private fun getPassedStore() : Store? = intent.getParcelableExtra("store")
+    private fun getPassedStore() : Store? = intent.getParcelableExtra("STORE")
     private fun fillForm(){
         getPassedStore()?.let {
             println(it.store_logo)

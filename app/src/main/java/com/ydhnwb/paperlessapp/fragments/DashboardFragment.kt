@@ -22,24 +22,19 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupUI()
         storeViewModel = ViewModelProvider(this).get(StoreViewModel::class.java)
-        storeViewModel.listenToMyStore().observe(viewLifecycleOwner, Observer {
-            attachToMyStores(it)
-        })
-        storeViewModel.listenToOtherStore().observe(viewLifecycleOwner, Observer {
-            attachToOtherStores(it)
-        })
-        storeViewModel.listenUIState().observe(viewLifecycleOwner, Observer {
-            handleUIState(it)
-        })
-        view.add_store.setOnClickListener {
-            startActivity(Intent(activity, CreateStoreActivity::class.java))
-        }
+        setupUI()
+        storeViewModel.listenToMyStore().observe(viewLifecycleOwner, Observer { attachToMyStores(it) })
+        storeViewModel.listenToOtherStore().observe(viewLifecycleOwner, Observer { attachToOtherStores(it) })
+        storeViewModel.listenUIState().observe(viewLifecycleOwner, Observer { handleUIState(it) })
+        view.add_store.setOnClickListener { startActivity(Intent(activity, CreateStoreActivity::class.java)) }
     }
 
     private fun handleUIState(it : StoreState){
         when(it){
+            is StoreState.Deleted -> {
+                storeViewModel.fetchStore(PaperlessUtil.getToken(activity!!))
+            }
             is StoreState.ShowToast -> toast(it.message)
             is StoreState.IsLoading -> {
                 if(it.isOther){
@@ -74,13 +69,13 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
             layoutManager = LinearLayoutManager(activity).apply {
                 orientation = LinearLayoutManager.HORIZONTAL
             }
-            adapter = StoreAdapter(mutableListOf(), activity!!)
+            adapter = StoreAdapter(mutableListOf(), activity!!, storeViewModel)
         }
         view!!.rv_other_stores.apply {
             layoutManager = LinearLayoutManager(activity).apply {
                 orientation = LinearLayoutManager.HORIZONTAL
             }
-            adapter = StoreAdapter(mutableListOf(), activity!!)
+            adapter = StoreAdapter(mutableListOf(), activity!!, storeViewModel)
         }
     }
 

@@ -63,4 +63,7 @@ interface ApiService {
     @Multipart
     @POST("v1/own/store/{id}")
     fun store_update(@Header("Authorization") token : String, @Path("id") id: String,@PartMap kwargs : HashMap<String, RequestBody>, @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
+
+    @DELETE("v1/own/store/{id}")
+    fun store_delete(@Header("Authorization") token : String, @Path("id") id: String) : Call<WrappedResponse<Store>>
 }

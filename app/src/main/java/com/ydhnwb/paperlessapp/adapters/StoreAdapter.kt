@@ -13,14 +13,15 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.CreateStoreActivity
 import com.ydhnwb.paperlessapp.activities.ManageActivity
 import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import com.ydhnwb.paperlessapp.webservices.ApiClient
 import kotlinx.android.synthetic.main.list_item_store.view.*
 
-class StoreAdapter(private var stores : MutableList<Store>, private var context: Context) : RecyclerView.Adapter<StoreAdapter.ViewHolder>(){
+class StoreAdapter(private var stores : MutableList<Store>, private var context: Context, private var storeViewModel: StoreViewModel) : RecyclerView.Adapter<StoreAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : ViewHolder {
-        return if(viewType == 1){
-            ViewHolder(LayoutInflater.from(context).inflate(R.layout.list_item_store_more, parent, false))
+        return if(viewType == 1){ ViewHolder(LayoutInflater.from(context).inflate(R.layout.list_item_store_more, parent, false))
         }else{
             ViewHolder(LayoutInflater.from(context).inflate(R.layout.list_item_store, parent, false))
         }
@@ -48,14 +49,14 @@ class StoreAdapter(private var stores : MutableList<Store>, private var context:
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (getItemViewType(position) != 1){
-            holder.bind(stores[position], context)
+            holder.bind(stores[position], context, storeViewModel)
         }else{
             holder.bindMore(context)
         }
     }
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        fun bind(store : Store, context : Context){
+        fun bind(store : Store, context : Context, svm : StoreViewModel){
             itemView.store_name.text = store.name.toString()
             println("${ApiClient.END_POINT}/${store.store_logo}")
             itemView.store_logo.load(store.store_logo)
@@ -71,13 +72,20 @@ class StoreAdapter(private var stores : MutableList<Store>, private var context:
                     setOnMenuItemClickListener { menuItems ->
                         when(menuItems.itemId){
                             R.id.menu_detail -> {
-                                context.startActivity(Intent(context, ManageActivity::class.java))
+                                context.startActivity(Intent(context, ManageActivity::class.java).apply {
+                                    putExtra("STORE", store)
+                                })
                                 true
                             }
                             R.id.menu_edit -> {
                                 context.startActivity(Intent(context, CreateStoreActivity::class.java).apply {
-                                    putExtra("store", store)
+                                    putExtra("STORE", store)
                                 })
+                                true
+                            }
+                            R.id.menu_delete -> {
+                                val token = PaperlessUtil.getToken(context)
+                                svm.storeDelete(token, store.id.toString())
                                 true
                             }
                             else -> true
