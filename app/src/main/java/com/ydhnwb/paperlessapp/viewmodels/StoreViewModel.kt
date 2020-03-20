@@ -219,7 +219,7 @@ class StoreViewModel : ViewModel(){
                         val b = response.body() as WrappedResponse
                         if(b.status){
                             state.value = StoreState.ShowToast("Berhasil dihapus")
-                            state.value = StoreState.Success()
+                            state.value = StoreState.Deleted
                         }else{
                             state.value = StoreState.ShowToast("Tidak dapat menghapus")
                         }
