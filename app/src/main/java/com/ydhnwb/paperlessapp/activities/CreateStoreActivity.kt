@@ -36,19 +36,34 @@ class CreateStoreActivity : AppCompatActivity() {
         })
         choosePhoto()
         saveChanges()
+        fillForm()
     }
 
     private fun saveChanges(){
         btn_create_store.setOnClickListener {
             store.apply {
                 name = et_store_name.text.toString().trim()
-                description = et_store_name.text.toString().trim()
+                description = et_store_desc.text.toString().trim()
                 phone = et_store_phone.text.toString().trim()
                 email = et_store_email.text.toString().trim()
                 address = et_store_address.text.toString().trim()
             }
-            if(storeViewModel.validate(store)){
-                storeViewModel.storeCreate(PaperlessUtil.getToken(this@CreateStoreActivity), store)
+            var isUpdate = false
+            if(getPassedStore() != null){
+                isUpdate = true
+//                println("New store logo is same? ${store.store_logo == getPassedStore()!!.store_logo}")
+                if (store.store_logo.equals(getPassedStore()!!.store_logo)){
+                    store.store_logo = null
+                    println("store logo is null")
+                }else{
+                }
+            }
+            if(storeViewModel.validate(store, isUpdate)){
+                if(getPassedStore() != null){
+                    storeViewModel.storeUpdate(PaperlessUtil.getToken(this@CreateStoreActivity), store)
+                }else{
+                    storeViewModel.storeCreate(PaperlessUtil.getToken(this@CreateStoreActivity), store)
+                }
             }
         }
     }
@@ -61,10 +76,12 @@ class CreateStoreActivity : AppCompatActivity() {
             is StoreState.IsLoading -> {
                 if(it.isLoading){
                     btn_create_store.isEnabled = false
+                    btn_add_image.isEnabled = false
                     loading.visibility = View.VISIBLE
                 }else{
                     loading.visibility = View.GONE
                     btn_create_store.isEnabled = true
+                    btn_add_image.isEnabled = true
                 }
             }
             is StoreState.Reset -> {
@@ -102,9 +119,36 @@ class CreateStoreActivity : AppCompatActivity() {
             val selectedImageUri = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
             selectedImageUri?.let{
                 store.store_logo = it[0]
-                println(store.store_logo)
                 store_image.load(File(it[0]))
+                if(getPassedStore() != null){
+                    println("New store logo is same? ${store.store_logo == getPassedStore()!!.store_logo}")
+                    println(getPassedStore()!!.store_logo)
+                    println(store.store_logo)
+                }
             }
         }
     }
+
+    private fun getPassedStore() : Store? = intent.getParcelableExtra("store")
+    private fun fillForm(){
+        getPassedStore()?.let {
+            println(it.store_logo)
+            et_store_name.setText(it.name)
+            et_store_desc.setText(it.description)
+            et_store_phone.setText(it.phone)
+            et_store_email.setText(it.email)
+            et_store_address.setText(it.address)
+            store_image.load(it.store_logo)
+            store.apply {
+                id = it.id
+                name = it.name
+                description = it.description
+                phone = it.phone
+                email = it.email
+                address = it.address
+                store_logo = it.store_logo
+            }
+        }
+    }
+
 }

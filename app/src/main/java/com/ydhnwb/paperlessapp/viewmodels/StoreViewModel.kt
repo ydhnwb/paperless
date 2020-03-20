@@ -23,13 +23,21 @@ class StoreViewModel : ViewModel(){
     private var myStores = MutableLiveData<List<Store>>()
     private var otherStore = MutableLiveData<List<Store>>()
 
-    fun validate(store : Store) : Boolean {
+    fun validate(store : Store, isUpdate : Boolean) : Boolean {
         state.value = StoreState.Reset
+
         if(store.store_logo.isNullOrEmpty()) {
-            state.value = StoreState.ShowToast("Belum ada gambar toko yang dipilih. Anda wajib memberikan satu gambar untuk toko")
-            state.value = StoreState.Validate(store_logo = "Belum ada gambar toko yang dipilih. Anda wajib memberikan satu gambar untuk toko")
-            return false
-        }else if(store.name.isNullOrEmpty()){
+            if(!isUpdate){
+                state.value = StoreState.ShowToast("Belum ada gambar toko yang dipilih. Anda wajib memberikan satu gambar untuk toko")
+                state.value = StoreState.Validate(store_logo = "Belum ada gambar toko yang dipilih. Anda wajib memberikan satu gambar untuk toko")
+                return false
+            }else{
+                println("Is update...")
+            }
+
+        }
+
+        if(store.name.isNullOrEmpty()){
             state.value = StoreState.ShowToast("Nama toko tidak boleh kosong")
             state.value = StoreState.Validate(store_name = "Nama toko tidak boleh kosong")
             return false
@@ -52,6 +60,69 @@ class StoreViewModel : ViewModel(){
         }
         return true
     }
+
+    fun storeUpdate(token: String, store: Store){
+        try{
+            state.value = StoreState.Reset
+            state.value = StoreState.IsLoading(true)
+            val map = HashMap<String, RequestBody>().apply {
+                put("name", RequestBody.create(MultipartBody.FORM, store.name.toString()))
+                put("description", RequestBody.create(MultipartBody.FORM, store.description.toString()))
+                put("address", RequestBody.create(MultipartBody.FORM, store.address.toString()))
+                put("phone", RequestBody.create(MultipartBody.FORM, store.phone.toString()))
+                put("email", RequestBody.create(MultipartBody.FORM, store.email.toString()))
+            }
+            if(store.store_logo != null){
+                val file = File(store.store_logo.toString())
+                val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
+                val photo = MultipartBody.Part.createFormData("store_logo", file.name, requestBodyForFile)
+                api.store_update(token,store.id.toString(), map, photo).enqueue(object : Callback<WrappedResponse<Store>>{
+                    override fun onFailure(call: Call<WrappedResponse<Store>>, t: Throwable) {
+                        println("store_update onFailure -> ${t.message}")
+                        state.value = StoreState.ShowToast(t.message.toString())
+                        state.value = StoreState.IsLoading(false)
+                    }
+
+                    override fun onResponse(call: Call<WrappedResponse<Store>>, response: Response<WrappedResponse<Store>>) {
+                        if(response.isSuccessful){
+                            val body = response.body()
+                            body?.let {
+                                if(it.status){ state.value = StoreState.Success() }else{ state.value = StoreState.ShowToast("Tidak dapat membuat toko. Coba lagi nanti") }
+                            }
+                        }else{
+                            state.value = StoreState.ShowToast("Tidak dapat membuat toko.")
+                        }
+                        state.value = StoreState.IsLoading(false)
+                    }
+                })
+            }else{
+                api.store_update(token, store.id.toString(), map).enqueue(object : Callback<WrappedResponse<Store>>{
+                    override fun onFailure(call: Call<WrappedResponse<Store>>, t: Throwable) {
+                        println("store_update onFailure -> ${t.message}")
+                        state.value = StoreState.ShowToast(t.message.toString())
+                        state.value = StoreState.IsLoading(false)
+                    }
+
+                    override fun onResponse(call: Call<WrappedResponse<Store>>, response: Response<WrappedResponse<Store>>) {
+                        if(response.isSuccessful){
+                            val body = response.body()
+                            body?.let {
+                                if(it.status){ state.value = StoreState.Success() }else{ state.value = StoreState.ShowToast("Tidak dapat membuat toko. Coba lagi nanti") }
+                            }
+                        }else{
+                            state.value = StoreState.ShowToast("Tidak dapat membuat toko.")
+                        }
+                        state.value = StoreState.IsLoading(false)
+                    }
+                })
+            }
+        }catch (e: Exception){
+            println(e.message)
+            state.value = StoreState.ShowToast(e.message.toString())
+            state.value = StoreState.IsLoading(false)
+        }
+    }
+
 
 
     fun storeCreate(token : String, store: Store){
@@ -130,13 +201,6 @@ class StoreViewModel : ViewModel(){
     fun fetchOtherStore(){
         state.value = StoreState.IsLoading(true, true)
         val list= mutableListOf<Store>()
-//        for(i in 0..6){
-//            list.add(Store().apply {
-//                id = i
-//                name = "Toko lain $i"
-//                store_logo = "https://cdn.vox-cdn.com/thumbor/SVEQv9ZyogzkPLs4PwTCh1NBCHg=/0x0:2048x1365/1200x800/filters:focal(861x520:1187x846)/cdn.vox-cdn.com/uploads/chorus_image/image/59488337/20786021_1964885550462647_3189575152413374824_o.0.jpg"
-//            })
-//        }
         otherStore.postValue(list)
         state.value = StoreState.IsLoading(false, true)
     }

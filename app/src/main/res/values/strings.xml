@@ -149,7 +149,7 @@
     <string name="title_reset">Reset password</string>
     <string name="reset_desc">Masukkan email anda yang terdaftar dalam aplikasi ini</string>
     <string name="btn_send_verif">Kirim verifikasi</string>
-    <string name="btn_add_image">Tambahkan foto</string>
+    <string name="btn_add_image">Pilih foto</string>
     <string name="hint_store_name">Masukkan nama toko</string>
     <string name="hint_store_description">Deskripsi toko</string>
     <string name="hint_store_phone">Nomor telepon toko</string>
@@ -165,5 +165,6 @@
     <string name="lorem">Lorem ipsum dolor sit amet</string>
     <string name="lorem_long">Lorem ipsum dolor sit amet consectuer. Lorem ipsum dolor sit amet.</string>
     <string name="info_see_detail">Lihat detail</string>
+    <string name="info_edit">Edit</string>
 
 </resources>

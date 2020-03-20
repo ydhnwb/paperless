@@ -5,10 +5,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.CreateStoreActivity
 import com.ydhnwb.paperlessapp.activities.ManageActivity
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.webservices.ApiClient
@@ -56,12 +58,32 @@ class StoreAdapter(private var stores : MutableList<Store>, private var context:
         fun bind(store : Store, context : Context){
             itemView.store_name.text = store.name.toString()
             println("${ApiClient.END_POINT}/${store.store_logo}")
-//            itemView.store_logo.load("${ApiClient.END_POINT}images/${store.store_logo}")
-            itemView.store_logo.load("https://cdn.vox-cdn.com/thumbor/SVEQv9ZyogzkPLs4PwTCh1NBCHg=/0x0:2048x1365/1200x800/filters:focal(861x520:1187x846)/cdn.vox-cdn.com/uploads/chorus_image/image/59488337/20786021_1964885550462647_3189575152413374824_o.0.jpg")
+            itemView.store_logo.load(store.store_logo)
             itemView.setOnClickListener {
                 context.startActivity(Intent(context, ManageActivity::class.java).apply {
                     putExtra("STORE", store)
                 })
+            }
+
+            itemView.store_more.setOnClickListener {
+                PopupMenu(context, it).apply {
+                    menuInflater.inflate(R.menu.menu_common_store, menu)
+                    setOnMenuItemClickListener { menuItems ->
+                        when(menuItems.itemId){
+                            R.id.menu_detail -> {
+                                context.startActivity(Intent(context, ManageActivity::class.java))
+                                true
+                            }
+                            R.id.menu_edit -> {
+                                context.startActivity(Intent(context, CreateStoreActivity::class.java).apply {
+                                    putExtra("store", store)
+                                })
+                                true
+                            }
+                            else -> true
+                        }
+                    }
+                }.show()
             }
         }
         fun bindMore(context: Context){

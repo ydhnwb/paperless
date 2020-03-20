@@ -55,4 +55,12 @@ interface ApiService {
                      @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
     @GET("v1/own/store")
     fun store_get(@Header("Authorization") token : String) : Call<WrappedListResponse<Store>>
+
+    @Multipart
+    @POST("v1/own/store/{id}")
+    fun store_update(@Header("Authorization") token : String, @Path("id") id: String,@PartMap kwargs : HashMap<String, RequestBody>) : Call<WrappedResponse<Store>>
+
+    @Multipart
+    @POST("v1/own/store/{id}")
+    fun store_update(@Header("Authorization") token : String, @Path("id") id: String,@PartMap kwargs : HashMap<String, RequestBody>, @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
 }

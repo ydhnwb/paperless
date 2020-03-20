@@ -22,9 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         nav_view.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-        if(savedInstanceState == null){
-            nav_view.selectedItemId = R.id.navigation_dashboard
-        }
+        if(savedInstanceState == null){ nav_view.selectedItemId = R.id.navigation_dashboard }
         Thread(Runnable {
             if (PaperlessUtil.isFirstTime(this@MainActivity)) {
                 runOnUiThread { startActivity(Intent(this@MainActivity, IntroActivity::class.java).also {
@@ -75,7 +73,6 @@ class MainActivity : AppCompatActivity() {
             navStatus = 0
             fragment = DashboardFragment()
         }
-
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.screen_container, fragment!!)
