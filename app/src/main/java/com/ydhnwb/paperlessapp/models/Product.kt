@@ -13,6 +13,6 @@ data class Product(
     @SerializedName("weight") var weight : Float? = null,
     @SerializedName("status") var status : Boolean? = null,
     @SerializedName("available_online") var availableOnline : Boolean? = null,
-    @SerializedName("quantity") var qty : Int? = null
-
+    @SerializedName("quantity") var qty : Int? = null,
+    @SerializedName("category") var categoryId : Int? = null
 ) : Parcelable

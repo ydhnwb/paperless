@@ -8,27 +8,26 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.adapters.EtalaseAdapter
+import com.ydhnwb.paperlessapp.adapters.SelectedProductAdapter
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.ProductState
 import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
+import kotlinx.android.synthetic.main.bottomsheet_detail.view.*
 import kotlinx.android.synthetic.main.fragment_etalase.view.*
+import kotlinx.android.synthetic.main.fragment_etalase.view.btn_details
 
 class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
     private lateinit var productViewModel: ProductViewModel
+    private lateinit var bottomSheet: BottomSheetBehavior<*>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.rv_etalase.apply {
-            layoutManager = if(this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
-                GridLayoutManager(activity, 2)
-            }else{
-                GridLayoutManager(activity, 4)
-            }
-            adapter = EtalaseAdapter(mutableListOf(), activity!!)
-        }
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        setupUIComponent()
         productViewModel.listenProducts().observe(viewLifecycleOwner, Observer {
             view.rv_etalase.adapter?.let { adapter ->
                 if(adapter is EtalaseAdapter){
@@ -48,8 +47,41 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
                 }
             }
         })
-//        productViewModel.fetchProducts(PaperlessUtil.getToken(activity))
+
+        productViewModel.listenSelectedProducts().observe(viewLifecycleOwner, Observer {
+            view.rv_detail_order.adapter?.let {a->
+                if(a is SelectedProductAdapter){
+                    a.updateList(it)
+                }
+            }
+        })
+        productViewModel.fetchProducts(PaperlessUtil.getToken(activity!!))
     }
 
     private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    private fun setupUIComponent(){
+        view!!.rv_etalase.apply {
+            layoutManager = if(this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+                GridLayoutManager(activity, 2)
+            }else{
+                GridLayoutManager(activity, 4)
+            }
+            adapter = EtalaseAdapter(mutableListOf(), activity!!, productViewModel)
+        }
+        view!!.rv_detail_order.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = SelectedProductAdapter(mutableListOf(), activity!!, productViewModel)
+        }
+        bottomSheet = BottomSheetBehavior.from(view!!.bottomsheet_detail_order)
+        bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+        view!!.btn_details.setOnClickListener {
+            println(bottomSheet.state)
+            if(bottomSheet.state == BottomSheetBehavior.STATE_COLLAPSED || bottomSheet.state == BottomSheetBehavior.STATE_HIDDEN){
+                bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+            }else{
+                bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
+
+    }
 }

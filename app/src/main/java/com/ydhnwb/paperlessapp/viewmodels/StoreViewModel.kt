@@ -55,7 +55,7 @@ class StoreViewModel : ViewModel(){
             return false
         }else if(store.address.isNullOrEmpty()){
             state.value = StoreState.ShowToast("Alamat toko tidak boleh kosong")
-            state.value = StoreState.Validate(store_name = "Alamat toko tidak boleh kosong")
+            state.value = StoreState.Validate(store_address = "Alamat toko tidak boleh kosong")
             return false
         }
         return true
