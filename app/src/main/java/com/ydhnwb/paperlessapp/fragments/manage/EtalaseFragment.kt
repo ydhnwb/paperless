@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.adapters.EtalaseAdapter
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.ProductState
 import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_etalase.view.*
@@ -28,7 +29,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
             adapter = EtalaseAdapter(mutableListOf(), activity!!)
         }
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-        productViewModel.listenToMyProducts().observe(viewLifecycleOwner, Observer {
+        productViewModel.listenProducts().observe(viewLifecycleOwner, Observer {
             view.rv_etalase.adapter?.let { adapter ->
                 if(adapter is EtalaseAdapter){
                     adapter.updateList(it)
@@ -47,7 +48,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
                 }
             }
         })
-        productViewModel.fetchMyProducts()
+//        productViewModel.fetchProducts(PaperlessUtil.getToken(activity))
     }
 
     private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()

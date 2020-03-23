@@ -167,5 +167,12 @@
     <string name="info_see_detail">Lihat detail</string>
     <string name="info_edit">Edit</string>
     <string name="title_delete">Hapus</string>
+    <string name="title_activity_product">ProductActivity</string>
+    <string name="hint_product_name">Masukkan nama produk</string>
+    <string name="hint_product_price">Harga produk</string>
+    <string name="hint_product_quantity">Qty</string>
+    <string name="hint_product_online_available">Produk ini juga dijual online</string>
+    <string name="hint_product_weight">Berat produk (kg)</string>
+    <string name="btn_save_product">Simpan produk</string>
 
 </resources>

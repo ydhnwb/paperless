@@ -4,24 +4,35 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.webservices.ApiClient
+import java.lang.Exception
 
 class ProductViewModel : ViewModel(){
     private var state : SingleLiveEvent<ProductState> = SingleLiveEvent()
-    private var myProducts = MutableLiveData<List<Product>>()
+    private var products = MutableLiveData<List<Product>>()
+    private var api = ApiClient.instance()
 
-    fun fetchMyProducts(){
-        state.value = ProductState.IsLoading(true)
-        myProducts.postValue(mutableListOf(
-            Product(1, 1, "Latte", "https://www.caffesociety.co.uk/assets/recipe-images/latte-small.jpg"),
-            Product(2, 1, "Americano", "https://miro.medium.com/max/400/1*Kz7w2a8MgzuHu1hiJZ8SzQ.jpeg"),
-            Product(3, 1, "Mocca", "https://www.bbcgoodfood.com/sites/default/files/styles/recipe/public/recipe/recipe-image/2018/03/mocha-001.jpg"),
-            Product(4, 1, "Delhi Ice Coffee", "https://www.chewoutloud.com/wp-content/uploads/2018/02/thai-iced-coffee-1.jpg")
-        ))
-        state.value = ProductState.IsLoading(false)
+    fun fetchProducts(token: String){
+        try {
+            state.value = ProductState.IsLoading(false)
+            val dummyProducts = mutableListOf<Product>().apply {
+                add(Product(1,"Latte","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, null))
+                add(Product(2,"Americano","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, null))
+                add(Product(3,"Coffee Toraja","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, null))
+                add(Product(4,"Mocca","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, null))
+                add(Product(5,"Cappuchino","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, null))
+            }
+            products.postValue(dummyProducts)
+            state.value = ProductState.IsLoading(false)
+        }catch (e: Exception){
+            println(e.message)
+            state.value = ProductState.IsLoading(false)
+            state.value = ProductState.ShowToast(e.message.toString())
+        }
     }
 
-    fun listenToMyProducts() = myProducts
     fun listenToUIState() = state
+    fun listenProducts() = products
 }
 
 

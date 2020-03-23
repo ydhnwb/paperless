@@ -1,5 +1,7 @@
 package com.ydhnwb.paperlessapp.webservices
 
+import com.ydhnwb.paperlessapp.models.Category
+import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
@@ -66,4 +68,10 @@ interface ApiService {
 
     @DELETE("v1/own/store/{id}")
     fun store_delete(@Header("Authorization") token : String, @Path("id") id: String) : Call<WrappedResponse<Store>>
+
+    @GET("v1/own/store/{id}/product")
+    fun product_get(@Header("Authorization") token: String, @Path("id") id : String) : Call<WrappedListResponse<Product>>
+
+    @GET("v1/category")
+    fun category_get() : Call<WrappedListResponse<Category>>
 }
