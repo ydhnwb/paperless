@@ -14,5 +14,6 @@ data class Product(
     @SerializedName("status") var status : Boolean? = null,
     @SerializedName("available_online") var availableOnline : Boolean? = null,
     @SerializedName("quantity") var qty : Int? = null,
-    @SerializedName("category") var categoryId : Int? = null
+    @SerializedName("category") var categoryId : Int? = null,
+    var selectedQuantity : Int? = null
 ) : Parcelable

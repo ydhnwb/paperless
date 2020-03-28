@@ -13,8 +13,6 @@ class ProductViewModel : ViewModel(){
     private var api = ApiClient.instance()
     private var selectedProducts = MutableLiveData<List<Product>>()
 
-
-
     fun fetchProducts(token: String){
         try {
             state.value = ProductState.IsLoading(false)
@@ -55,13 +53,48 @@ class ProductViewModel : ViewModel(){
         return true
     }
 
-    fun addProduct(product: Product){
+    fun addSelectedProduct(product: Product){
         val tempSelectedProducts = if(selectedProducts.value == null){
             mutableListOf()
         } else {
             selectedProducts.value as MutableList<Product>
         }
-        tempSelectedProducts.add(product)
+        val sameProduct = tempSelectedProducts.find { p -> p.id == product.id }
+        sameProduct?.let {p ->
+            p.selectedQuantity = p.selectedQuantity?.plus(1)
+        } ?: kotlin.run {
+            tempSelectedProducts.add(product)
+        }
+        selectedProducts.postValue(tempSelectedProducts)
+    }
+
+    fun decrementQuantity(product: Product){
+        val tempSelectedProducts = if(selectedProducts.value == null){
+            mutableListOf()
+        } else {
+            selectedProducts.value as MutableList<Product>
+        }
+        val p = tempSelectedProducts.find { it.id == product.id }
+        p?.let {
+            if(it.selectedQuantity?.minus(1) == 0){
+                tempSelectedProducts.remove(it)
+            }else{
+                it.selectedQuantity = it.selectedQuantity!!.minus(1)
+            }
+        }
+        selectedProducts.postValue(tempSelectedProducts)
+    }
+
+    fun incrementQuantity(product: Product){
+        val tempSelectedProducts = if(selectedProducts.value == null){
+            mutableListOf()
+        } else {
+            selectedProducts.value as MutableList<Product>
+        }
+        val p = tempSelectedProducts.find { it.id == product.id }
+        p?.let {
+            it.selectedQuantity = it.selectedQuantity!!.plus(1)
+        }
         selectedProducts.postValue(tempSelectedProducts)
     }
 

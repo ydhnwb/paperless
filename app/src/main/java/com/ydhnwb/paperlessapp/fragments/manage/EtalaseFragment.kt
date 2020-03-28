@@ -39,11 +39,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
             when(it){
                 is ProductState.ShowToast -> toast(it.message)
                 is ProductState.IsLoading -> {
-                    if(it.state){
-                        view.loading.visibility = View.VISIBLE
-                    }else{
-                        view.loading.visibility = View.GONE
-                    }
+                    if(it.state){ view.loading.visibility = View.VISIBLE }else{ view.loading.visibility = View.GONE }
                 }
             }
         })
@@ -53,6 +49,16 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
                 if(a is SelectedProductAdapter){
                     a.updateList(it)
                 }
+                val totalQuantity = it.sumBy { product ->
+                    product.selectedQuantity!!
+                }
+                toast(totalQuantity.toString())
+                val totalPrice = if(it.isEmpty()){ 0 }else{ it.sumBy { product ->
+                        product.price!! * product.selectedQuantity!!
+                    }
+                }
+                view.tv_item_indicator.text = "Tagih ($totalQuantity items)"
+                view.tv_total_price.text = PaperlessUtil.setToIDR(totalPrice)
             }
         })
         productViewModel.fetchProducts(PaperlessUtil.getToken(activity!!))
@@ -82,6 +88,5 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
                 bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
             }
         }
-
     }
 }

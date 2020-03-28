@@ -3,6 +3,8 @@ package com.ydhnwb.paperlessapp.utilities
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import com.ydhnwb.paperlessapp.webservices.ApiClient
+import java.text.NumberFormat
+import java.util.*
 
 class Constants {
     companion object {
@@ -43,6 +45,12 @@ class PaperlessUtil {
                 putBoolean("FIRST_TIME", value)
                 apply()
             }
+        }
+
+        fun setToIDR(num : Int) : String {
+            val localeID = Locale("in", "ID")
+            val formatRupiah: NumberFormat = NumberFormat.getCurrencyInstance(localeID)
+            return formatRupiah.format(num)
         }
 
         fun toImageUrl(url : String) = "${ApiClient.END_POINT}/url"

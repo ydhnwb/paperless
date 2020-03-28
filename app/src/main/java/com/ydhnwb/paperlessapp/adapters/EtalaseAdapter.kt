@@ -33,7 +33,8 @@ class EtalaseAdapter (private var products : MutableList<Product>, private var c
             itemView.product_image.load(product.image)
             itemView.setOnClickListener {
                 val p = product.copy()
-                productViewModel.addProduct(p)
+                p.selectedQuantity = 1
+                productViewModel.addSelectedProduct(p)
             }
         }
     }
