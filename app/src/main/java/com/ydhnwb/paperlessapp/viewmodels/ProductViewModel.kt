@@ -32,21 +32,21 @@ class ProductViewModel : ViewModel(){
         }
     }
 
-    fun validate(product: Product) : Boolean {
+    fun validate(name : String, price: String, quantity : String, weight: String, categoryId : Int?) : Boolean {
         state.value = ProductState.Reset
-        if(product.name.isNullOrEmpty()){
+        if(name.isEmpty()){
             state.value = ProductState.Validate(name = "Nama produk tidak boleh kosong")
             return false
-        }else if(product.price == null || product.price == 0){
+        }else if(price.isEmpty()){
             state.value = ProductState.Validate(price = "Harga produk tidak boleh kosong atau nol")
             return false
-        }else if(product.categoryId == null){
+        }else if(categoryId == null){
             state.value = ProductState.Validate(categoryId = "Kategori wajib dipilih terlebih dahulu")
             return false
-        }else if(product.qty != null){
+        }else if(quantity.isEmpty()){
             state.value = ProductState.Validate(qty = "Isikan quantity terlebih dahulu")
             return false
-        }else if(product.weight != null || product.weight != 0.0F){
+        }else if(weight.isEmpty()){
             state.value = ProductState.Validate(weight = "Berat tak boleh kosong")
             return false
         }
@@ -109,6 +109,9 @@ class ProductViewModel : ViewModel(){
             tempSelectedProducts.remove(it)
         }
         selectedProducts.postValue(tempSelectedProducts)
+    }
+
+    fun createProduct(token: String, storeId : String, product: Product){
 
     }
 

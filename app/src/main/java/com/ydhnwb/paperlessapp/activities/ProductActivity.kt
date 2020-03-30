@@ -1,6 +1,10 @@
 package com.ydhnwb.paperlessapp.activities
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
@@ -9,19 +13,26 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import coil.api.load
+import com.fxn.pix.Pix
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Category
+import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.viewmodels.CategoryState
 import com.ydhnwb.paperlessapp.viewmodels.CategoryViewModel
 import com.ydhnwb.paperlessapp.viewmodels.ProductState
 import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
 import kotlinx.android.synthetic.main.activity_product.*
 import kotlinx.android.synthetic.main.content_product.*
+import java.io.File
 
 
 class ProductActivity : AppCompatActivity() {
+    private val IMAGE_REQUEST_CODE = 123
     private lateinit var productViewModel: ProductViewModel
     private lateinit var categoryViewModel: CategoryViewModel
+    private var product = Product()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
@@ -35,6 +46,8 @@ class ProductActivity : AppCompatActivity() {
         categoryViewModel.listenCategories().observe(this, Observer { attachToSpinner(it) })
         categoryViewModel.listenToUIState().observe(this, Observer { handleCategoryState(it) })
         productViewModel.listenToUIState().observe(this, Observer { handleUIState(it) })
+        chooseImage()
+        saveChanges()
     }
 
     private fun handleCategoryState(it: CategoryState){
@@ -62,6 +75,17 @@ class ProductActivity : AppCompatActivity() {
                 if(it.state){ loading.visibility = View.VISIBLE
                 }else{ loading.visibility = View.GONE }
             }
+            is ProductState.Validate -> {
+                it.name?.let { e -> setErrorName(e) }
+                it.price?.let { e -> setErrorPrice(e) }
+                it.qty?.let { e-> setErrorQuantity(e) }
+            }
+            is ProductState.Reset -> {
+                setErrorName(null)
+                setErrorPrice(null)
+                setErrorQuantity(null)
+                setErrorWeight(null)
+            }
             is ProductState.ShowToast -> toast(it.message)
         }
     }
@@ -74,9 +98,49 @@ class ProductActivity : AppCompatActivity() {
 
     private fun setErrorName(err: String?) { in_product_name.error = err }
     private fun setErrorPrice(err: String?) { in_product_price.error = err }
-    private fun setErrorQuantity(err: String?) = { in_product_quantity.error = err }
-    private fun setErrorWeight(err: String?) = { in_product_weight.error = err }
+    private fun setErrorQuantity(err: String?) { in_product_quantity.error = err }
+    private fun setErrorWeight(err: String?) { in_product_weight.error = err }
+    private fun getPassedProduct() = intent.getParcelableExtra<Product>("PRODUCT")
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null){
+            val selectedImageUri = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
+            selectedImageUri?.let{
+                product.image = it[0]
+                product_image.load(File(it[0]))
+            }
+        }
+    }
 
+    private fun chooseImage(){
+        product_image.setOnClickListener {
+            Pix.start(this, IMAGE_REQUEST_CODE)
+        }
+    }
+
+    private fun saveChanges(){
+        btn_submit.setOnClickListener {
+            val name = et_product_name.text.toString().trim()
+            val price = et_prodouct_price.text .toString().trim()
+            val quantity = et_product_quantity.text.toString()
+            val weight = et_product_weight.text.toString()
+            val category : Category? = sp_product_category.selectedItem as Category
+            category?.let {
+                if(productViewModel.validate(name, price, quantity, weight, category.id)){
+                    toast("Add product")
+                }
+            }
+        }
+    }
+
+    private fun popup(message: String) {
+        androidx.appcompat.app.AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialogTheme)).apply {
+            setMessage(message)
+            setPositiveButton("Mengerti"){ dialogInterface, _ ->
+                dialogInterface.cancel()
+            }.create().show()
+        }
+    }
 
 }
