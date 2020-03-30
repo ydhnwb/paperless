@@ -18,13 +18,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.CheckoutActivity"
+            android:label="@string/title_activity_checkout"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".activities.ProductActivity"
             android:label="@string/title_activity_product"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.CreateStoreActivity"
             android:label="@string/title_activity_create_store"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"

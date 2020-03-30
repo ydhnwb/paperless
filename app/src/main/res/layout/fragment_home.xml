@@ -30,7 +30,7 @@
             android:padding="16dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="600dp">
 
             <TextView
                 android:layout_marginBottom="16dp"

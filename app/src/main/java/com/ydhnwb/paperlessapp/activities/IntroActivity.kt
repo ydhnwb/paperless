@@ -18,21 +18,21 @@ class IntroActivity : AppIntro2(){
         val sliderPage = SliderPage().apply {
             description = "Rencanakan keuangan anda dengan menganalisa setiap data secara realtime"
             descColor = Color.parseColor("#ffffff")
-            imageDrawable = R.drawable.ic_doodle_opensource
+            imageDrawable = R.drawable.ic_doodle_ecommerce
             bgColor = Color.parseColor("#1E80CE")
         }
 
         val sliderPage2 = SliderPage().apply {
             description = "Tidak perlu selalu standby di toko, anda tetap bisa melihat laporan meski tengah berlibur"
             descColor = Color.parseColor("#ffffff")
-            imageDrawable = R.drawable.ic_doodle_better
+            imageDrawable = R.drawable.ic_doodle_payment_processed_alt
             bgColor = Color.parseColor("#1E80CE")
         }
 
         val sliderPage3 = SliderPage().apply {
             description = "Tak perlu takut dicurangi karyawan anda dengan manajemen hak akses toko"
             descColor = Color.parseColor("#ffffff")
-            imageDrawable = R.drawable.ic_doodle_privacy
+            imageDrawable = R.drawable.ic_doodle_social_alt
             bgColor = Color.parseColor("#1E80CE")
         }
         addSlide(AppIntroFragment.newInstance(sliderPage))

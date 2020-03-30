@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:elevation="2dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/checkout_total_price"
+                android:textSize="28sp"
+                android:textColor="@color/colorBlackSteel"
+                android:padding="16dp"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:text="Rp. 0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/checkout_btn_discount"
+                        android:background="?attr/selectableItemBackground"
+                        android:weightSum="1"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:textColor="@color/colorBlackSteel"
+                            android:textStyle="bold"
+                            android:padding="16dp"
+                            android:text="Terapkan diskon"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.8"
+                            android:layout_height="wrap_content"/>
+
+                        <RelativeLayout
+                            android:gravity="center"
+                            android:layout_weight="0.2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content">
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/checkout_switch_discount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/checkout_layout_discount"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatCheckBox
+                            android:id="@+id/checkout_checkbox_percent"
+                            android:layout_width="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:text="Gunakan persen (%)"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/checkout_discount_indicator"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorBlackSteel"
+                            android:text="Rp."
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginStart="16dp"
+                            android:layout_height="wrap_content">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:hint="@string/hint_discount"
+                                android:layout_height="wrap_content"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:weightSum="2"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textColor="@color/colorBlackSteel"
+                        android:textStyle="bold"
+                        android:padding="16dp"
+                        android:text="Tunai"
+                        android:layout_width="0dp"
+                        android:layout_weight="1.8"
+                        android:layout_height="wrap_content"/>
+
+                    <RelativeLayout
+                        android:layout_gravity="center"
+                        android:layout_weight="0.2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="end"
+                            android:src="@drawable/ic_chevron_right_black_24dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:background="@color/colorGrey"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <LinearLayout
+                    android:weightSum="2"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:padding="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlackSteel"
+                        android:text="Pembayaran lainnya"
+                        android:layout_width="0dp"
+                        android:layout_weight="1.8"
+                        android:layout_height="wrap_content"/>
+
+                    <RelativeLayout
+                        android:layout_gravity="center"
+                        android:layout_weight="0.2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="end"
+                            android:src="@drawable/ic_chevron_right_black_24dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:background="@color/colorGrey"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+</ScrollView>

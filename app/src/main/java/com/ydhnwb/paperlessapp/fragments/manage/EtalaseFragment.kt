@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.fragments.manage
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
@@ -11,8 +12,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.CheckoutActivity
 import com.ydhnwb.paperlessapp.adapters.EtalaseAdapter
 import com.ydhnwb.paperlessapp.adapters.SelectedProductAdapter
+import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.ProductState
 import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
@@ -46,13 +49,8 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
 
         productViewModel.listenSelectedProducts().observe(viewLifecycleOwner, Observer {
             view.rv_detail_order.adapter?.let {a->
-                if(a is SelectedProductAdapter){
-                    a.updateList(it)
-                }
-                val totalQuantity = it.sumBy { product ->
-                    product.selectedQuantity!!
-                }
-                toast(totalQuantity.toString())
+                if(a is SelectedProductAdapter){ a.updateList(it) }
+                val totalQuantity = it.sumBy { product -> product.selectedQuantity!! }
                 val totalPrice = if(it.isEmpty()){ 0 }else{ it.sumBy { product ->
                         product.price!! * product.selectedQuantity!!
                     }
@@ -81,12 +79,22 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
         bottomSheet = BottomSheetBehavior.from(view!!.bottomsheet_detail_order)
         bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
         view!!.btn_details.setOnClickListener {
-            println(bottomSheet.state)
             if(bottomSheet.state == BottomSheetBehavior.STATE_COLLAPSED || bottomSheet.state == BottomSheetBehavior.STATE_HIDDEN){
                 bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
             }else{
                 bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
             }
+        }
+        view!!.btn_checkout.setOnClickListener {
+            val selectedProducts : ArrayList<Product>? = productViewModel.listenSelectedProducts().value as ArrayList<Product>?
+            if(selectedProducts != null){
+                startActivity(Intent(activity!!, CheckoutActivity::class.java).apply {
+                    putParcelableArrayListExtra("PRODUCT", selectedProducts)
+                })
+            }else{
+                toast("Pilih produk terlebih dahulu")
+            }
+
         }
     }
 }

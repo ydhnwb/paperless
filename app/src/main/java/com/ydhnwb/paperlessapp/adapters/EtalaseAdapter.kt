@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Product
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
 import kotlinx.android.synthetic.main.list_item_product.view.*
 
@@ -30,6 +31,7 @@ class EtalaseAdapter (private var products : MutableList<Product>, private var c
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         fun bind(product: Product, context: Context, productViewModel: ProductViewModel){
             itemView.product_name.text = product.name
+            itemView.product_price.text = PaperlessUtil.setToIDR(product.price!!)
             itemView.product_image.load(product.image)
             itemView.setOnClickListener {
                 val p = product.copy()

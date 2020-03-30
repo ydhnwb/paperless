@@ -176,5 +176,8 @@
     <string name="btn_save_product">Simpan produk</string>
     <string name="info_selected_product">Produk yang dipilih</string>
     <string name="placeholder_zero">0</string>
+    <string name="title_activity_checkout">Checkout</string>
+    <string name="hint_discount">Masukkan jumlah diskkon</string>
+    <string name="btn_checkout">Checkout</string>
 
 </resources>

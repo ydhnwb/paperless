@@ -22,8 +22,7 @@ class SelectedProductAdapter (private var selectedProducts : MutableList<Product
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(parent.context).inflate(
-        R.layout.list_item_selected_product, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_selected_product, parent, false))
 
     override fun getItemCount() = selectedProducts.size
 
@@ -31,17 +30,11 @@ class SelectedProductAdapter (private var selectedProducts : MutableList<Product
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(product: Product, context: Context, productViewModel: ProductViewModel){
-            itemView.product_incrementQuantity.setOnClickListener {
-                productViewModel.incrementQuantity(product)
-            }
-            itemView.product_decrementQuantity.setOnClickListener {
-                productViewModel.decrementQuantity(product)
-                Toast.makeText(context, "Hu", Toast.LENGTH_LONG).show()
-            }
+            itemView.product_incrementQuantity.setOnClickListener { productViewModel.incrementQuantity(product) }
+            itemView.product_decrementQuantity.setOnClickListener { productViewModel.decrementQuantity(product) }
             itemView.product_name.text = product.name
             itemView.product_image.load(product.image)
             itemView.product_selectedQuantity.text = product.selectedQuantity.toString()
-
             itemView.setOnClickListener {
             }
         }
