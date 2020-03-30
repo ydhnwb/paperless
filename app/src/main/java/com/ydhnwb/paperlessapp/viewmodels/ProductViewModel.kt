@@ -98,6 +98,20 @@ class ProductViewModel : ViewModel(){
         selectedProducts.postValue(tempSelectedProducts)
     }
 
+    fun deleteSelectedProduct(p: Product){
+        val tempSelectedProducts = if(selectedProducts.value == null){
+            mutableListOf()
+        } else {
+            selectedProducts.value as MutableList<Product>
+        }
+        val p = tempSelectedProducts.find { it.id == p.id }
+        p?.let {
+            tempSelectedProducts.remove(it)
+        }
+        selectedProducts.postValue(tempSelectedProducts)
+
+    }
+
     fun listenSelectedProducts() = selectedProducts
     fun listenToUIState() = state
     fun listenProducts() = products
