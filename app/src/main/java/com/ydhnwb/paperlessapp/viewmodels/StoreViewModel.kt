@@ -22,6 +22,9 @@ class StoreViewModel : ViewModel(){
     private var api = ApiClient.instance()
     private var myStores = MutableLiveData<List<Store>>()
     private var otherStore = MutableLiveData<List<Store>>()
+    private var currentManagedStore = MutableLiveData<Store>()
+
+    fun setCurrentManagedStore(store: Store) = currentManagedStore.postValue(store)
 
     fun validate(store : Store, isUpdate : Boolean) : Boolean {
         state.value = StoreState.Reset
@@ -122,8 +125,6 @@ class StoreViewModel : ViewModel(){
             state.value = StoreState.IsLoading(false)
         }
     }
-
-
 
     fun storeCreate(token : String, store: Store){
         try{
@@ -238,6 +239,7 @@ class StoreViewModel : ViewModel(){
     fun listenToMyStore() = myStores
     fun listenToOtherStore() = otherStore
     fun listenUIState() = state
+    fun getCurrentStore() = currentManagedStore.value
 }
 
 

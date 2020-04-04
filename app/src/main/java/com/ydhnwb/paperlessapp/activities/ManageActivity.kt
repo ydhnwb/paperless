@@ -2,8 +2,6 @@ package com.ydhnwb.paperlessapp.activities
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.navigation.ui.AppBarConfiguration
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
@@ -11,13 +9,14 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
+import androidx.lifecycle.ViewModelProvider
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.fragments.manage.EmployeeFragment
 import com.ydhnwb.paperlessapp.fragments.manage.EtalaseFragment
 import com.ydhnwb.paperlessapp.fragments.manage.HomeFragment
 import com.ydhnwb.paperlessapp.fragments.manage.ProductFragment
 import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import kotlinx.android.synthetic.main.activity_manage.*
 import kotlinx.android.synthetic.main.app_bar_manage.*
 
@@ -27,12 +26,16 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         private var navStatus = -1
     }
 
+    private lateinit var storeViewModel: StoreViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = getCurrentStore()?.name
+        supportActionBar?.title = getCurrentStore().name
         initComp()
+        storeViewModel = ViewModelProvider(this).get(StoreViewModel::class.java)
+        storeViewModel.setCurrentManagedStore(getCurrentStore())
         if(savedInstanceState == null){
             openFirst = true
             val item = nav_view.getMenu().getItem(0).setChecked(true)
@@ -119,5 +122,6 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         nav_view.setNavigationItemSelectedListener(this)
     }
 
-    private fun getCurrentStore() = intent.getParcelableExtra<Store>("STORE")
+    private fun getCurrentStore() = intent.getParcelableExtra<Store>("STORE")!!
+
 }

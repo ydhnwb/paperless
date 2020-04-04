@@ -2,9 +2,19 @@ package com.ydhnwb.paperlessapp.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ydhnwb.paperlessapp.models.Category
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
+import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiClient
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.File
 import java.lang.Exception
 
 class ProductViewModel : ViewModel(){
@@ -13,15 +23,41 @@ class ProductViewModel : ViewModel(){
     private var api = ApiClient.instance()
     private var selectedProducts = MutableLiveData<List<Product>>()
 
+    fun fetchAllProducts(token: String, storeId: String){
+        state.value = ProductState.IsLoading(true)
+        api.product_get(token, storeId).enqueue(object : Callback<WrappedListResponse<Product>>{
+            override fun onFailure(call: Call<WrappedListResponse<Product>>, t: Throwable) {
+                println(t.message)
+                state.value = ProductState.IsLoading(false)
+                state.value = ProductState.ShowToast(t.message.toString())
+            }
+
+            override fun onResponse(call: Call<WrappedListResponse<Product>>, response: Response<WrappedListResponse<Product>>) {
+                if (response.isSuccessful){
+                    val body = response.body()
+                    body?.let {
+                        if (it.status){
+                            products.postValue(it.data)
+                        }
+                    }
+                }else{
+                    state.value = ProductState.ShowToast("Tidak dapat mengambil data produk")
+                }
+                state.value = ProductState.IsLoading(false)
+            }
+        })
+    }
+
+
     fun fetchProducts(token: String){
         try {
             state.value = ProductState.IsLoading(false)
             val dummyProducts = mutableListOf<Product>().apply {
-                add(Product(1,"Latte","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, null))
-                add(Product(2,"Americano","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, null))
-                add(Product(3,"Coffee Toraja","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, null))
-                add(Product(4,"Mocca","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, null))
-                add(Product(5,"Cappuchino","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, null))
+                add(Product(1,"Latte","","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, false,null, Category()))
+                add(Product(2,"Americano","","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false,false,null, Category()))
+                add(Product(3,"Coffee Toraja","","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, false,null, Category()))
+                add(Product(4,"Mocca","","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, false,null, Category() ))
+                add(Product(5,"Cappuchino","","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, false,null, Category()))
             }
             products.postValue(dummyProducts)
             state.value = ProductState.IsLoading(false)
@@ -32,21 +68,21 @@ class ProductViewModel : ViewModel(){
         }
     }
 
-    fun validate(name : String, price: String, quantity : String, weight: String, categoryId : Int?) : Boolean {
+    fun validate(name : String, price: Int?, quantity : Int?, isAvailableOnline : Boolean ,weight: Float?, categoryId : Int?) : Boolean {
         state.value = ProductState.Reset
         if(name.isEmpty()){
             state.value = ProductState.Validate(name = "Nama produk tidak boleh kosong")
             return false
-        }else if(price.isEmpty()){
+        }else if(price == null || price <= 0){
             state.value = ProductState.Validate(price = "Harga produk tidak boleh kosong atau nol")
             return false
         }else if(categoryId == null){
             state.value = ProductState.Validate(categoryId = "Kategori wajib dipilih terlebih dahulu")
             return false
-        }else if(quantity.isEmpty()){
+        }else if(quantity == null || quantity <= 0){
             state.value = ProductState.Validate(qty = "Isikan quantity terlebih dahulu")
             return false
-        }else if(weight.isEmpty()){
+        }else if(isAvailableOnline && ( weight == null || weight < 1)){
             state.value = ProductState.Validate(weight = "Berat tak boleh kosong")
             return false
         }
@@ -104,15 +140,45 @@ class ProductViewModel : ViewModel(){
         } else {
             selectedProducts.value as MutableList<Product>
         }
-        val p = tempSelectedProducts.find { it.id == p.id }
-        p?.let {
+        val x = tempSelectedProducts.find { it.id == p.id }
+        x?.let {
             tempSelectedProducts.remove(it)
         }
         selectedProducts.postValue(tempSelectedProducts)
     }
 
-    fun createProduct(token: String, storeId : String, product: Product){
+    fun createProduct(token: String, storeId : String, product: Product, categoryId : Int){
+        state.value = ProductState.IsLoading(true)
+        val file = File(product.image.toString())
+        val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
+        val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
+        api.product_store(token, storeId, product.name.toString(), "Lorem ipsum",product.code, product.price!!,
+            categoryId, product.availableOnline, product.weight, true, product.qty!!, image)
+            .enqueue(object : Callback<WrappedResponse<Product>>{
+                override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
+                    println(t.message)
+                    state.value = ProductState.ShowToast(t.message.toString())
+                    state.value = ProductState.IsLoading(false)
+                }
 
+                override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
+                    if(response.isSuccessful){
+                        val body = response.body()
+                        body?.let {
+                            if(it.status){
+                                state.value = ProductState.ShowToast("Success create product")
+                                state.value = ProductState.Success
+                            }else{
+                                state.value = ProductState.ShowPopup("Gagal saat membuat produk")
+                            }
+                        }
+                    }else{
+                        state.value = ProductState.ShowPopup("Terjadi kesalahan. Tidak dapat membuat produk")
+                        println(response.body())
+                    }
+                    state.value = ProductState.IsLoading(false)
+                }
+            })
     }
 
     fun listenSelectedProducts() = selectedProducts
@@ -127,5 +193,7 @@ sealed class ProductState{
                         var qty: String? = null, var categoryId : String? = null) : ProductState()
     data class IsLoading(var state : Boolean) : ProductState()
     data class ShowToast(var message : String) : ProductState()
+    data class ShowPopup(var message : String) : ProductState()
+    object Success : ProductState()
     object Reset : ProductState()
 }

@@ -18,6 +18,8 @@ import com.fxn.pix.Pix
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Category
 import com.ydhnwb.paperlessapp.models.Product
+import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.CategoryState
 import com.ydhnwb.paperlessapp.viewmodels.CategoryViewModel
 import com.ydhnwb.paperlessapp.viewmodels.ProductState
@@ -79,6 +81,7 @@ class ProductActivity : AppCompatActivity() {
                 it.name?.let { e -> setErrorName(e) }
                 it.price?.let { e -> setErrorPrice(e) }
                 it.qty?.let { e-> setErrorQuantity(e) }
+                it.weight?.let { e -> setErrorWeight(e) }
             }
             is ProductState.Reset -> {
                 setErrorName(null)
@@ -86,13 +89,59 @@ class ProductActivity : AppCompatActivity() {
                 setErrorQuantity(null)
                 setErrorWeight(null)
             }
+            is ProductState.ShowPopup -> popup(it.message)
             is ProductState.ShowToast -> toast(it.message)
         }
     }
-    private fun checkBoxAvailableOnline(){
-        cb_product_online_available.setOnCheckedChangeListener { it , isChecked ->
-            if(isChecked){ in_product_weight.visibility = View.VISIBLE
-            }else{ in_product_weight.visibility = View.GONE }
+
+    private fun checkBoxAvailableOnline(){ cb_product_online_available.setOnCheckedChangeListener { it , isChecked ->
+            if(isChecked){ in_product_weight.visibility = View.VISIBLE }else{ in_product_weight.visibility = View.GONE }
+        }
+    }
+
+    private fun getPassedProduct() : Product? = intent.getParcelableExtra<Product>("PRODUCT")
+
+    private fun getPassedStore() : Store? = intent.getParcelableExtra<Store>("STORE")
+
+    private fun chooseImage(){ product_image.setOnClickListener { Pix.start(this, IMAGE_REQUEST_CODE) } }
+
+    private fun saveChanges(){
+        btn_submit.setOnClickListener {
+            val name = et_product_name.text.toString().trim()
+            val price = et_prodouct_price.text .toString().trim().toIntOrNull()
+            val quantity = et_product_quantity.text.toString().toIntOrNull()
+            val weight = et_product_weight.text.toString().toFloatOrNull()
+            val category : Category? = sp_product_category.selectedItem as Category?
+            category?.let {cat ->
+                if(productViewModel.validate(name, price, quantity, cb_product_online_available.isChecked,  weight, category.id)){
+                    product.apply {
+                        this.name = name
+                        this.price = price
+                        this.qty = quantity
+                        this.weight = weight ?: 1.0F
+                    }
+                    val isCreate = true
+                    if(isCreate){
+                        product.image?.let { imagePath ->
+                            productViewModel.createProduct(PaperlessUtil.getToken(this@ProductActivity),
+                                getPassedStore()?.id.toString(), product, cat.id!!)
+                        } ?: kotlin.run {
+                            popup("Mohon pilih gambar terlebih dahulu")
+                        }
+                    }else{
+                        toast("update here")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun popup(message: String) {
+        AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialogTheme)).apply {
+            setMessage(message)
+            setPositiveButton("Mengerti"){ dialogInterface, _ ->
+                dialogInterface.cancel()
+            }.create().show()
         }
     }
 
@@ -100,7 +149,6 @@ class ProductActivity : AppCompatActivity() {
     private fun setErrorPrice(err: String?) { in_product_price.error = err }
     private fun setErrorQuantity(err: String?) { in_product_quantity.error = err }
     private fun setErrorWeight(err: String?) { in_product_weight.error = err }
-    private fun getPassedProduct() = intent.getParcelableExtra<Product>("PRODUCT")
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -110,36 +158,6 @@ class ProductActivity : AppCompatActivity() {
                 product.image = it[0]
                 product_image.load(File(it[0]))
             }
-        }
-    }
-
-    private fun chooseImage(){
-        product_image.setOnClickListener {
-            Pix.start(this, IMAGE_REQUEST_CODE)
-        }
-    }
-
-    private fun saveChanges(){
-        btn_submit.setOnClickListener {
-            val name = et_product_name.text.toString().trim()
-            val price = et_prodouct_price.text .toString().trim()
-            val quantity = et_product_quantity.text.toString()
-            val weight = et_product_weight.text.toString()
-            val category : Category? = sp_product_category.selectedItem as Category
-            category?.let {
-                if(productViewModel.validate(name, price, quantity, weight, category.id)){
-                    toast("Add product")
-                }
-            }
-        }
-    }
-
-    private fun popup(message: String) {
-        androidx.appcompat.app.AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialogTheme)).apply {
-            setMessage(message)
-            setPositiveButton("Mengerti"){ dialogInterface, _ ->
-                dialogInterface.cancel()
-            }.create().show()
         }
     }
 

@@ -12,6 +12,7 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
@@ -30,6 +31,7 @@ class ApiClient {
                 retrofit = Retrofit.Builder().apply {
                     baseUrl(ENDPOINT)
                     client(client)
+                    addConverterFactory(ScalarsConverterFactory.create())
                     addConverterFactory(GsonConverterFactory.create())
                 }.build()
                 retrofit!!
@@ -69,9 +71,25 @@ interface ApiService {
     @DELETE("v1/own/store/{id}")
     fun store_delete(@Header("Authorization") token : String, @Path("id") id: String) : Call<WrappedResponse<Store>>
 
+    @GET("v1/category")
+    fun category_get() : Call<WrappedListResponse<Category>>
+
     @GET("v1/own/store/{id}/product")
     fun product_get(@Header("Authorization") token: String, @Path("id") id : String) : Call<WrappedListResponse<Product>>
 
-    @GET("v1/category")
-    fun category_get() : Call<WrappedListResponse<Category>>
+    @Multipart
+    @POST("v1/own/store/{id}/product")
+    fun product_store(@Header("Authorization") token : String,
+                      @Path("id") storeId : String,
+                      @Part("name") name : String,
+                      @Part("description") description : String,
+                      @Part("code") code : String? = null,
+                      @Part("price") price : Int,
+                      @Part("category_id") categoryId : Int,
+                      @Part("available_online") isOnline : Boolean = false,
+                      @Part("weight") weight : Float? = 1.0F,
+                      @Part("status") status : Boolean = true,
+                      @Part("quantity") qty : Int,
+                      @Part image : MultipartBody.Part)
+            : Call<WrappedResponse<Product>>
 }

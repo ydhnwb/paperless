@@ -66,5 +66,6 @@ dependencies {
 
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.8.1'
+
 }
