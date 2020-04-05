@@ -42,6 +42,7 @@ class ProductActivity : AppCompatActivity() {
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
         toolbar.setNavigationOnClickListener { finish() }
         checkBoxAvailableOnline()
+        checkBoxHaveStock()
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         categoryViewModel.fetchCategory()
@@ -50,76 +51,85 @@ class ProductActivity : AppCompatActivity() {
         productViewModel.listenToUIState().observe(this, Observer { handleUIState(it) })
         chooseImage()
         saveChanges()
+        fill()
     }
 
-    private fun handleCategoryState(it: CategoryState){
-        when(it){
-            is CategoryState.IsLoading -> sp_product_category.isEnabled = !it.state
-            is CategoryState.ShowToast -> toast(it.message)
-        }
-    }
 
-    private fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    private fun attachToSpinner(it: List<Category>){
-        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, it)
-        sp_product_category.adapter = spinnerAdapter
-        sp_product_category.setOnItemSelectedListener(object : OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedCategory : Category = parent?.selectedItem as Category
-                println(selectedCategory.name.toString() + " selected")
-            }
-        })
-    }
     private fun handleUIState(it: ProductState){
         when(it){
             is ProductState.IsLoading -> {
-                if(it.state){ loading.visibility = View.VISIBLE
-                }else{ loading.visibility = View.GONE }
+                if(it.state){
+                    loading.visibility = View.VISIBLE
+                }else{
+                    loading.visibility = View.GONE
+                }
+                btn_submit.isEnabled = !it.state
             }
             is ProductState.Validate -> {
                 it.name?.let { e -> setErrorName(e) }
                 it.price?.let { e -> setErrorPrice(e) }
                 it.qty?.let { e-> setErrorQuantity(e) }
                 it.weight?.let { e -> setErrorWeight(e) }
+                it.desc?.let { e -> setErrorDescription(e) }
             }
             is ProductState.Reset -> {
                 setErrorName(null)
                 setErrorPrice(null)
                 setErrorQuantity(null)
                 setErrorWeight(null)
+                setErrorDescription(null)
             }
             is ProductState.ShowPopup -> popup(it.message)
             is ProductState.ShowToast -> toast(it.message)
+            is ProductState.Success -> finish()
         }
     }
 
-    private fun checkBoxAvailableOnline(){ cb_product_online_available.setOnCheckedChangeListener { it , isChecked ->
-            if(isChecked){ in_product_weight.visibility = View.VISIBLE }else{ in_product_weight.visibility = View.GONE }
+
+
+    private fun fill(){
+        getPassedProduct()?.let {
+            et_product_name.setText(it.name)
+            et_prodouct_price.setText(it.price.toString())
+            et_prodouct_desc.setText(it.description.toString())
+            if(it.qty != null){ et_product_quantity.setText(it.qty.toString()) }
+            cb_product_online_available.isChecked = it.availableOnline
+            cb_product_have_stock.isChecked = (it.stock != null)
+            if(cb_product_online_available.isChecked){ et_product_weight.setText(it.weight.toString()) }
+            if(cb_product_have_stock.isChecked){ et_product_quantity.setText(it.stock!!.stock!!.toString()) }
+            product_image.load(it.image)
+            product.apply {
+                id = it.id
+                name = it.name
+                description = it.description
+                image = it.image
+                price = it.price
+                weight = it.weight
+                availableOnline = it.availableOnline
+                category = it.category
+                status = it.status
+                image = it.image
+            }
         }
     }
 
-    private fun getPassedProduct() : Product? = intent.getParcelableExtra<Product>("PRODUCT")
 
-    private fun getPassedStore() : Store? = intent.getParcelableExtra<Store>("STORE")
 
-    private fun chooseImage(){ product_image.setOnClickListener { Pix.start(this, IMAGE_REQUEST_CODE) } }
 
     private fun saveChanges(){
         btn_submit.setOnClickListener {
-            val name = et_product_name.text.toString().trim()
-            val price = et_prodouct_price.text .toString().trim().toIntOrNull()
-            val quantity = et_product_quantity.text.toString().toIntOrNull()
-            val weight = et_product_weight.text.toString().toFloatOrNull()
-            val category : Category? = sp_product_category.selectedItem as Category?
-            category?.let {cat ->
-                if(productViewModel.validate(name, price, quantity, cb_product_online_available.isChecked,  weight, category.id)){
-                    product.apply {
-                        this.name = name
-                        this.price = price
-                        this.qty = quantity
-                        this.weight = weight ?: 1.0F
-                    }
+            product.apply {
+                this.name = et_product_name.text.toString().trim()
+                this.description = et_prodouct_desc.text.toString().trim()
+                this.price = et_prodouct_price.text.toString().trim().toIntOrNull()
+                this.qty = et_product_quantity.text.toString().trim().toIntOrNull()
+                this.availableOnline = cb_product_online_available.isChecked
+                this.weight = et_product_weight.text.toString().trim().toDoubleOrNull()
+                this.category = sp_product_category.selectedItem as Category?
+            }
+            product.category?.let {cat ->
+                if(productViewModel.validate(product.name.toString(), product.description.toString(),
+                        product.price, product.qty, product.availableOnline, product.weight, cat.id)){
                     val isCreate = true
                     if(isCreate){
                         product.image?.let { imagePath ->
@@ -136,6 +146,38 @@ class ProductActivity : AppCompatActivity() {
         }
     }
 
+    private fun chooseImage(){ product_image.setOnClickListener { Pix.start(this, IMAGE_REQUEST_CODE) } }
+
+    private fun getPassedProduct() : Product? = intent.getParcelableExtra<Product>("PRODUCT")
+    private fun getPassedStore() : Store? = intent.getParcelableExtra<Store>("STORE")
+
+    private fun checkBoxAvailableOnline(){ cb_product_online_available.setOnCheckedChangeListener { it , isChecked ->
+        if(isChecked) in_product_weight.visibility = View.VISIBLE else in_product_weight.visibility = View.GONE } }
+    private fun checkBoxHaveStock(){ cb_product_have_stock.setOnCheckedChangeListener { it, isChecked ->
+        if (isChecked) in_product_quantity.visibility = View.VISIBLE else in_product_quantity.visibility = View.GONE } }
+
+    private fun attachToSpinner(it: List<Category>){
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, it)
+        sp_product_category.adapter = spinnerAdapter
+        sp_product_category.setOnItemSelectedListener(object : OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedCategory : Category = parent?.selectedItem as Category
+                println(selectedCategory.name.toString() + " selected")
+            }
+        })
+        getPassedProduct()?.let {
+            val pos = spinnerAdapter.getPosition(it.category)
+            sp_product_category.setSelection(pos)
+        }
+    }
+    private fun handleCategoryState(it: CategoryState){
+        when(it){
+            is CategoryState.IsLoading -> sp_product_category.isEnabled = !it.state
+            is CategoryState.ShowToast -> toast(it.message)
+        }
+    }
+
     private fun popup(message: String) {
         AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialogTheme)).apply {
             setMessage(message)
@@ -144,11 +186,13 @@ class ProductActivity : AppCompatActivity() {
             }.create().show()
         }
     }
+    private fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 
     private fun setErrorName(err: String?) { in_product_name.error = err }
     private fun setErrorPrice(err: String?) { in_product_price.error = err }
     private fun setErrorQuantity(err: String?) { in_product_quantity.error = err }
     private fun setErrorWeight(err: String?) { in_product_weight.error = err }
+    private fun setErrorDescription(err: String?) { in_product_desc.error = err }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

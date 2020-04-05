@@ -50,7 +50,22 @@
             </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
-        
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            app:errorEnabled="true"
+            android:hint="@string/hint_product_desc"
+            android:id="@+id/in_product_desc"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:id="@+id/et_prodouct_desc"
+                android:maxLines="3"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             app:errorEnabled="true"
@@ -70,11 +85,19 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"/>
 
+
+        <CheckBox
+            android:text="@string/hint_product_have_stock"
+            android:id="@+id/cb_product_have_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             app:errorEnabled="true"
             android:id="@+id/in_product_quantity"
             android:hint="@string/hint_product_quantity"
+            android:visibility="gone"
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -84,6 +107,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
+            android:layout_marginTop="8dp"
             android:id="@+id/cb_product_online_available"
             android:text="@string/hint_product_online_available"
             android:layout_width="wrap_content"

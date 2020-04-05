@@ -180,5 +180,7 @@
     <string name="hint_discount">Masukkan jumlah diskkon</string>
     <string name="btn_checkout">Checkout</string>
     <string name="info_delete">Hapus</string>
+    <string name="hint_product_desc">Deskripsi produk</string>
+    <string name="hint_product_have_stock">Produk ini memiliki stok</string>
 
 </resources>

@@ -95,11 +95,11 @@ class UserViewModel : ViewModel(){
                         if(it.status){
                             state.value = UserState.Success(email)
                         }else{
-                            state.value = UserState.ShowToast(it.message.toString())
+                            state.value = UserState.ShowToast(it.message)
                         }
                     }
                 }else{
-                    state.value = UserState.Popup("Tidak membuat akun. Mungkin email sudah pernah didaftarkan")
+                    state.value = UserState.Popup("Tidak dapat membuat akun. Mungkin email sudah pernah didaftarkan")
                 }
                 state.value = UserState.IsLoading(false)
             }

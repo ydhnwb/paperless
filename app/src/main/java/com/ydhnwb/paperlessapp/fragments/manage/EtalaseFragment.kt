@@ -19,17 +19,20 @@ import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.ProductState
 import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
+import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import kotlinx.android.synthetic.main.bottomsheet_detail.view.*
 import kotlinx.android.synthetic.main.fragment_etalase.view.*
 import kotlinx.android.synthetic.main.fragment_etalase.view.btn_details
 
 class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
     private lateinit var productViewModel: ProductViewModel
+    private lateinit var parentStoreViewModel: StoreViewModel
     private lateinit var bottomSheet: BottomSheetBehavior<*>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        parentStoreViewModel = ViewModelProvider(activity!!).get(StoreViewModel::class.java)
         setupUIComponent()
         productViewModel.listenProducts().observe(viewLifecycleOwner, Observer {
             view.rv_etalase.adapter?.let { adapter ->
@@ -59,7 +62,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
                 view.tv_total_price.text = PaperlessUtil.setToIDR(totalPrice)
             }
         })
-        productViewModel.fetchProducts(PaperlessUtil.getToken(activity!!))
+        productViewModel.fetchAllProducts(PaperlessUtil.getToken(activity!!), parentStoreViewModel.getCurrentStore()?.id.toString())
     }
 
     private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
@@ -87,7 +90,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
         }
         view!!.btn_checkout.setOnClickListener {
             val selectedProducts : ArrayList<Product>? = productViewModel.listenSelectedProducts().value as ArrayList<Product>?
-            if(selectedProducts != null){
+            if(selectedProducts != null && selectedProducts.isNotEmpty()){
                 startActivity(Intent(activity!!, CheckoutActivity::class.java).apply {
                     putParcelableArrayListExtra("PRODUCT", selectedProducts)
                 })

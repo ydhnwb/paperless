@@ -87,7 +87,7 @@ interface ApiService {
                       @Part("price") price : Int,
                       @Part("category_id") categoryId : Int,
                       @Part("available_online") isOnline : Boolean = false,
-                      @Part("weight") weight : Float? = 1.0F,
+                      @Part("weight") weight : Double? = 1.0,
                       @Part("status") status : Boolean = true,
                       @Part("quantity") qty : Int,
                       @Part image : MultipartBody.Part)

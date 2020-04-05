@@ -40,38 +40,19 @@ class ProductViewModel : ViewModel(){
                             products.postValue(it.data)
                         }
                     }
-                }else{
-                    state.value = ProductState.ShowToast("Tidak dapat mengambil data produk")
-                }
+                }else{ state.value = ProductState.ShowToast("Tidak dapat mengambil data produk") }
                 state.value = ProductState.IsLoading(false)
             }
         })
     }
 
-
-    fun fetchProducts(token: String){
-        try {
-            state.value = ProductState.IsLoading(false)
-            val dummyProducts = mutableListOf<Product>().apply {
-                add(Product(1,"Latte","","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, false,null, Category()))
-                add(Product(2,"Americano","","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false,false,null, Category()))
-                add(Product(3,"Coffee Toraja","","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, false,null, Category()))
-                add(Product(4,"Mocca","","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, false,null, Category() ))
-                add(Product(5,"Cappuchino","","https://cdn02.indozone.id/re/content/2019/10/07/ers0M9/t_5d9ae209ae934.jpg?w=700&q=85", 15000, null, false, false,null, Category()))
-            }
-            products.postValue(dummyProducts)
-            state.value = ProductState.IsLoading(false)
-        }catch (e: Exception){
-            println(e.message)
-            state.value = ProductState.IsLoading(false)
-            state.value = ProductState.ShowToast(e.message.toString())
-        }
-    }
-
-    fun validate(name : String, price: Int?, quantity : Int?, isAvailableOnline : Boolean ,weight: Float?, categoryId : Int?) : Boolean {
+    fun validate(name : String, desc : String, price: Int?, quantity : Int?, isAvailableOnline : Boolean ,weight: Double?, categoryId : Int?) : Boolean {
         state.value = ProductState.Reset
         if(name.isEmpty()){
             state.value = ProductState.Validate(name = "Nama produk tidak boleh kosong")
+            return false
+        }else if(desc.isEmpty()){
+            state.value = ProductState.Validate(desc = "Deskripsi tidak boleh kosong")
             return false
         }else if(price == null || price <= 0){
             state.value = ProductState.Validate(price = "Harga produk tidak boleh kosong atau nol")
@@ -152,7 +133,7 @@ class ProductViewModel : ViewModel(){
         val file = File(product.image.toString())
         val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
         val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
-        api.product_store(token, storeId, product.name.toString(), "Lorem ipsum",product.code, product.price!!,
+        api.product_store(token, storeId, product.name.toString(), product.description.toString() ,product.code, product.price!!,
             categoryId, product.availableOnline, product.weight, true, product.qty!!, image)
             .enqueue(object : Callback<WrappedResponse<Product>>{
                 override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
@@ -188,7 +169,7 @@ class ProductViewModel : ViewModel(){
 
 
 sealed class ProductState{
-    data class Validate(var name: String? = null, var image: String? = null, var price: String? = null,
+    data class Validate(var name: String? = null, var desc : String? = null,var image: String? = null, var price: String? = null,
                         var weight: String? = null, var availableOnline: String? = null, var status : String? = null,
                         var qty: String? = null, var categoryId : String? = null) : ProductState()
     data class IsLoading(var state : Boolean) : ProductState()
