@@ -27,7 +27,7 @@ class ProductFragment : Fragment(R.layout.fragment_product) {
         parentStoreViewModel = ViewModelProvider(activity!!).get(StoreViewModel::class.java)
         view.rv_manage_product.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = DetailedProductAdapter(mutableListOf(), activity!!)
+            adapter = DetailedProductAdapter(mutableListOf(), activity!!, parentStoreViewModel.getCurrentStore()!!)
         }
         view.fab_add.setOnClickListener {
             startActivity(Intent(activity, ProductActivity::class.java).apply {
@@ -49,12 +49,11 @@ class ProductFragment : Fragment(R.layout.fragment_product) {
                 }
             }
         })
-//        productViewModel.fetchProducts(PaperlessUtil.getToken(activity!!))
     }
 
     override fun onResume() {
         super.onResume()
-        productViewModel?.fetchAllProducts(PaperlessUtil.getToken(activity!!), parentStoreViewModel.getCurrentStore()!!.id.toString())
+        productViewModel.fetchAllProducts(PaperlessUtil.getToken(activity!!), parentStoreViewModel.getCurrentStore()!!.id.toString())
     }
     private fun toast(message: String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
 

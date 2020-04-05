@@ -5,9 +5,9 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.ContextThemeWrapper
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -53,6 +53,8 @@ class ProductActivity : AppCompatActivity() {
         saveChanges()
         fill()
     }
+
+
 
 
     private fun handleUIState(it: ProductState){
@@ -126,20 +128,26 @@ class ProductActivity : AppCompatActivity() {
                 this.availableOnline = cb_product_online_available.isChecked
                 this.weight = et_product_weight.text.toString().trim().toDoubleOrNull()
                 this.category = sp_product_category.selectedItem as Category?
+            }.also { p ->
+                if(p.weight == null){
+                    p.weight = 1.0
+                }
             }
             product.category?.let {cat ->
                 if(productViewModel.validate(product.name.toString(), product.description.toString(),
                         product.price, product.qty, product.availableOnline, product.weight, cat.id)){
-                    val isCreate = true
-                    if(isCreate){
+                    getPassedProduct()?.let { passedProduct ->
+                        val isUpdateImage = !passedProduct.image.equals(product.image)
+                        productViewModel.updateProduct(PaperlessUtil.getToken(this@ProductActivity), getPassedStore()?.id.toString(),
+                        product, cat.id!!, isUpdateImage)
+
+                    } ?: kotlin.run {
                         product.image?.let { imagePath ->
                             productViewModel.createProduct(PaperlessUtil.getToken(this@ProductActivity),
                                 getPassedStore()?.id.toString(), product, cat.id!!)
                         } ?: kotlin.run {
                             popup("Mohon pilih gambar terlebih dahulu")
                         }
-                    }else{
-                        toast("update here")
                     }
                 }
             }
@@ -159,13 +167,6 @@ class ProductActivity : AppCompatActivity() {
     private fun attachToSpinner(it: List<Category>){
         val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, it)
         sp_product_category.adapter = spinnerAdapter
-        sp_product_category.setOnItemSelectedListener(object : OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedCategory : Category = parent?.selectedItem as Category
-                println(selectedCategory.name.toString() + " selected")
-            }
-        })
         getPassedProduct()?.let {
             val pos = spinnerAdapter.getPosition(it.category)
             sp_product_category.setSelection(pos)
@@ -204,5 +205,25 @@ class ProductActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getPassedProduct()?.let {
+            menuInflater.inflate(R.menu.menu_common_product, menu)
+            return true
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.menu_delete -> {
+                productViewModel.delete(PaperlessUtil.getToken(this@ProductActivity),
+                    getPassedStore()?.id.toString(), getPassedProduct()?.id.toString())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
 }

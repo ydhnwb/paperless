@@ -92,4 +92,41 @@ interface ApiService {
                       @Part("quantity") qty : Int,
                       @Part image : MultipartBody.Part)
             : Call<WrappedResponse<Product>>
+
+    @Multipart
+    @POST("v1/own/store/{id}/product/{productId}")
+    fun product_update(@Header("Authorization") token : String,
+                      @Path("id") storeId : String,
+                      @Path("productId") productId : String,
+                      @Part("name") name : String,
+                      @Part("description") description : String,
+                      @Part("code") code : String? = null,
+                      @Part("price") price : Int,
+                      @Part("category_id") categoryId : Int,
+                      @Part("available_online") isOnline : Boolean = false,
+                      @Part("weight") weight : Double? = 1.0,
+                      @Part("status") status : Boolean = true,
+                      @Part("quantity") qty : Int)
+            : Call<WrappedResponse<Product>>
+
+    @Multipart
+    @POST("v1/own/store/{id}/product/{productId}")
+    fun product_update(@Header("Authorization") token : String,
+                       @Path("id") storeId : String,
+                       @Path("productId") productId : String,
+                       @Part("name") name : String,
+                       @Part("description") description : String,
+                       @Part("code") code : String? = null,
+                       @Part("price") price : Int,
+                       @Part("category_id") categoryId : Int,
+                       @Part("available_online") isOnline : Boolean = false,
+                       @Part("weight") weight : Double? = 1.0,
+                       @Part("status") status : Boolean = true,
+                       @Part("quantity") qty : Int,
+                       @Part image : MultipartBody.Part)
+            : Call<WrappedResponse<Product>>
+
+    @DELETE("v1/own/store/{id}/product/{productId}")
+    fun product_delete(@Header("Authorization") token : String, @Path("id") storeId : String, @Path("productId") productId: String)
+    : Call<WrappedResponse<Product>>
 }

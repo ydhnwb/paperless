@@ -51,7 +51,6 @@ class CreateStoreActivity : AppCompatActivity() {
             var isUpdate = false
             if(getPassedStore() != null){
                 isUpdate = true
-//                println("New store logo is same? ${store.store_logo == getPassedStore()!!.store_logo}")
                 if (store.store_logo.equals(getPassedStore()!!.store_logo)){
                     store.store_logo = null
                     println("store logo is null")

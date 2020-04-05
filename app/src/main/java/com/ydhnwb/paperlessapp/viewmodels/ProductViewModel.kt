@@ -162,6 +162,92 @@ class ProductViewModel : ViewModel(){
             })
     }
 
+    fun updateProduct(token: String, storeId: String, product : Product, categoryId: Int, isUpdateImage : Boolean){
+        state.value = ProductState.IsLoading(true)
+        println(product)
+        if(isUpdateImage){
+            val file = File(product.image.toString())
+            val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
+            val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
+            api.product_update(token, storeId, product.id.toString(), product.name.toString(), product.description.toString(),
+                product.code, product.price!!, categoryId, product.availableOnline, product.weight, true, product.qty!!, image)
+                .enqueue(object : Callback<WrappedResponse<Product>>{
+                    override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
+                        println(t.message)
+                        state.value = ProductState.IsLoading(false)
+                        state.value = ProductState.ShowToast(t.message.toString())
+                    }
+
+                    override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
+                        if(response.isSuccessful){
+                            val b = response.body()
+                            b?.let {
+                                if(it.status) state.value = ProductState.Success else state.value = ProductState.ShowPopup("Tidak dapat mengupdate produk")
+                            }
+                        }else{
+                            state.value = ProductState.ShowPopup("Terjadi kesalahan saat mengupdate produk")
+                        }
+                        state.value = ProductState.IsLoading(false)
+                    }
+                })
+        }else{
+            api.product_update(token, storeId, product.id.toString(), product.name.toString(), product.description.toString(),
+                product.code, product.price!!, categoryId, product.availableOnline, product.weight, true, product.qty!!)
+                .enqueue(object : Callback<WrappedResponse<Product>>{
+                    override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
+                        println(t.message)
+                        state.value = ProductState.IsLoading(false)
+                        state.value = ProductState.ShowToast(t.message.toString())
+                    }
+
+                    override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
+                        println(response)
+                        if(response.isSuccessful){
+                            val b = response.body()
+                            b?.let {
+                                if(it.status) state.value = ProductState.Success else state.value = ProductState.ShowPopup("Tidak dapat mengupdate produk")
+                            }
+                            println(response.body())
+                            println(response.code())
+                        }else{
+                            state.value = ProductState.ShowPopup("Terjadi kesalahan saat mengupdate produk")
+                            println(response.body())
+                            println(response.code())
+                        }
+                        state.value = ProductState.IsLoading(false)
+                    }
+                })
+        }
+    }
+
+    fun delete(token : String, storeId: String, productId : String){
+        state.value = ProductState.IsLoading(true)
+        api.product_delete(token, storeId, productId).enqueue(object : Callback<WrappedResponse<Product>>{
+            override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
+                println(t.message)
+                state.value = ProductState.IsLoading(false)
+                state.value = ProductState.ShowToast(t.message.toString())
+            }
+
+            override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
+                if(response.isSuccessful){
+                    val b = response.body()
+                    b?.let {
+                        if (it.status){
+                            state.value = ProductState.Success
+                        }else{
+                            state.value = ProductState.ShowPopup("Tidak dapat menghapus")
+                        }
+                    }
+                }else{
+                    state.value = ProductState.ShowPopup("Tidak dapat menghapus")
+                }
+                state.value = ProductState.IsLoading(false)
+            }
+
+        })
+    }
+
     fun listenSelectedProducts() = selectedProducts
     fun listenToUIState() = state
     fun listenProducts() = products
