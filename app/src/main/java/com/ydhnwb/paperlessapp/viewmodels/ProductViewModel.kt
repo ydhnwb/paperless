@@ -46,7 +46,7 @@ class ProductViewModel : ViewModel(){
         })
     }
 
-    fun validate(name : String, desc : String, price: Int?, quantity : Int?, isAvailableOnline : Boolean ,weight: Double?, categoryId : Int?) : Boolean {
+    fun validate(name : String, desc : String, price: Int?, quantity : Int?, isAvailableOnline : Boolean ,weight: Double?, categoryId : Int?, isHaveStock : Boolean) : Boolean {
         state.value = ProductState.Reset
         if(name.isEmpty()){
             state.value = ProductState.Validate(name = "Nama produk tidak boleh kosong")
@@ -60,9 +60,11 @@ class ProductViewModel : ViewModel(){
         }else if(categoryId == null){
             state.value = ProductState.Validate(categoryId = "Kategori wajib dipilih terlebih dahulu")
             return false
-        }else if(quantity == null || quantity <= 0){
-            state.value = ProductState.Validate(qty = "Isikan quantity terlebih dahulu")
-            return false
+        }else if(isHaveStock){
+            if(quantity == null || quantity <= 0){
+                state.value = ProductState.Validate(qty = "Isikan quantity terlebih dahulu")
+                return false
+            }
         }else if(isAvailableOnline && ( weight == null || weight < 1)){
             state.value = ProductState.Validate(weight = "Berat tak boleh kosong")
             return false

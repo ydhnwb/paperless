@@ -67,5 +67,6 @@ dependencies {
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.8.1'
+    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 
 }

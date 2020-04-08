@@ -52,6 +52,7 @@ class ProductActivity : AppCompatActivity() {
         chooseImage()
         saveChanges()
         fill()
+        scanBarcode()
     }
 
 
@@ -60,11 +61,7 @@ class ProductActivity : AppCompatActivity() {
     private fun handleUIState(it: ProductState){
         when(it){
             is ProductState.IsLoading -> {
-                if(it.state){
-                    loading.visibility = View.VISIBLE
-                }else{
-                    loading.visibility = View.GONE
-                }
+                if(it.state) loading.visibility = View.VISIBLE else loading.visibility = View.GONE
                 btn_submit.isEnabled = !it.state
             }
             is ProductState.Validate -> {
@@ -116,15 +113,27 @@ class ProductActivity : AppCompatActivity() {
     }
 
 
+    private fun scanBarcode(){
+        btn_product_scan.setOnClickListener {
+            startActivityForResult(Intent(this, ScannerActivity::class.java), 0)
+        }
+    }
+
 
 
     private fun saveChanges(){
         btn_submit.setOnClickListener {
+            var qty : Int? = null
+            if(cb_product_have_stock.isChecked){
+                qty = et_product_quantity.text.toString().trim().toIntOrNull()
+            }else{
+                qty = null
+            }
             product.apply {
                 this.name = et_product_name.text.toString().trim()
                 this.description = et_prodouct_desc.text.toString().trim()
                 this.price = et_prodouct_price.text.toString().trim().toIntOrNull()
-                this.qty = et_product_quantity.text.toString().trim().toIntOrNull()
+                this.qty = qty
                 this.availableOnline = cb_product_online_available.isChecked
                 this.weight = et_product_weight.text.toString().trim().toDoubleOrNull()
                 this.category = sp_product_category.selectedItem as Category?
@@ -135,7 +144,7 @@ class ProductActivity : AppCompatActivity() {
             }
             product.category?.let {cat ->
                 if(productViewModel.validate(product.name.toString(), product.description.toString(),
-                        product.price, product.qty, product.availableOnline, product.weight, cat.id)){
+                        product.price, product.qty, product.availableOnline, product.weight, cat.id, cb_product_have_stock.isChecked)){
                     getPassedProduct()?.let { passedProduct ->
                         val isUpdateImage = !passedProduct.image.equals(product.image)
                         productViewModel.updateProduct(PaperlessUtil.getToken(this@ProductActivity), getPassedStore()?.id.toString(),
@@ -203,6 +212,8 @@ class ProductActivity : AppCompatActivity() {
                 product.image = it[0]
                 product_image.load(File(it[0]))
             }
+        }else if(requestCode == 0 && resultCode == Activity.RESULT_OK && data != null ){
+            et_prodouct_code.setText(data.getStringExtra("CODE"))
         }
     }
 
@@ -224,6 +235,5 @@ class ProductActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 
 }
