@@ -89,7 +89,7 @@ interface ApiService {
                       @Part("available_online") isOnline : Boolean = false,
                       @Part("weight") weight : Double? = 1.0,
                       @Part("status") status : Boolean = true,
-                      @Part("quantity") qty : Int,
+                      @Part("quantity") qty : Int? = null,
                       @Part image : MultipartBody.Part)
             : Call<WrappedResponse<Product>>
 

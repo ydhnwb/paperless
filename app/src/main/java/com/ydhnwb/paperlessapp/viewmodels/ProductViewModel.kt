@@ -136,7 +136,7 @@ class ProductViewModel : ViewModel(){
         val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
         val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
         api.product_store(token, storeId, product.name.toString(), product.description.toString() ,product.code, product.price!!,
-            categoryId, product.availableOnline, product.weight, true, product.qty!!, image)
+            categoryId, product.availableOnline, product.weight, true, product.qty, image)
             .enqueue(object : Callback<WrappedResponse<Product>>{
                 override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
                     println(t.message)
