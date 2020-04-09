@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.viewmodels
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
@@ -13,6 +14,7 @@ import retrofit2.Response
 class UserViewModel : ViewModel(){
     private var state : SingleLiveEvent<UserState> = SingleLiveEvent()
     private var api = ApiClient.instance()
+    private var currentUser = MutableLiveData<User>()
 
     fun validate(name : String?, email: String, password: String, confirmPassword : String?) : Boolean{
         state.value = UserState.Reset
@@ -106,7 +108,35 @@ class UserViewModel : ViewModel(){
         })
     }
 
+    fun profile(token: String){
+        state.value = UserState.IsLoading(false)
+        api.profile(token).enqueue(object: Callback<WrappedResponse<User>>{
+            override fun onFailure(call: Call<WrappedResponse<User>>, t: Throwable) {
+                println(t.message)
+                state.value = UserState.ShowToast(t.message.toString())
+                state.value = UserState.IsLoading(false)
+            }
+
+            override fun onResponse(call: Call<WrappedResponse<User>>, response: Response<WrappedResponse<User>>) {
+                if(response.isSuccessful){
+                    val b = response.body()
+                    b?.let {
+                        if(it.status){
+                            currentUser.postValue(it.data)
+                        }else{
+                            state.value = UserState.ShowToast("Tidak dapat memuat info")
+                        }
+                    }
+                }else{
+                    state.value = UserState.ShowToast("Kesalahan saat mengambil info user")
+                }
+                state.value = UserState.IsLoading(false)
+            }
+        })
+    }
+
     fun getUIState() = state
+    fun listenToCurrentUser() = currentUser
 }
 
 sealed class UserState{

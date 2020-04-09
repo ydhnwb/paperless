@@ -129,4 +129,7 @@ interface ApiService {
     @DELETE("v1/own/store/{id}/product/{productId}")
     fun product_delete(@Header("Authorization") token : String, @Path("id") storeId : String, @Path("productId") productId: String)
     : Call<WrappedResponse<Product>>
+
+    @GET("v1/users/profile")
+    fun profile(@Header("Authorization") token: String) : Call<WrappedResponse<User>>
 }
