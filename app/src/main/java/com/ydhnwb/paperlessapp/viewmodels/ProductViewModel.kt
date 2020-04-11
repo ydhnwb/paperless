@@ -251,20 +251,13 @@ class ProductViewModel : ViewModel(){
     }
 
     fun checkProductByCode(code : String) : Product? {
-        val tempProducts = if(products.value == null){
-            mutableListOf()
-        } else {
-            products.value as MutableList<Product>
-        }
-        val p = tempProducts.find {
-            it.code.equals(code)
-        }
+        val tempProducts = if(products.value == null){ mutableListOf() } else { products.value as MutableList<Product> }
+        val p = tempProducts.find { it.code.equals(code) }
         p?.let {
             return it
         } ?: kotlin.run {
             return null
         }
-
     }
 
     fun listenSelectedProducts() = selectedProducts

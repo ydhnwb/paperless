@@ -93,10 +93,11 @@ class ProductActivity : AppCompatActivity() {
             et_prodouct_desc.setText(it.description.toString())
             if(it.qty != null){ et_product_quantity.setText(it.qty.toString()) }
             cb_product_online_available.isChecked = it.availableOnline
-            cb_product_have_stock.isChecked = (it.stock != null)
+            cb_product_have_stock.isChecked = (it.qty != null)
             if(cb_product_online_available.isChecked){ et_product_weight.setText(it.weight.toString()) }
-            if(cb_product_have_stock.isChecked){ et_product_quantity.setText(it.stock!!.stock!!.toString()) }
+            if(cb_product_have_stock.isChecked){ et_product_quantity.setText(it.qty.toString()) }
             product_image.load(it.image)
+            it.code?.let { code -> et_prodouct_code.setText(code) }
             product.apply {
                 id = it.id
                 name = it.name
@@ -108,6 +109,7 @@ class ProductActivity : AppCompatActivity() {
                 category = it.category
                 status = it.status
                 image = it.image
+                code = it.code
             }
         }
     }
@@ -119,8 +121,6 @@ class ProductActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun saveChanges(){
         btn_submit.setOnClickListener {
             var qty : Int? = null
@@ -131,6 +131,7 @@ class ProductActivity : AppCompatActivity() {
             }
             product.apply {
                 this.name = et_product_name.text.toString().trim()
+                this.code = if (et_prodouct_code.text.toString().trim().isEmpty()) et_prodouct_code.text.toString().trim() else null
                 this.description = et_prodouct_desc.text.toString().trim()
                 this.price = et_prodouct_price.text.toString().trim().toIntOrNull()
                 this.qty = qty
@@ -149,7 +150,6 @@ class ProductActivity : AppCompatActivity() {
                         val isUpdateImage = !passedProduct.image.equals(product.image)
                         productViewModel.updateProduct(PaperlessUtil.getToken(this@ProductActivity), getPassedStore()?.id.toString(),
                         product, cat.id!!, isUpdateImage)
-
                     } ?: kotlin.run {
                         product.image?.let { imagePath ->
                             productViewModel.createProduct(PaperlessUtil.getToken(this@ProductActivity),
