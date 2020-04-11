@@ -193,8 +193,18 @@ class ProductViewModel : ViewModel(){
                     }
                 })
         }else{
-            api.product_update(token, storeId, product.id.toString(), product.name.toString(), product.description.toString(),
-                product.code, product.price!!, categoryId, product.availableOnline, product.weight, true, product.qty!!)
+            api.product_update(token,
+                storeId,
+                product.id.toString(),
+                product.name.toString(),
+                product.description.toString(),
+                product.code,
+                product.price!!,
+                categoryId,
+                product.availableOnline,
+                product.weight,
+                true,
+                product.qty)
                 .enqueue(object : Callback<WrappedResponse<Product>>{
                     override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
                         println(t.message)

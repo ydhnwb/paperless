@@ -83,7 +83,7 @@ interface ApiService {
                       @Path("id") storeId : String,
                       @Part("name") name : String,
                       @Part("description") description : String,
-                      @Part("code") code : String? = null,
+                      @Part("code") code : String?,
                       @Part("price") price : Int,
                       @Part("category_id") categoryId : Int,
                       @Part("available_online") isOnline : Boolean = false,
@@ -100,13 +100,13 @@ interface ApiService {
                       @Path("productId") productId : String,
                       @Part("name") name : String,
                       @Part("description") description : String,
-                      @Part("code") code : String? = null,
+                      @Part("code") code : String?,
                       @Part("price") price : Int,
                       @Part("category_id") categoryId : Int,
                       @Part("available_online") isOnline : Boolean = false,
                       @Part("weight") weight : Double? = 1.0,
                       @Part("status") status : Boolean = true,
-                      @Part("quantity") qty : Int)
+                      @Part("quantity") qty : Int?)
             : Call<WrappedResponse<Product>>
 
     @Multipart
@@ -116,13 +116,13 @@ interface ApiService {
                        @Path("productId") productId : String,
                        @Part("name") name : String,
                        @Part("description") description : String,
-                       @Part("code") code : String? = null,
+                       @Part("code") code : String?,
                        @Part("price") price : Int,
                        @Part("category_id") categoryId : Int,
                        @Part("available_online") isOnline : Boolean = false,
                        @Part("weight") weight : Double? = 1.0,
                        @Part("status") status : Boolean = true,
-                       @Part("quantity") qty : Int,
+                       @Part("quantity") qty : Int?,
                        @Part image : MultipartBody.Part)
             : Call<WrappedResponse<Product>>
 

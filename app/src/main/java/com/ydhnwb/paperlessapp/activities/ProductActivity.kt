@@ -131,7 +131,7 @@ class ProductActivity : AppCompatActivity() {
             }
             product.apply {
                 this.name = et_product_name.text.toString().trim()
-                this.code = if (et_prodouct_code.text.toString().trim().isEmpty()) et_prodouct_code.text.toString().trim() else null
+                this.code = if (et_prodouct_code.text.toString().trim().isNotEmpty()) et_prodouct_code.text.toString().trim() else null
                 this.description = et_prodouct_desc.text.toString().trim()
                 this.price = et_prodouct_price.text.toString().trim().toIntOrNull()
                 this.qty = qty
@@ -148,8 +148,12 @@ class ProductActivity : AppCompatActivity() {
                         product.price, product.qty, product.availableOnline, product.weight, cat.id, cb_product_have_stock.isChecked)){
                     getPassedProduct()?.let { passedProduct ->
                         val isUpdateImage = !passedProduct.image.equals(product.image)
-                        productViewModel.updateProduct(PaperlessUtil.getToken(this@ProductActivity), getPassedStore()?.id.toString(),
-                        product, cat.id!!, isUpdateImage)
+                        productViewModel.updateProduct(
+                            PaperlessUtil.getToken(this@ProductActivity),
+                            getPassedStore()?.id.toString(),
+                            product,
+                            cat.id!!,
+                            isUpdateImage)
                     } ?: kotlin.run {
                         product.image?.let { imagePath ->
                             productViewModel.createProduct(PaperlessUtil.getToken(this@ProductActivity),
