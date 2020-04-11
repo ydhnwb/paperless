@@ -109,7 +109,7 @@ class UserViewModel : ViewModel(){
     }
 
     fun profile(token: String){
-        state.value = UserState.IsLoading(false)
+        state.value = UserState.IsLoading(true)
         api.profile(token).enqueue(object: Callback<WrappedResponse<User>>{
             override fun onFailure(call: Call<WrappedResponse<User>>, t: Throwable) {
                 println(t.message)

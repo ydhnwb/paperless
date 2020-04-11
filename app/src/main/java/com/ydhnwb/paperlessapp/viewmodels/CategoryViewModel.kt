@@ -16,7 +16,6 @@ class CategoryViewModel : ViewModel(){
     private var state : SingleLiveEvent<CategoryState> = SingleLiveEvent()
     private var categories = MutableLiveData<List<Category>>()
 
-
     fun fetchCategory(){
         try{
             state.value = CategoryState.IsLoading(true)

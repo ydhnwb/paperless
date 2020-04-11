@@ -26,6 +26,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_margin="16dp"
+        android:id="@+id/fab"
         android:tint="@color/colorBlackSteel"
         android:backgroundTint="@color/colorFlueGreen"
         android:src="@drawable/ic_person_add_black_24dp"

@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.fragments.manage
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -8,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.SearchUserActivity
 import com.ydhnwb.paperlessapp.adapters.EmployeeAdapter
 import com.ydhnwb.paperlessapp.viewmodels.EmployeeState
 import com.ydhnwb.paperlessapp.viewmodels.EmployeeViewModel
@@ -33,6 +35,9 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
                 }
             }
         })
+        view.fab.setOnClickListener {
+            startActivity(Intent(activity, SearchUserActivity::class.java))
+        }
     }
 
     private fun handleUIState(it: EmployeeState){

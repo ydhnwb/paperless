@@ -1,9 +1,15 @@
 package com.ydhnwb.paperlessapp.activities
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.zxing.Result
 import com.ydhnwb.paperlessapp.R
 import kotlinx.android.synthetic.main.activity_scanner.*
@@ -37,6 +43,30 @@ class ScannerActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
             val i = Intent().putExtra("CODE", it.text)
             setResult(Activity.RESULT_OK, i)
             finish()
+        }
+    }
+
+    private fun checkPermisson(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                Toast.makeText(this, "Aplikasi tidak berjalan tanpa izin ke kamera", Toast.LENGTH_LONG).show()
+                finish()
+            } else {
+                ActivityCompat.requestPermissions(this,  arrayOf(Manifest.permission.CAMERA), 20)
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            20 -> {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("IntroAct", "Permission has been denied by user")
+                } else {
+                    Log.i("IntroAct", "Permission has been granted by user")
+                }
+            }
         }
     }
 }

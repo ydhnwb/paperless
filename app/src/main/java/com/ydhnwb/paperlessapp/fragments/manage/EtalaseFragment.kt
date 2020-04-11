@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.fragments.manage
 
+import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.CheckoutActivity
+import com.ydhnwb.paperlessapp.activities.ScannerActivity
 import com.ydhnwb.paperlessapp.adapters.EtalaseAdapter
 import com.ydhnwb.paperlessapp.adapters.SelectedProductAdapter
 import com.ydhnwb.paperlessapp.models.Product
@@ -98,6 +100,31 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
                 toast("Pilih produk terlebih dahulu")
             }
 
+        }
+
+        view!!.btn_scan.setOnClickListener {
+            startActivityForResult(Intent(activity, ScannerActivity::class.java), 0)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 0 && resultCode == Activity.RESULT_OK && data != null ){
+            checkProductByCode(data.getStringExtra("CODE"))
+        }
+    }
+
+    private fun checkProductByCode(code: String?){
+        code?.let {
+            val product : Product? = productViewModel.checkProductByCode(it)
+            product?.let {
+                val p = product.copy()
+                p.selectedQuantity = 1
+                productViewModel.addSelectedProduct(p)
+                toast("${p.name} ditambahkan ke keranjang")
+            } ?: kotlin.run {
+                toast("Produk dengan code $it tidak ditemukan")
+            }
         }
     }
 }
