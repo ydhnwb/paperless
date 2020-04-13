@@ -8,6 +8,7 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.fragments.DashboardFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
+import android.graphics.Color
 import android.widget.Toast
 import com.ydhnwb.paperlessapp.fragments.NotificationFragment
 import com.ydhnwb.paperlessapp.fragments.ProfileFragment

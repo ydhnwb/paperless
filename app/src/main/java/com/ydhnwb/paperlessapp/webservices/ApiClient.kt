@@ -132,4 +132,7 @@ interface ApiService {
 
     @GET("v1/users/profile")
     fun profile(@Header("Authorization") token: String) : Call<WrappedResponse<User>>
+
+    @GET("v1/search")
+    fun user_search(@Header("Authorization") token: String, @Query("query") q : String) : Call<WrappedListResponse<User>>
 }

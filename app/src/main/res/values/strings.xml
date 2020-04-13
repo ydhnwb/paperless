@@ -184,5 +184,6 @@
     <string name="hint_product_have_stock">Produk ini memiliki stok</string>
     <string name="title_activity_search_user">SearchUserActivity</string>
     <string name="hint_search_user">Cari pengguna</string>
+    <string name="hint_search_user_alt">Mulailah dengan mengetik nama</string>
 
 </resources>

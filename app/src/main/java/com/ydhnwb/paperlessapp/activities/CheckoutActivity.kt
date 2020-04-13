@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.activities
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
@@ -56,4 +57,5 @@ class CheckoutActivity : AppCompatActivity() {
             checkout_discount_indicator.text = if(isChecked) "%" else "Rp."
         }
     }
+
 }

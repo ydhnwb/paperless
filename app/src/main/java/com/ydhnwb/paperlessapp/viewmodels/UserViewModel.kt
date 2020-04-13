@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiClient
 import retrofit2.Call
@@ -15,6 +16,7 @@ class UserViewModel : ViewModel(){
     private var state : SingleLiveEvent<UserState> = SingleLiveEvent()
     private var api = ApiClient.instance()
     private var currentUser = MutableLiveData<User>()
+    private var searchResult = MutableLiveData<List<User>>()
 
     fun validate(name : String?, email: String, password: String, confirmPassword : String?) : Boolean{
         state.value = UserState.Reset
@@ -135,6 +137,40 @@ class UserViewModel : ViewModel(){
         })
     }
 
+    fun search(token: String, query: String){
+        state.value = UserState.IsLoading(true)
+        api.user_search(token,query).enqueue(object: Callback<WrappedListResponse<User>>{
+            override fun onFailure(call: Call<WrappedListResponse<User>>, t: Throwable) {
+                println(t.message)
+                state.value = UserState.IsLoading(false)
+                state.value = UserState.ShowToast(t.message.toString())
+            }
+
+            override fun onResponse(call: Call<WrappedListResponse<User>>, response: Response<WrappedListResponse<User>>) {
+                if(response.isSuccessful){
+                    val b = response.body()
+                    b?.let {
+                       if(it.status){
+                            val res = mutableListOf<User>()
+                            if (it.data!!.size > 20){
+                                res.addAll(it.data!!.take(20))
+                            }else{
+                                res.addAll(it.data!!)
+                            }
+                            searchResult.postValue(res)
+                        }else{
+                            state.value = UserState.ShowToast("Tidak dapat mencari pengguna")
+                        }
+                    }
+                }else{
+                    state.value = UserState.ShowToast("Response server error")
+                }
+                state.value = UserState.IsLoading(false)
+            }
+        })
+    }
+
+    fun listenToSearchResult() = searchResult
     fun getUIState() = state
     fun listenToCurrentUser() = currentUser
 }
