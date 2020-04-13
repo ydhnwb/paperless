@@ -8,13 +8,13 @@ import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiClient
+import com.ydhnwb.paperlessapp.webservices.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UserViewModel : ViewModel(){
+class UserViewModel(private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<UserState> = SingleLiveEvent()
-    private var api = ApiClient.instance()
     private var currentUser = MutableLiveData<User>()
     private var searchResult = MutableLiveData<List<User>>()
 

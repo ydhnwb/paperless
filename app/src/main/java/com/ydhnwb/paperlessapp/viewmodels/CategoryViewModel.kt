@@ -6,13 +6,13 @@ import com.ydhnwb.paperlessapp.models.Category
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.webservices.ApiClient
+import com.ydhnwb.paperlessapp.webservices.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
 
-class CategoryViewModel : ViewModel(){
-    private var api = ApiClient.instance()
+class CategoryViewModel(private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<CategoryState> = SingleLiveEvent()
     private var categories = MutableLiveData<List<Category>>()
 

@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -25,16 +24,16 @@ import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import kotlinx.android.synthetic.main.bottomsheet_detail.view.*
 import kotlinx.android.synthetic.main.fragment_etalase.view.*
 import kotlinx.android.synthetic.main.fragment_etalase.view.btn_details
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
-    private lateinit var productViewModel: ProductViewModel
-    private lateinit var parentStoreViewModel: StoreViewModel
+    private val productViewModel: ProductViewModel by viewModel()
+    private val parentStoreViewModel: StoreViewModel by sharedViewModel()
     private lateinit var bottomSheet: BottomSheetBehavior<*>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-        parentStoreViewModel = ViewModelProvider(activity!!).get(StoreViewModel::class.java)
         setupUIComponent()
         productViewModel.listenProducts().observe(viewLifecycleOwner, Observer {
             view.rv_etalase.adapter?.let { adapter ->

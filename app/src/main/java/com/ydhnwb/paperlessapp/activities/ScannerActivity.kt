@@ -25,6 +25,7 @@ class ScannerActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         scannerView = ZXingScannerView(this)
         content_frame.addView(scannerView)
         supportActionBar?.hide()
+        checkPermisson()
     }
 
     override fun onResume() {

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.api.load
 import coil.transform.CircleCropTransformation
@@ -22,6 +21,7 @@ import com.ydhnwb.paperlessapp.viewmodels.UserState
 import com.ydhnwb.paperlessapp.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.fragment_not_logged_in.view.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
     private var isNotLoggedIn : Boolean = false
@@ -31,7 +31,7 @@ class ProfileFragment : Fragment() {
         add(Preference(3, R.string.pref_privacy, R.drawable.ic_security_black_24dp))
         add(Preference(4, R.string.pref_store, R.drawable.ic_dashboard_black_24dp))
     }
-    private lateinit var userViewModel : UserViewModel
+    private val userViewModel : UserViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         isNotLoggedIn = PaperlessUtil.getToken(activity!!).equals("UNDEFINED")
@@ -48,7 +48,6 @@ class ProfileFragment : Fragment() {
             view.btn_register.setOnClickListener { startActivity(Intent(activity, RegisterActivity::class.java)) }
             view.btn_login.setOnClickListener { startActivity(Intent(activity, LoginActivity::class.java)) }
         }else{
-            userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
             userViewModel.listenToCurrentUser().observe(viewLifecycleOwner, Observer {
                 it?.let {
                     view.profile_image.load(R.drawable.ydhnwb){

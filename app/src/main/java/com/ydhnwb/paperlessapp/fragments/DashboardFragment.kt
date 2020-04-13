@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.CreateStoreActivity
@@ -16,13 +15,13 @@ import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.StoreState
 import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard){
-    private lateinit var storeViewModel: StoreViewModel
+    private val storeViewModel: StoreViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        storeViewModel = ViewModelProvider(this).get(StoreViewModel::class.java)
         setupUI()
         storeViewModel.listenToMyStore().observe(viewLifecycleOwner, Observer { attachToMyStores(it) })
         storeViewModel.listenToOtherStore().observe(viewLifecycleOwner, Observer { attachToOtherStores(it) })

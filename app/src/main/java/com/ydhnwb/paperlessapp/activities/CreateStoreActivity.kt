@@ -2,13 +2,11 @@ package com.ydhnwb.paperlessapp.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import coil.api.load
 import com.fxn.pix.Pix
 import com.ydhnwb.paperlessapp.R
@@ -18,11 +16,12 @@ import com.ydhnwb.paperlessapp.viewmodels.StoreState
 import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import kotlinx.android.synthetic.main.activity_create_store.*
 import kotlinx.android.synthetic.main.content_create_store.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
 class CreateStoreActivity : AppCompatActivity() {
     companion object { private const val IMAGE_REQUEST_CODE = 167 }
-    private lateinit var storeViewModel : StoreViewModel
+    private val storeViewModel : StoreViewModel by viewModel()
     private var store = Store()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +30,6 @@ class CreateStoreActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         toolbar.setNavigationOnClickListener { finish() }
-        storeViewModel = ViewModelProvider(this).get(StoreViewModel::class.java)
         storeViewModel.listenUIState().observe(this, Observer {
             handleUIState(it)
         })

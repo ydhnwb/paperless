@@ -1,13 +1,10 @@
 package com.ydhnwb.paperlessapp.activities
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.ydhnwb.paperlessapp.R
@@ -16,17 +13,16 @@ import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.UserState
 import com.ydhnwb.paperlessapp.viewmodels.UserViewModel
-
 import kotlinx.android.synthetic.main.activity_search_user.*
 import kotlinx.android.synthetic.main.content_search_user.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchUserActivity : AppCompatActivity() {
-    private lateinit var userViewModel: UserViewModel
+    private val userViewModel: UserViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_user)
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         setupUI()
         userViewModel.listenToSearchResult().observe(this, Observer {
             handleSearchResult(it)

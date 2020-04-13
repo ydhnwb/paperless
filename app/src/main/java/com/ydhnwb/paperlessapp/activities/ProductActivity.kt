@@ -3,7 +3,6 @@ package com.ydhnwb.paperlessapp.activities
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.Menu
@@ -13,7 +12,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import coil.api.load
 import com.fxn.pix.Pix
 import com.ydhnwb.paperlessapp.R
@@ -27,13 +25,14 @@ import com.ydhnwb.paperlessapp.viewmodels.ProductState
 import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
 import kotlinx.android.synthetic.main.activity_product.*
 import kotlinx.android.synthetic.main.content_product.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
 
 class ProductActivity : AppCompatActivity() {
     private val IMAGE_REQUEST_CODE = 123
-    private lateinit var productViewModel: ProductViewModel
-    private lateinit var categoryViewModel: CategoryViewModel
+    private val productViewModel: ProductViewModel by viewModel()
+    private val categoryViewModel: CategoryViewModel by viewModel()
     private var product = Product()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +43,6 @@ class ProductActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener { finish() }
         checkBoxAvailableOnline()
         checkBoxHaveStock()
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-        categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         categoryViewModel.fetchCategory()
         categoryViewModel.listenCategories().observe(this, Observer { attachToSpinner(it) })
         categoryViewModel.listenToUIState().observe(this, Observer { handleCategoryState(it) })

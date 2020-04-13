@@ -8,6 +8,7 @@ import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiClient
+import com.ydhnwb.paperlessapp.webservices.ApiService
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -17,9 +18,8 @@ import retrofit2.Response
 import java.io.File
 import java.lang.Exception
 
-class StoreViewModel : ViewModel(){
+class StoreViewModel(private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<StoreState> = SingleLiveEvent()
-    private var api = ApiClient.instance()
     private var myStores = MutableLiveData<List<Store>>()
     private var otherStore = MutableLiveData<List<Store>>()
     private var currentManagedStore = MutableLiveData<Store>()

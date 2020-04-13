@@ -1,7 +1,6 @@
 package com.ydhnwb.paperlessapp.activities
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.fragments.manage.EmployeeFragment
 import com.ydhnwb.paperlessapp.fragments.manage.EtalaseFragment
@@ -20,6 +18,7 @@ import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import kotlinx.android.synthetic.main.activity_manage.*
 import kotlinx.android.synthetic.main.app_bar_manage.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
@@ -27,7 +26,7 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         private var navStatus = -1
     }
 
-    private lateinit var storeViewModel: StoreViewModel
+    private val storeViewModel: StoreViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +34,6 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setSupportActionBar(toolbar)
         supportActionBar?.title = getCurrentStore().name
         initComp()
-        storeViewModel = ViewModelProvider(this).get(StoreViewModel::class.java)
         storeViewModel.setCurrentManagedStore(getCurrentStore())
         if(savedInstanceState == null){
             openFirst = true

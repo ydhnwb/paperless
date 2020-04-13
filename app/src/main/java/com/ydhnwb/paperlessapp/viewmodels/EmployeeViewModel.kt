@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Employee
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import com.ydhnwb.paperlessapp.webservices.ApiClient
+import com.ydhnwb.paperlessapp.webservices.ApiService
 
-class EmployeeViewModel : ViewModel(){
+class EmployeeViewModel(private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<EmployeeState> = SingleLiveEvent()
     private var employees = MutableLiveData<List<Employee>>()
-    private var api = ApiClient.instance()
 
     fun fetchAllEmployee(){
         val e = mutableListOf<Employee>().apply {

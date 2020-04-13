@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.ProductActivity
@@ -16,15 +15,15 @@ import com.ydhnwb.paperlessapp.viewmodels.ProductState
 import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
 import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import kotlinx.android.synthetic.main.fragment_product.view.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProductFragment : Fragment(R.layout.fragment_product) {
-    private lateinit var productViewModel: ProductViewModel
-    private lateinit var parentStoreViewModel: StoreViewModel
+    private val productViewModel: ProductViewModel by viewModel()
+    private val parentStoreViewModel: StoreViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-        parentStoreViewModel = ViewModelProvider(activity!!).get(StoreViewModel::class.java)
         view.rv_manage_product.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = DetailedProductAdapter(mutableListOf(), activity!!, parentStoreViewModel.getCurrentStore()!!)

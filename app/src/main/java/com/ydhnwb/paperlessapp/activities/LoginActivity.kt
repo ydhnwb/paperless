@@ -1,28 +1,26 @@
 package com.ydhnwb.paperlessapp.activities
 
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.UserState
 import com.ydhnwb.paperlessapp.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.activity_login.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var userViewModel : UserViewModel
+    private val userViewModel : UserViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         supportActionBar?.hide()
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         userViewModel.getUIState().observe(this, Observer {
             handleState(it)
         })

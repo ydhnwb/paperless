@@ -8,6 +8,7 @@ import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiClient
+import com.ydhnwb.paperlessapp.webservices.ApiService
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -17,10 +18,9 @@ import retrofit2.Response
 import java.io.File
 import java.lang.Exception
 
-class ProductViewModel : ViewModel(){
+class ProductViewModel(private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<ProductState> = SingleLiveEvent()
     private var products = MutableLiveData<List<Product>>()
-    private var api = ApiClient.instance()
     private var selectedProducts = MutableLiveData<List<Product>>()
 
     fun fetchAllProducts(token: String, storeId: String){
