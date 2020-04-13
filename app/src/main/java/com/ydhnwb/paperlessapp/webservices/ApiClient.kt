@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.webservices
 
+import com.ydhnwb.paperlessapp.BuildConfig
 import com.ydhnwb.paperlessapp.models.Category
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.models.Store
@@ -18,8 +19,6 @@ import java.util.concurrent.TimeUnit
 
 class ApiClient {
     companion object {
-        const val END_POINT = "https://paperless-project.herokuapp.com/"
-        private const val ENDPOINT = "https://paperless-project.herokuapp.com/api/"
         private var retrofit : Retrofit? = null
         private val client = OkHttpClient.Builder().apply {
             writeTimeout(60, TimeUnit.SECONDS)
@@ -29,7 +28,7 @@ class ApiClient {
         private fun getClient() : Retrofit {
             return if(retrofit == null){
                 retrofit = Retrofit.Builder().apply {
-                    baseUrl(ENDPOINT)
+                    baseUrl(BuildConfig.ENDPOINT)
                     client(client)
                     addConverterFactory(ScalarsConverterFactory.create())
                     addConverterFactory(GsonConverterFactory.create())

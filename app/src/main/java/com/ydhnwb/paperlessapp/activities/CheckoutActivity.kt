@@ -41,7 +41,7 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun listenerDiscount(){
-        checkout_switch_discount.setOnCheckedChangeListener { it, isChecked ->
+        checkout_switch_discount.setOnCheckedChangeListener { _, isChecked ->
             setVisibilityDiscountLayout(isChecked)
         }
     }
@@ -53,7 +53,7 @@ class CheckoutActivity : AppCompatActivity() {
 
     }
     private fun listenerPercent(){
-        checkout_checkbox_percent.setOnCheckedChangeListener { it, isChecked ->
+        checkout_checkbox_percent.setOnCheckedChangeListener { _, isChecked ->
             checkout_discount_indicator.text = if(isChecked) "%" else "Rp."
         }
     }

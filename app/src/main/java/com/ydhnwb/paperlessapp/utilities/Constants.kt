@@ -53,8 +53,6 @@ class PaperlessUtil {
             return formatRupiah.format(num)
         }
 
-        fun toImageUrl(url : String) = "${ApiClient.END_POINT}/url"
-
         fun isValidEmail(email : String) : Boolean = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
         fun isValidPassword(password : String) = password.length >= 8
 

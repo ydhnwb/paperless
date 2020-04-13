@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_marginTop="16dp"
             app:errorEnabled="true"
+            app:boxBackgroundColor="@android:color/transparent"
             android:id="@+id/in_store_name"
             android:hint="@string/hint_store_name"
             android:layout_height="wrap_content">
@@ -44,6 +45,7 @@
             android:id="@+id/in_store_desc"
             app:errorEnabled="true"
             android:hint="@string/hint_store_description"
+            app:boxBackgroundColor="@android:color/transparent"
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -55,6 +57,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:hint="@string/hint_store_phone"
+            app:boxBackgroundColor="@android:color/transparent"
             app:errorEnabled="true"
             android:id="@+id/in_store_phone"
             android:layout_height="wrap_content">
@@ -70,6 +73,7 @@
             android:layout_width="match_parent"
             android:hint="@string/hint_email"
             android:id="@+id/in_store_email"
+            app:boxBackgroundColor="@android:color/transparent"
             app:errorEnabled="true"
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText
@@ -84,6 +88,7 @@
             app:errorEnabled="true"
             android:id="@+id/in_store_address"
             android:hint="@string/hint_store_address"
+            app:boxBackgroundColor="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText

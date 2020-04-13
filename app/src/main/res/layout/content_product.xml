@@ -40,6 +40,7 @@
                 android:layout_width="match_parent"
                 app:errorEnabled="true"
                 android:id="@+id/in_product_name"
+                app:boxBackgroundColor="@android:color/transparent"
                 android:layout_marginStart="8dp"
                 android:hint="@string/hint_product_name"
                 android:layout_height="wrap_content">
@@ -56,6 +57,7 @@
             app:errorEnabled="true"
             android:hint="@string/hint_product_desc"
             android:id="@+id/in_product_desc"
+            app:boxBackgroundColor="@android:color/transparent"
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -73,7 +75,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:id="@+id/in_product_code"
-                android:hint="Kode produk (opsional)"
+                app:boxBackgroundColor="@android:color/transparent"
+                android:hint="@string/hint_product_code"
                 android:layout_weight="0.8"
                 android:layout_height="wrap_content">
                 <com.google.android.material.textfield.TextInputEditText
@@ -105,6 +108,7 @@
             app:errorEnabled="true"
             android:id="@+id/in_product_price"
             android:hint="@string/hint_product_price"
+            app:boxBackgroundColor="@android:color/transparent"
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -132,6 +136,7 @@
             android:id="@+id/in_product_quantity"
             android:hint="@string/hint_product_quantity"
             android:visibility="gone"
+            app:boxBackgroundColor="@android:color/transparent"
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -151,6 +156,7 @@
             android:layout_width="match_parent"
             app:errorEnabled="true"
             android:visibility="gone"
+            app:boxBackgroundColor="@android:color/transparent"
             android:id="@+id/in_product_weight"
             android:hint="@string/hint_product_weight"
             android:layout_height="wrap_content">

@@ -26,22 +26,32 @@
             <include layout="@layout/chart_bar"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:padding="16dp"
-            android:orientation="vertical"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="600dp">
+            android:elevation="2dp"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:background="?attr/selectableItemBackground"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="600dp">
 
-            <TextView
-                android:layout_marginBottom="16dp"
-                android:textColor="@color/colorBlackSteel"
-                android:textStyle="bold"
-                android:text="4 Produk terlaris bulan ini"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_marginBottom="16dp"
+                    android:textColor="@color/colorBlackSteel"
+                    android:textStyle="bold"
+                    android:text="4 Produk terlaris bulan ini"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-            <include layout="@layout/chart_pie"/>
-        </LinearLayout>
+                <include layout="@layout/chart_pie"/>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
 
 
     </LinearLayout>

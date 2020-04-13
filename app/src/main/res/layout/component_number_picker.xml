@@ -14,6 +14,7 @@
         <com.google.android.material.card.MaterialCardView
             android:backgroundTint="@color/colorGrey"
             android:layout_width="24dp"
+            app:cardCornerRadius="3dp"
             android:id="@+id/product_decrementQuantity"
             android:layout_gravity="center"
             android:layout_height="24dp">
@@ -39,6 +40,7 @@
         <com.google.android.material.card.MaterialCardView
             android:backgroundTint="@color/colorPrimaryDark"
             android:layout_width="24dp"
+            app:cardCornerRadius="3dp"
             android:id="@+id/product_incrementQuantity"
             android:layout_gravity="center"
             android:layout_height="24dp">

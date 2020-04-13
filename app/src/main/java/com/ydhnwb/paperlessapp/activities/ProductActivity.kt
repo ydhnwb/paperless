@@ -124,7 +124,7 @@ class ProductActivity : AppCompatActivity() {
 
     private fun saveChanges(){
         btn_submit.setOnClickListener {
-            var qty : Int? = null
+            var qty: Int?
             if(cb_product_have_stock.isChecked){
                 qty = et_product_quantity.text.toString().trim().toIntOrNull()
             }else{
@@ -156,7 +156,7 @@ class ProductActivity : AppCompatActivity() {
                             cat.id!!,
                             isUpdateImage)
                     } ?: kotlin.run {
-                        product.image?.let { imagePath ->
+                        product.image?.let { _ ->
                             productViewModel.createProduct(PaperlessUtil.getToken(this@ProductActivity),
                                 getPassedStore()?.id.toString(), product, cat.id!!)
                         } ?: kotlin.run {
@@ -173,9 +173,9 @@ class ProductActivity : AppCompatActivity() {
     private fun getPassedProduct() : Product? = intent.getParcelableExtra<Product>("PRODUCT")
     private fun getPassedStore() : Store? = intent.getParcelableExtra<Store>("STORE")
 
-    private fun checkBoxAvailableOnline(){ cb_product_online_available.setOnCheckedChangeListener { it , isChecked ->
+    private fun checkBoxAvailableOnline(){ cb_product_online_available.setOnCheckedChangeListener { _ , isChecked ->
         if(isChecked) in_product_weight.visibility = View.VISIBLE else in_product_weight.visibility = View.GONE } }
-    private fun checkBoxHaveStock(){ cb_product_have_stock.setOnCheckedChangeListener { it, isChecked ->
+    private fun checkBoxHaveStock(){ cb_product_have_stock.setOnCheckedChangeListener { _, isChecked ->
         if (isChecked) in_product_quantity.visibility = View.VISIBLE else in_product_quantity.visibility = View.GONE } }
 
     private fun attachToSpinner(it: List<Category>){

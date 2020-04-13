@@ -58,7 +58,6 @@ class StoreAdapter(private var stores : MutableList<Store>, private var context:
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         fun bind(store : Store, context : Context, svm : StoreViewModel){
             itemView.store_name.text = store.name.toString()
-            println("${ApiClient.END_POINT}/${store.store_logo}")
             itemView.store_logo.load(store.store_logo)
             itemView.setOnClickListener {
                 context.startActivity(Intent(context, ManageActivity::class.java).apply {

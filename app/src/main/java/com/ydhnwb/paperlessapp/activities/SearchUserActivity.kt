@@ -26,7 +26,6 @@ class SearchUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_user)
-        setSupportActionBar(toolbar)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         setupUI()
         userViewModel.listenToSearchResult().observe(this, Observer {
@@ -48,7 +47,7 @@ class SearchUserActivity : AppCompatActivity() {
             override fun onSearchStateChanged(enabled: Boolean) {}
             override fun onSearchConfirmed(text: CharSequence?) {
                 text?.let {
-                    it.isNotEmpty().let { b ->
+                    it.isNotEmpty().let { _ ->
                         userViewModel.search(PaperlessUtil.getToken(this@SearchUserActivity),it.toString())
                     }
                 }

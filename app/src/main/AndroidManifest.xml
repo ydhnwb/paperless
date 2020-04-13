@@ -20,7 +20,8 @@
         <activity
             android:name=".activities.SearchUserActivity"
             android:label="@string/title_activity_search_user"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity android:name=".activities.ScannerActivity" />
         <activity
             android:name=".activities.CheckoutActivity"

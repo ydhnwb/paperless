@@ -35,6 +35,7 @@
         <com.google.android.material.textfield.TextInputLayout
             app:errorEnabled="true"
             android:id="@+id/in_name"
+            app:boxBackgroundColor="@android:color/transparent"
             android:hint="@string/fullname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -51,6 +52,7 @@
         <com.google.android.material.textfield.TextInputLayout
             app:errorEnabled="true"
             android:id="@+id/in_email"
+            app:boxBackgroundColor="@android:color/transparent"
             android:hint="@string/hint_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -69,6 +71,7 @@
             app:errorEnabled="true"
             app:passwordToggleEnabled="true"
             android:id="@+id/in_password"
+            app:boxBackgroundColor="@android:color/transparent"
             android:hint="@string/hint_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -87,6 +90,7 @@
             app:passwordToggleEnabled="true"
             android:id="@+id/in_password_confirm"
             android:hint="@string/confirm_password"
+            app:boxBackgroundColor="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
