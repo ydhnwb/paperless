@@ -60,6 +60,7 @@ class SearchUserActivity : AppCompatActivity() {
         when(it){
             is UserState.ShowToast -> toast(it.message)
             is UserState.IsLoading -> {
+                isEmptyView(!it.state)
                 if(it.state){
                     loading.visibility = View.VISIBLE
                 }else{
@@ -70,11 +71,7 @@ class SearchUserActivity : AppCompatActivity() {
     }
 
     private fun handleSearchResult(it: List<User>){
-        if(it.isEmpty()){
-            empty_view.visibility = View.VISIBLE
-        }else{
-            empty_view.visibility = View.GONE
-        }
+        isEmptyView(it.isEmpty())
         rv_user.adapter?.let {adapter ->
             if(adapter is SearchResultUserAdapter){
                 adapter.updateList(it)
@@ -82,6 +79,9 @@ class SearchUserActivity : AppCompatActivity() {
         }
     }
 
+    private fun isEmptyView(state : Boolean){
+        if(state) empty_view.visibility = View.VISIBLE else empty_view.visibility = View.GONE
+    }
 
     private fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 
