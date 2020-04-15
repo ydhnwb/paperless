@@ -146,6 +146,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
+            android:visibility="invisible"
             android:layout_marginTop="8dp"
             android:id="@+id/cb_product_online_available"
             android:text="@string/hint_product_online_available"

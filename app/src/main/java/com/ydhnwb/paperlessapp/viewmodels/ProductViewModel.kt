@@ -132,6 +132,9 @@ class ProductViewModel(private val api : ApiService) : ViewModel(){
 
     fun createProduct(token: String, storeId : String, product: Product, categoryId : Int){
         state.value = ProductState.IsLoading(true)
+        println(storeId)
+        println(product)
+        println(categoryId)
         val file = File(product.image.toString())
         val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
         val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
@@ -158,6 +161,7 @@ class ProductViewModel(private val api : ApiService) : ViewModel(){
                     }else{
                         state.value = ProductState.ShowPopup("Terjadi kesalahan. Tidak dapat membuat produk")
                         println(response.body())
+                        println(response.code())
                     }
                     state.value = ProductState.IsLoading(false)
                 }
@@ -172,7 +176,7 @@ class ProductViewModel(private val api : ApiService) : ViewModel(){
             val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
             val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
             api.product_update(token, storeId, product.id.toString(), product.name.toString(), product.description.toString(),
-                product.code, product.price!!, categoryId, product.availableOnline, product.weight, true, product.qty!!, image)
+                product.code, product.price!!, categoryId, product.availableOnline, product.weight, true, product.qty, image)
                 .enqueue(object : Callback<WrappedResponse<Product>>{
                     override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
                         println(t.message)

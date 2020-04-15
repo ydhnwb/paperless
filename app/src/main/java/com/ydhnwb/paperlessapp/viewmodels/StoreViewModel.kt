@@ -156,6 +156,8 @@ class StoreViewModel(private val api : ApiService) : ViewModel(){
                             }
                         }
                     }else{
+                        println(response.body())
+                        println(response.code())
                         state.value = StoreState.ShowToast("Tidak dapat membuat toko.")
                     }
                     state.value = StoreState.IsLoading(false)

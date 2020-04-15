@@ -5,8 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.github.florent37.shapeofview.shapes.ArcView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shape_arc_height="20dp"
+        app:shape_arc_position="bottom">
+
+        <FrameLayout
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="220dp">
+
+            <TextView
+                android:layout_marginTop="38dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/colorKeepWhite"
+                android:textStyle="bold"
+                android:textSize="38sp"
+                android:text="@string/title_notifications_alt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </FrameLayout>
+
+    </com.github.florent37.shapeofview.shapes.ArcView>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="94dp"
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
         android:layout_width="match_parent"

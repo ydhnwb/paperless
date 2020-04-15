@@ -41,7 +41,7 @@ class ProductActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
         toolbar.setNavigationOnClickListener { finish() }
-        checkBoxAvailableOnline()
+//        checkBoxAvailableOnline()
         checkBoxHaveStock()
         categoryViewModel.fetchCategory()
         categoryViewModel.listenCategories().observe(this, Observer { attachToSpinner(it) })
@@ -90,9 +90,9 @@ class ProductActivity : AppCompatActivity() {
             et_prodouct_price.setText(it.price.toString())
             et_prodouct_desc.setText(it.description.toString())
             if(it.qty != null){ et_product_quantity.setText(it.qty.toString()) }
-            cb_product_online_available.isChecked = it.availableOnline
+//            cb_product_online_available.isChecked = it.availableOnline
             cb_product_have_stock.isChecked = (it.qty != null)
-            if(cb_product_online_available.isChecked){ et_product_weight.setText(it.weight.toString()) }
+//            if(cb_product_online_available.isChecked){ et_product_weight.setText(it.weight.toString()) }
             if(cb_product_have_stock.isChecked){ et_product_quantity.setText(it.qty.toString()) }
             product_image.load(it.image)
             it.code?.let { code -> et_prodouct_code.setText(code) }
@@ -102,10 +102,10 @@ class ProductActivity : AppCompatActivity() {
                 description = it.description
                 image = it.image
                 price = it.price
-                weight = it.weight
-                availableOnline = it.availableOnline
+                weight = 1.0
+                availableOnline = false
                 category = it.category
-                status = it.status
+                status = true
                 image = it.image
                 code = it.code
             }
@@ -121,21 +121,21 @@ class ProductActivity : AppCompatActivity() {
 
     private fun saveChanges(){
         btn_submit.setOnClickListener {
-            var qty: Int?
-            if(cb_product_have_stock.isChecked){
-                qty = et_product_quantity.text.toString().trim().toIntOrNull()
-            }else{
-                qty = null
-            }
+//            var qty: Int? = null
+//            if(cb_product_have_stock.isChecked){
+//                qty = et_product_quantity.text.toString().trim().toIntOrNull()
+//            }else{
+//                qty = null
+//            }
             product.apply {
                 this.name = et_product_name.text.toString().trim()
                 this.code = if (et_prodouct_code.text.toString().trim().isNotEmpty()) et_prodouct_code.text.toString().trim() else null
                 this.description = et_prodouct_desc.text.toString().trim()
                 this.price = et_prodouct_price.text.toString().trim().toIntOrNull()
-                this.qty = qty
-                this.availableOnline = cb_product_online_available.isChecked
-                this.weight = et_product_weight.text.toString().trim().toDoubleOrNull()
+                this.availableOnline = false
+                this.weight = 1.0
                 this.category = sp_product_category.selectedItem as Category?
+                this.qty = if(cb_product_have_stock.isChecked) et_product_quantity.text.toString().trim().toIntOrNull() else null
             }.also { p ->
                 if(p.weight == null){
                     p.weight = 1.0
@@ -146,6 +146,7 @@ class ProductActivity : AppCompatActivity() {
                         product.price, product.qty, product.availableOnline, product.weight, cat.id, cb_product_have_stock.isChecked)){
                     getPassedProduct()?.let { passedProduct ->
                         val isUpdateImage = !passedProduct.image.equals(product.image)
+                        product.qty = if (cb_product_have_stock.isChecked) product.qty else null
                         productViewModel.updateProduct(
                             PaperlessUtil.getToken(this@ProductActivity),
                             getPassedStore()?.id.toString(),
@@ -167,8 +168,8 @@ class ProductActivity : AppCompatActivity() {
 
     private fun chooseImage(){ product_image.setOnClickListener { Pix.start(this, IMAGE_REQUEST_CODE) } }
 
-    private fun getPassedProduct() : Product? = intent.getParcelableExtra<Product>("PRODUCT")
-    private fun getPassedStore() : Store? = intent.getParcelableExtra<Store>("STORE")
+    private fun getPassedProduct() : Product? = intent.getParcelableExtra("PRODUCT")
+    private fun getPassedStore() : Store? = intent.getParcelableExtra("STORE")
 
     private fun checkBoxAvailableOnline(){ cb_product_online_available.setOnCheckedChangeListener { _ , isChecked ->
         if(isChecked) in_product_weight.visibility = View.VISIBLE else in_product_weight.visibility = View.GONE } }

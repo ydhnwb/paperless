@@ -186,5 +186,12 @@
     <string name="hint_search_user">Cari pengguna</string>
     <string name="hint_search_user_alt">Mulailah dengan mengetik nama</string>
     <string name="hint_product_code">Kode produk (opsional)</string>
+    <string name="title_find">Temukan</string>
+    <string name="title_find_alt">katalog produk</string>
+    <string name="hint_search_catalog">Cari produk</string>
+    <string name="title_by_category">Kategori</string>
+    <string name="title_dashboard_alt">anda</string>
+    <string name="title_profile_alt">Profil</string>
+    <string name="title_notifications_alt">Notifikasi</string>
 
 </resources>

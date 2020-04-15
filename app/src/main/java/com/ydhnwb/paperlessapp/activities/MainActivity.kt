@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
 import android.graphics.Color
 import android.widget.Toast
+import com.ydhnwb.paperlessapp.fragments.ExploreFragment
 import com.ydhnwb.paperlessapp.fragments.NotificationFragment
 import com.ydhnwb.paperlessapp.fragments.ProfileFragment
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.hide()
         nav_view.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         if(savedInstanceState == null){ nav_view.selectedItemId = R.id.navigation_dashboard }
         Thread(Runnable {
@@ -49,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.navigation_explore -> {
                 if(navStatus != 1){
-                    fragment = DashboardFragment()
+                    fragment = ExploreFragment()
                     navStatus = 1
                 }
             }
