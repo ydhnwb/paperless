@@ -1,10 +1,7 @@
 package com.ydhnwb.paperlessapp.webservices
 
 import com.ydhnwb.paperlessapp.BuildConfig
-import com.ydhnwb.paperlessapp.models.Category
-import com.ydhnwb.paperlessapp.models.Product
-import com.ydhnwb.paperlessapp.models.Store
-import com.ydhnwb.paperlessapp.models.User
+import com.ydhnwb.paperlessapp.models.*
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import okhttp3.MultipartBody
@@ -134,4 +131,17 @@ interface ApiService {
 
     @GET("v1/search")
     fun user_search(@Header("Authorization") token: String, @Query("query") q : String) : Call<WrappedListResponse<User>>
+
+    @FormUrlEncoded
+    @POST("v1/invitation/out")
+    fun invite(@Header("Authorization") token : String, @Field("requested_by_store") requestedByStoreId : Int,
+               @Field("role") role : Int, @Field("to") to : Int)
+            : Call<WrappedResponse<Invitation>>
+
+    @GET("v1/own/store/{storeId}/invitation/out")
+    fun invitation_sent(@Header("Authorization") token : String, @Path("storeId") storeId : Int) :
+            Call<WrappedListResponse<Invitation>>
+
+    @GET("v1/invitation/in")
+    fun invitation_in(@Header("Authorization") token : String) : Call<WrappedListResponse<Invitation>>
 }

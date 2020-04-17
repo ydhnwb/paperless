@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="48dp"
+            android:id="@+id/user_image"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/image_placeholder"
+            android:layout_height="48dp"/>
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"
+            android:maxLines="2"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="Prieyudha Akadita S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:textAlignment="center"
+            android:text="@string/info_are_you_sure_invite"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:textAllCaps="false"
+            android:id="@+id/btn_add_cashier"
+            android:text="@string/info_add_as_cashier"
+            android:layout_height="56dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:id="@+id/btn_add_staff"
+            android:textAllCaps="false"
+            android:text="@string/info_add_as_staff"
+            android:layout_height="56dp"/>
+
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/loading"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

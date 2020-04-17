@@ -195,5 +195,11 @@
     <string name="title_notifications_alt">Notifikasi</string>
     <string name="store_menu_report">Laporan</string>
     <string name="store_menu_invitation">Invitasi</string>
+    <string name="info_are_you_sure_invite">Apakah anda ingin mengundang pengguna ini sebagai ke toko anda?</string>
+    <string name="info_add_as_cashier">Undang sebagai kasir</string>
+    <string name="info_add_as_staff">Undang sebagai staff</string>
+    <string name="info_understand">Mengerti</string>
+    <string name="info_successfully_invite">Undangan dikirim</string>
+    <string name="title_activity_invitation">InvitationActivity</string>
 
 </resources>

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.adapters.SearchResultUserAdapter
+import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.UserState
@@ -33,10 +34,12 @@ class SearchUserActivity : AppCompatActivity() {
 
     }
 
+    private fun getPassedStore() = intent.getParcelableExtra<Store>("store")
+
     private fun setupUI(){
         rv_user.apply {
             layoutManager = LinearLayoutManager(this@SearchUserActivity)
-            adapter = SearchResultUserAdapter(mutableListOf(), this@SearchUserActivity, userViewModel)
+            adapter = SearchResultUserAdapter(mutableListOf(), this@SearchUserActivity, userViewModel, getPassedStore())
         }
         search_bar.setOnSearchActionListener(object: MaterialSearchBar.OnSearchActionListener{
             override fun onButtonClicked(buttonCode: Int) {}

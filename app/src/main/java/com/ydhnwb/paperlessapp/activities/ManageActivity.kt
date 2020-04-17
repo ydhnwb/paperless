@@ -59,7 +59,7 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                     navStatus = 0
                     openFirst = false
                     fragment =
-                        HomeFragment()
+                        HomeFragment.instance(getCurrentStore())
                 }
             }
             R.id.nav_etalase -> {
@@ -88,7 +88,7 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 }else{
                     openFirst = false
                     navStatus = 3
-                    fragment = EmployeeFragment()
+                    fragment = EmployeeFragment.instance(getCurrentStore())
                 }
             }
 

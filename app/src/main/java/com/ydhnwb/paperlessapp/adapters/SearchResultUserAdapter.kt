@@ -4,14 +4,17 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.fragments.dialog.InviteDialog
+import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.list_item_employee.view.*
 
-class SearchResultUserAdapter (private var users : MutableList<User>, private var context: Context, private var userViewModel: UserViewModel) :
+class SearchResultUserAdapter (private var users : MutableList<User>, private var context: Context,
+                               private var userViewModel: UserViewModel,private var store : Store) :
         RecyclerView.Adapter<SearchResultUserAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -20,7 +23,7 @@ class SearchResultUserAdapter (private var users : MutableList<User>, private va
 
     override fun getItemCount() = users.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(users[position], context, userViewModel)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(users[position], context, userViewModel, store)
 
     fun updateList(us : List<User>){
         users.clear()
@@ -29,10 +32,11 @@ class SearchResultUserAdapter (private var users : MutableList<User>, private va
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bind(user: User, context: Context, userViewModel: UserViewModel){
+        fun bind(user: User, context: Context, userViewModel: UserViewModel, store: Store){
             itemView.employee_name.text = user.name
             itemView.setOnClickListener {
-                Toast.makeText(context, user.name, Toast.LENGTH_LONG).show()
+                val c = context as AppCompatActivity
+                InviteDialog.instance(user, store).show(c.supportFragmentManager, "invite_dialog")
             }
         }
 
