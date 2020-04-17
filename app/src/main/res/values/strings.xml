@@ -200,10 +200,14 @@
     <string name="info_add_as_staff">Undang sebagai staff</string>
     <string name="info_understand">Mengerti</string>
     <string name="info_successfully_invite">Undangan dikirim</string>
-    <string name="title_activity_invitation">InvitationActivity</string>
+    <string name="title_activity_invitation">Invitasi</string>
     <string name="invitation_waiting">Menunggu konfirmasi</string>
     <string name="invitation_rejected">Ditolak</string>
     <string name="pref_invitation">Invitasi</string>
     <string name="empty_invitation">Belum ada apapun di sini</string>
+    <string name="info_are_you_sure_accept_invite">Apakah anda ingin menerima undangan ini?</string>
+    <string name="btn_accept">Terima</string>
+    <string name="info_cancel">Batal</string>
+    <string name="store_menu_customer">Pelanggan</string>
 
 </resources>

@@ -34,10 +34,6 @@ class InvitationActivity : AppCompatActivity() {
 //        }
         invitationViewModel.listenToUIState().observer(this, Observer { handleUIState(it) })
         fetchInvitation()
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
     }
 
     private fun setupUI(){
@@ -67,7 +63,12 @@ class InvitationActivity : AppCompatActivity() {
             invitationViewModel.listenToInvitationIn().observe(this, Observer {
                 rv_invitation.adapter?.let { a ->
                     if(a is InvitationAdapter){
-                        a.updateList(it)
+                        a.updateList(it.reversed())
+                    }
+                    if(it.isNullOrEmpty()){
+                        empty_view.visibility = View.VISIBLE
+                    }else{
+                        empty_view.visibility = View.GONE
                     }
                 }
             })
@@ -81,7 +82,7 @@ class InvitationActivity : AppCompatActivity() {
             invitationViewModel.listenToInvitationSent().observe(this, Observer {
                 rv_invitation.adapter?.let { a ->
                     if(a is InvitationAdapter){
-                        a.updateList(it)
+                        a.updateList(it.reversed())
                         if(it.isNullOrEmpty()){
                             empty_view.visibility = View.VISIBLE
                         }else{
@@ -90,13 +91,18 @@ class InvitationActivity : AppCompatActivity() {
                     }
                 }
             })
+            if(invitationViewModel.listenToInvitationSent().value == null || invitationViewModel.listenToInvitationSent().value!!.isEmpty()){
+                empty_view.visibility = View.VISIBLE
+            }else{
+                empty_view.visibility = View.GONE
+            }
             invitationViewModel.invitationSent(PaperlessUtil.getToken(this), getPassedStore()?.id!!)
         }
     }
     private fun handleUIState(it : InvitationState){
         when(it){
             is InvitationState.IsLoading -> {
-//                empty_view.visibility = View.GONE
+                empty_view.visibility = View.GONE
                 if(it.state){
                     loading.visibility = View.VISIBLE
                 }else{
