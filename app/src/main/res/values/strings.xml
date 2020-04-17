@@ -193,5 +193,7 @@
     <string name="title_dashboard_alt">anda</string>
     <string name="title_profile_alt">Profil</string>
     <string name="title_notifications_alt">Notifikasi</string>
+    <string name="store_menu_report">Laporan</string>
+    <string name="store_menu_invitation">Invitasi</string>
 
 </resources>

@@ -2,7 +2,9 @@ package com.ydhnwb.paperlessapp.fragments.manage
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.anychart.APIlib
 import com.anychart.AnyChart
 import com.anychart.chart.common.dataentry.DataEntry
@@ -10,16 +12,41 @@ import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.core.cartesian.series.Column
 import com.anychart.enums.*
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.adapters.StoreMenuAdapter
+import com.ydhnwb.paperlessapp.models.StoreMenu
 import kotlinx.android.synthetic.main.chart_bar.view.*
 import kotlinx.android.synthetic.main.chart_pie.*
 import kotlinx.android.synthetic.main.chart_pie.view.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
+    private lateinit var storeMenus : List<StoreMenu>
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.bar_chart.setProgressBar(view.bar_progress_bar)
-        APIlib.getInstance().setActiveAnyChartView(view.bar_chart)
+        storeMenu()
+        dummyChart()
+        dummyPie()
+
+    }
+
+    private fun storeMenu(){
+        storeMenus = listOf(
+            StoreMenu(resources.getString(R.string.store_menu_report), R.drawable.ic_doodle_mail, ContextCompat.getColor(activity!!, R.color.colorAccent)),
+            StoreMenu(resources.getString(R.string.store_menu_invitation), R.drawable.ic_doodle_connection, ContextCompat.getColor(activity!!, R.color.colorPrimary)),
+            StoreMenu(resources.getString(R.string.store_menu_invitation), R.drawable.ic_doodle_connection, ContextCompat.getColor(activity!!, R.color.colorPrimary)),
+            StoreMenu(resources.getString(R.string.store_menu_invitation), R.drawable.ic_doodle_connection, ContextCompat.getColor(activity!!, R.color.colorPrimary))
+        )
+        view!!.rv_store_menu.apply {
+            adapter = StoreMenuAdapter(storeMenus, context)
+            layoutManager = LinearLayoutManager(activity)
+        }
+    }
+
+    private fun dummyChart(){
+        view!!.bar_chart.setProgressBar(view!!.bar_progress_bar)
+        APIlib.getInstance().setActiveAnyChartView(view!!.bar_chart)
         val cartesian = AnyChart.cartesian()
         val data: MutableList<DataEntry> = mutableListOf()
         data.add(ValueDataEntry("Latte", 910))
@@ -38,10 +65,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         cartesian.xAxis(0).title("Product")
         cartesian.yAxis(0).title("Revenue")
 
-        view.bar_chart.setChart(cartesian)
+        view!!.bar_chart.setChart(cartesian)
 
-        view.pie_chart.setProgressBar(pie_progress_bar)
-        APIlib.getInstance().setActiveAnyChartView(view.pie_chart)
+    }
+
+    private fun dummyPie(){
+        val data: MutableList<DataEntry> = mutableListOf()
+        data.add(ValueDataEntry("Latte", 910))
+        data.add(ValueDataEntry("Americano", 902))
+        data.add(ValueDataEntry("Delhi Ice", 102))
+        data.add(ValueDataEntry("Mocca", 89))
+
+        view!!.pie_chart.setProgressBar(pie_progress_bar)
+        APIlib.getInstance().setActiveAnyChartView(view!!.pie_chart)
         val pie = AnyChart.pie()
         val dataPie: MutableList<DataEntry> = mutableListOf()
         dataPie.add(ValueDataEntry("Latte", 910))
@@ -61,6 +97,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             .position("center-bottom")
             .itemsLayout(LegendLayout.HORIZONTAL)
             .align(Align.CENTER)
-        view.pie_chart.setChart(pie)
+        view!!.pie_chart.setChart(pie)
     }
 }
