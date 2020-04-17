@@ -201,5 +201,9 @@
     <string name="info_understand">Mengerti</string>
     <string name="info_successfully_invite">Undangan dikirim</string>
     <string name="title_activity_invitation">InvitationActivity</string>
+    <string name="invitation_waiting">Menunggu konfirmasi</string>
+    <string name="invitation_rejected">Ditolak</string>
+    <string name="pref_invitation">Invitasi</string>
+    <string name="empty_invitation">Belum ada apapun di sini</string>
 
 </resources>

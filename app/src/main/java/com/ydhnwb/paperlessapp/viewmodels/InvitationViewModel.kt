@@ -17,7 +17,7 @@ class InvitationViewModel (private val api : ApiService) : ViewModel(){
     private var invitationsIn = MutableLiveData<List<Invitation>>()
 
     fun setLoading(){ state.value = InvitationState.IsLoading(true) }
-    fun hideLoading(){ state.value = InvitationState.IsLoading(true) }
+    fun hideLoading(){ state.value = InvitationState.IsLoading(false) }
 
     fun invitationSent(token: String, storeId: Int){
         setLoading()

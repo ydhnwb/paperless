@@ -63,8 +63,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             StoreMenu(resources.getString(R.string.store_menu_invitation), R.drawable.ic_doodle_connection, ContextCompat.getColor(activity!!, R.color.colorOrange)),
             StoreMenu(resources.getString(R.string.store_menu_invitation), R.drawable.ic_doodle_connection, ContextCompat.getColor(activity!!, R.color.colorGreen))
         )
+
         view!!.rv_store_menu.apply {
-            adapter = StoreMenuAdapter(storeMenus, context)
+            adapter = StoreMenuAdapter(storeMenus, context, arguments?.getParcelable<Store>("store")!!)
             layoutManager = GridLayoutManager(activity, 2)
         }
     }
