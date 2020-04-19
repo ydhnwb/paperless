@@ -209,5 +209,7 @@
     <string name="btn_accept">Terima</string>
     <string name="info_cancel">Batal</string>
     <string name="store_menu_customer">Pelanggan</string>
+    <string name="invitation_all">Semua</string>
+    <string name="invitation_accepted">Diterima</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -21,6 +22,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class InvitationActivity : AppCompatActivity() {
     private val invitationViewModel : InvitationViewModel by viewModel()
+    private var invitations = mutableListOf<Invitation>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +30,13 @@ class InvitationActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.setNavigationOnClickListener { finish() }
         setupUI()
-//        if (getPassedStore() != null){
-//            supportActionBar?.setDisplayShowTitleEnabled(false)
-//            setupSpinner()
-//        }
+        if (getPassedStore() != null){
+            invitation_spinner.visibility = View.VISIBLE
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+            setupSpinner()
+        }else{
+            invitation_spinner.visibility = View.GONE
+        }
         invitationViewModel.listenToUIState().observer(this, Observer { handleUIState(it) })
         fetchInvitation()
     }
@@ -45,16 +50,31 @@ class InvitationActivity : AppCompatActivity() {
     private fun getPassedStore() = intent.getParcelableExtra<Store?>("store")
     private fun setupSpinner(){
         if(getPassedStore() != null){
-            val menus = listOf<String>(
+            val menus = listOf(
+                resources.getString(R.string.invitation_all),
                 resources.getString(R.string.invitation_waiting),
+                resources.getString(R.string.invitation_accepted),
                 resources.getString(R.string.invitation_rejected)
             )
-//            val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, menus)
-//            invitation_spinner.adapter = spinnerAdapter
-//            invitation_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//                override fun onNothingSelected(parent: AdapterView<*>?) {}
-//                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {}
-//            }
+            val spinnerAdapter = ArrayAdapter(supportActionBar?.themedContext!!, android.R.layout.simple_spinner_dropdown_item, menus)
+            invitation_spinner.adapter = spinnerAdapter
+            invitation_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    when(position){
+                        0 -> updateListInvitationSent(invitations.reversed())
+                        1 -> updateListInvitationSent(invitations.reversed().filter { x -> x.status == null })
+                        2 -> updateListInvitationSent(invitations.reversed().filter { x ->
+                            if(x.status == null) false else x.status!! == 1.toShort()
+                        })
+                        3 -> updateListInvitationSent(invitations.reversed().filter { x ->
+                            if(x.status == null) false else x.status!! == 0.toShort()
+                        })
+                        else -> updateListInvitationSent(invitations.reversed())
+                    }
+
+                }
+            }
         }
     }
 
@@ -80,16 +100,10 @@ class InvitationActivity : AppCompatActivity() {
             invitationViewModel.invitationIn(PaperlessUtil.getToken(this))
         }else{
             invitationViewModel.listenToInvitationSent().observe(this, Observer {
-                rv_invitation.adapter?.let { a ->
-                    if(a is InvitationAdapter){
-                        a.updateList(it.reversed())
-                        if(it.isNullOrEmpty()){
-                            empty_view.visibility = View.VISIBLE
-                        }else{
-                            empty_view.visibility = View.GONE
-                        }
-                    }
-                }
+                updateListInvitationSent(it.reversed())
+                invitations.clear()
+                invitations.addAll(it)
+                if(it.isNullOrEmpty()){ empty_view.visibility = View.VISIBLE }else{ empty_view.visibility = View.GONE }
             })
             if(invitationViewModel.listenToInvitationSent().value == null || invitationViewModel.listenToInvitationSent().value!!.isEmpty()){
                 empty_view.visibility = View.VISIBLE
@@ -103,11 +117,22 @@ class InvitationActivity : AppCompatActivity() {
         when(it){
             is InvitationState.IsLoading -> {
                 empty_view.visibility = View.GONE
+                getPassedStore()?.let {s ->
+                    invitation_spinner.isEnabled = !it.state
+                }
                 if(it.state){
                     loading.visibility = View.VISIBLE
                 }else{
                     loading.visibility = View.GONE
                 }
+            }
+        }
+    }
+
+    private fun updateListInvitationSent(it : List<Invitation>){
+        rv_invitation.adapter?.let { a ->
+            if (a is InvitationAdapter){
+                a.updateList(it)
             }
         }
     }
