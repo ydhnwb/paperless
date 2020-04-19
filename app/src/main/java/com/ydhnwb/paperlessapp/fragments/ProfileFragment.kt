@@ -29,7 +29,7 @@ class ProfileFragment : Fragment() {
         add(Preference(1, R.string.pref_profile, R.drawable.ic_person_black_24dp))
         add(Preference(2, R.string.pref_invitation, R.drawable.ic_payment_black_24dp))
         add(Preference(3, R.string.pref_privacy, R.drawable.ic_security_black_24dp))
-        add(Preference(4, R.string.pref_store, R.drawable.ic_dashboard_black_24dp))
+        add(Preference(4, R.string.sign_out, R.drawable.ic_dashboard_black_24dp))
     }
     private val userViewModel : UserViewModel by viewModel()
 

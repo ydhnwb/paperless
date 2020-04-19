@@ -211,5 +211,7 @@
     <string name="store_menu_customer">Pelanggan</string>
     <string name="invitation_all">Semua</string>
     <string name="invitation_accepted">Diterima</string>
+    <string name="info_reject">Tolak</string>
+    <string name="sign_out">Sign out</string>
 
 </resources>

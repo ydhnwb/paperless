@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.InvitationActivity
+import com.ydhnwb.paperlessapp.activities.LoginActivity
 import com.ydhnwb.paperlessapp.models.Preference
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.list_item_preference.view.*
 
 class PreferenceAdapter (private var context: Context, private var prefs : List<Preference>) : RecyclerView.Adapter<PreferenceAdapter.ViewHolder>(){
@@ -27,6 +30,12 @@ class PreferenceAdapter (private var context: Context, private var prefs : List<
             itemView.setOnClickListener {
                 when(i){
                     1 -> context.startActivity(Intent(context, InvitationActivity::class.java))
+                    3 -> {
+                        PaperlessUtil.clearToken(context)
+                        context.startActivity(Intent(context, LoginActivity::class.java))
+                        context as AppCompatActivity
+                        context.finish()
+                    }
                     else -> println("Ya")
                 }
             }

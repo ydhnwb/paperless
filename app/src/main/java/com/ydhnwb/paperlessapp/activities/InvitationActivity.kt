@@ -1,10 +1,13 @@
 package com.ydhnwb.paperlessapp.activities
 
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -44,7 +47,7 @@ class InvitationActivity : AppCompatActivity() {
     private fun setupUI(){
         rv_invitation.apply {
             layoutManager = LinearLayoutManager(this@InvitationActivity )
-            adapter = InvitationAdapter(mutableListOf<Invitation>(), this@InvitationActivity, getPassedStore() == null)
+            adapter = InvitationAdapter(mutableListOf<Invitation>(), this@InvitationActivity, getPassedStore() == null, invitationViewModel)
         }
     }
     private fun getPassedStore() = intent.getParcelableExtra<Store?>("store")
@@ -83,7 +86,9 @@ class InvitationActivity : AppCompatActivity() {
             invitationViewModel.listenToInvitationIn().observe(this, Observer {
                 rv_invitation.adapter?.let { a ->
                     if(a is InvitationAdapter){
-                        a.updateList(it.reversed())
+                        a.updateList(it.reversed().filter { x ->
+                            x.status == null
+                        })
                     }
                     if(it.isNullOrEmpty()){
                         empty_view.visibility = View.VISIBLE
@@ -126,6 +131,9 @@ class InvitationActivity : AppCompatActivity() {
                     loading.visibility = View.GONE
                 }
             }
+            is InvitationState.ShowAlert -> showAlert(it.message)
+            is InvitationState.ShowToast -> showToast(it.message)
+            is InvitationState.Success -> invitationViewModel.invitationIn(PaperlessUtil.getToken(this))
         }
     }
 
@@ -136,4 +144,13 @@ class InvitationActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun showAlert(message : String){
+        AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialogTheme)).apply{
+            setMessage(message)
+            setPositiveButton(resources.getString(R.string.info_understand)){d , _ -> d.dismiss()}
+        }.show()
+    }
+
+    private fun showToast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
