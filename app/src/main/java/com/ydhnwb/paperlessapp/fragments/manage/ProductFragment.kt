@@ -33,19 +33,18 @@ class ProductFragment : Fragment(R.layout.fragment_product) {
                 putExtra("STORE", parentStoreViewModel.getCurrentStore())
             })
         }
-        productViewModel.listenToUIState().observer(viewLifecycleOwner, Observer {
-            when(it){
-                is ProductState.ShowToast -> toast(it.message)
-                is ProductState.IsLoading -> {
-                    if(it.state){ view.loading.visibility = View.VISIBLE }else{ view.loading.visibility = View.GONE }
-                }
-            }
-        })
+        productViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
         productViewModel.listenProducts().observe(viewLifecycleOwner, Observer {
+            if(it.isNullOrEmpty()){ view.empty_view.visibility = View.VISIBLE }else{ view.empty_view.visibility = View.GONE }
             view.rv_manage_product.adapter?.let { i ->
                 if(i is DetailedProductAdapter){
                     i.updateList(it)
                 }
+            }
+            if(productViewModel.listenProducts().value == null || productViewModel.listenProducts().value!!.isEmpty()){
+                view.empty_view.visibility = View.VISIBLE
+            }else{
+                view.empty_view.visibility = View.GONE
             }
         })
     }
@@ -54,6 +53,14 @@ class ProductFragment : Fragment(R.layout.fragment_product) {
         super.onResume()
         productViewModel.fetchAllProducts(PaperlessUtil.getToken(activity!!), parentStoreViewModel.getCurrentStore()!!.id.toString())
     }
-    private fun toast(message: String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
 
+    private fun toast(message: String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    private fun handleUIState(it: ProductState){
+        when(it){
+            is ProductState.ShowToast -> toast(it.message)
+            is ProductState.IsLoading -> {
+                if(it.state){ view?.loading?.visibility = View.VISIBLE }else{ view?.loading?.visibility = View.GONE }
+            }
+        }
+    }
 }

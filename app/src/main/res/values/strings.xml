@@ -213,5 +213,8 @@
     <string name="invitation_accepted">Diterima</string>
     <string name="info_reject">Tolak</string>
     <string name="sign_out">Sign out</string>
+    <string name="empty_product">Belum ada produk</string>
+    <string name="empty_employee">Belum ada karyawan di toko ini</string>
+    <string name="info_all">Semua</string>
 
 </resources>

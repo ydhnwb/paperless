@@ -36,16 +36,20 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
             adapter = EmployeeAdapter(mutableListOf(), activity!!)
         }
         employeeViewModel.fetchAllEmployee()
-        employeeViewModel.listenToUIState().observe(viewLifecycleOwner, Observer {
-            handleUIState(it)
-        })
+        employeeViewModel.listenToUIState().observe(viewLifecycleOwner, Observer { handleUIState(it) })
         employeeViewModel.listenToEmployees().observe(viewLifecycleOwner, Observer {
+            if(it.isNullOrEmpty()){ view.empty_view.visibility = View.VISIBLE }else{ view.empty_view.visibility = View.GONE }
             view.rv_employee.adapter?.let { adapter ->
                 if(adapter is EmployeeAdapter){
                     adapter.updateList(it)
                 }
             }
         })
+        if(employeeViewModel.listenToEmployees().value == null || employeeViewModel.listenToEmployees().value!!.isEmpty()){
+            view.empty_view.visibility = View.VISIBLE
+        }else{
+            view.empty_view.visibility = View.GONE
+        }
         view.fab.setOnClickListener {
             val store : Store = arguments?.getParcelable("store")!!
             startActivity(Intent(activity, SearchUserActivity::class.java).apply {
@@ -56,9 +60,7 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
 
     private fun handleUIState(it: EmployeeState){
         when(it){
-            is EmployeeState.IsLoading -> {
-                if(it.state){ view!!.loading.visibility = View.VISIBLE }else{ view!!.loading.visibility = View.GONE }
-            }
+            is EmployeeState.IsLoading -> { if(it.state){ view!!.loading.visibility = View.VISIBLE }else{ view!!.loading.visibility = View.GONE } }
             is EmployeeState.ShowToast -> toast(it.message)
         }
     }

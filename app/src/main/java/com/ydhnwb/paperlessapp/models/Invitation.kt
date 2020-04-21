@@ -7,7 +7,8 @@ data class Invitation(
     @SerializedName("requested_by_store") var requestedByStore : Store? = null,
     @SerializedName("to") var to : User? = null,
     @SerializedName("invited_at") var date : String? = null,
-    @SerializedName("status") var status : Short? = null
+    @SerializedName("status") var status : Boolean? = null,
+    @SerializedName("role") var role : Short? = null
 )
 
 data class InvitationAlt(

@@ -146,8 +146,8 @@ interface ApiService {
     fun invitation_in(@Header("Authorization") token : String) : Call<WrappedListResponse<Invitation>>
 
     @GET("v1/invitation/in/{id}/accept")
-    fun invitation_acc(@Header("Authorization") token : String, @Path("id") invitationId : String) : Call<WrappedResponse<InvitationAlt>>
+    fun invitation_acc(@Header("Authorization") token : String, @Path("id") invitationId : String) : Call<WrappedResponse<Invitation>>
 
     @GET("v1/invitation/in/{id}/reject")
-    fun invitation_reject(@Header("Authorization") token : String, @Path("id") invitationId : String) : Call<WrappedResponse<InvitationAlt>>
+    fun invitation_reject(@Header("Authorization") token : String, @Path("id") invitationId : String) : Call<WrappedResponse<Invitation>>
 }

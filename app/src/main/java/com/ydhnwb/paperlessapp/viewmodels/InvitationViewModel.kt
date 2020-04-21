@@ -3,7 +3,6 @@ package com.ydhnwb.paperlessapp.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Invitation
-import com.ydhnwb.paperlessapp.models.InvitationAlt
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
@@ -102,19 +101,19 @@ class InvitationViewModel (private val api : ApiService) : ViewModel(){
 
     fun acceptInvitation(token: String, invitationId : String){
         setLoading()
-        api.invitation_acc(token, invitationId).enqueue(object : Callback<WrappedResponse<InvitationAlt>>{
-            override fun onFailure(call: Call<WrappedResponse<InvitationAlt>>, t: Throwable) {
+        api.invitation_acc(token, invitationId).enqueue(object : Callback<WrappedResponse<Invitation>>{
+            override fun onFailure(call: Call<WrappedResponse<Invitation>>, t: Throwable) {
                 println(t.message)
                 state.value = InvitationState.ShowToast(t.message.toString())
                 hideLoading()
             }
 
-            override fun onResponse(call: Call<WrappedResponse<InvitationAlt>>, response: Response<WrappedResponse<InvitationAlt>>) {
+            override fun onResponse(call: Call<WrappedResponse<Invitation>>, response: Response<WrappedResponse<Invitation>>) {
                 if(response.isSuccessful){
                     if(response.body()!!.status){
                         state.value = InvitationState.Success
                     }else{
-                        state.value = InvitationState.ShowAlert("Tidak dapat menerima undangan")
+                        state.value = InvitationState.ShowAlert("Tidak dapat menerima undangan karena Anda masih menjadi karyawan di toko lain")
                     }
                 }else{
                     state.value = InvitationState.ShowAlert("Tidak dapat menerima invitasi")
@@ -126,14 +125,14 @@ class InvitationViewModel (private val api : ApiService) : ViewModel(){
 
     fun rejectInvitation(token: String, invitationId : String){
         setLoading()
-        api.invitation_reject(token, invitationId).enqueue(object : Callback<WrappedResponse<InvitationAlt>>{
-            override fun onFailure(call: Call<WrappedResponse<InvitationAlt>>, t: Throwable) {
+        api.invitation_reject(token, invitationId).enqueue(object : Callback<WrappedResponse<Invitation>>{
+            override fun onFailure(call: Call<WrappedResponse<Invitation>>, t: Throwable) {
                 println(t.message)
                 state.value = InvitationState.ShowToast(t.message.toString())
                 hideLoading()
             }
 
-            override fun onResponse(call: Call<WrappedResponse<InvitationAlt>>, response: Response<WrappedResponse<InvitationAlt>>) {
+            override fun onResponse(call: Call<WrappedResponse<Invitation>>, response: Response<WrappedResponse<Invitation>>) {
                 if(response.isSuccessful){
                     if(response.body()!!.status){
                         state.value = InvitationState.Success

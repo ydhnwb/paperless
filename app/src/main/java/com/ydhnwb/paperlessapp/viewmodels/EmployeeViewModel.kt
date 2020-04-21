@@ -13,9 +13,9 @@ class EmployeeViewModel(private val api : ApiService) : ViewModel(){
 
     fun fetchAllEmployee(){
         val e = mutableListOf<Employee>().apply {
-            add(Employee(1, "Ardhan Faiz Kautsar", "KASIR"))
-            add(Employee(2, "Fanni Naditya Putra", "STAFF"))
-            add(Employee(3, "Afif Maulana Iskandar", "STAFF"))
+//            add(Employee(1, "Ardhan Faiz Kautsar", "KASIR"))
+//            add(Employee(2, "Fanni Naditya Putra", "STAFF"))
+//            add(Employee(3, "Afif Maulana Iskandar", "STAFF"))
         }
         employees.postValue(e)
     }

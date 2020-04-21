@@ -67,12 +67,8 @@ class InvitationActivity : AppCompatActivity() {
                     when(position){
                         0 -> updateListInvitationSent(invitations.reversed())
                         1 -> updateListInvitationSent(invitations.reversed().filter { x -> x.status == null })
-                        2 -> updateListInvitationSent(invitations.reversed().filter { x ->
-                            if(x.status == null) false else x.status!! == 1.toShort()
-                        })
-                        3 -> updateListInvitationSent(invitations.reversed().filter { x ->
-                            if(x.status == null) false else x.status!! == 0.toShort()
-                        })
+                        2 -> updateListInvitationSent(invitations.reversed().filter { x -> x.status?.let { true } ?: kotlin.run { false } })
+                        3 -> updateListInvitationSent(invitations.reversed().filter { x -> x.status != null && !x.status!! })
                         else -> updateListInvitationSent(invitations.reversed())
                     }
 
