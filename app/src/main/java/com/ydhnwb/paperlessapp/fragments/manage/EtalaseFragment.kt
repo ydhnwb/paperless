@@ -42,43 +42,20 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
         setupUIComponent()
         productViewModel.listenProducts().observe(viewLifecycleOwner, Observer {
             if(it.isNullOrEmpty()){
-                view.spinner_category.visibility = View.GONE
                 view.empty_view.visibility = View.VISIBLE
             }else{
-                view.spinner_category.visibility = View.VISIBLE
                 view.empty_view.visibility = View.GONE
-                val filteredCategories = it.map { p -> p.category }.distinctBy { c -> c?.name }.map { f -> f?.name!! }.toMutableList()
-                filteredCategories.add(0, resources.getString(R.string.info_all))
-                val spinnerAdapter = ArrayAdapter(activity!!, android.R.layout.simple_spinner_dropdown_item, filteredCategories)
-                view.spinner_category.adapter = spinnerAdapter
-                view.spinner_category.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                    override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
-                        if (position == 0){
-                            filteredProducts.clear()
-                            filteredProducts.addAll(it)
-                        }else{
-                            val temp = it.filter { p -> p.category!!.name!!.equals(view.spinner_category.getItemAtPosition(position)) }
-                            filteredProducts = temp.toMutableList()
-                        }
-                    }
-
-                }
-
             }
             view.rv_etalase.adapter?.let { adapter ->
                 if(adapter is EtalaseAdapter){
-//                    adapter.updateList(it)
-                    adapter.updateList(filteredProducts)
+                    adapter.updateList(it)
                 }
             }
         })
         if(productViewModel.listenProducts().value == null || productViewModel.listenProducts().value!!.isEmpty()){
             view.empty_view.visibility = View.VISIBLE
-            view.spinner_category.visibility = View.GONE
         }else{
             view.empty_view.visibility = View.GONE
-            view.spinner_category.visibility = View.VISIBLE
         }
         productViewModel.listenToUIState().observe(viewLifecycleOwner, Observer { handleUIState(it) })
         productViewModel.listenSelectedProducts().observe(viewLifecycleOwner, Observer { handleSelectedProduct(it) })
@@ -147,7 +124,6 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
         when(it){
             is ProductState.ShowToast -> toast(it.message)
             is ProductState.IsLoading -> {
-                view!!.spinner_category.isEnabled = !it.state
                 if(it.state){
                     view?.loading?.visibility = View.VISIBLE
                 }else{

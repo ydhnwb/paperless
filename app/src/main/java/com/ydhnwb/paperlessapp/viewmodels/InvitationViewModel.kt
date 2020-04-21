@@ -140,10 +140,6 @@ class InvitationViewModel (private val api : ApiService) : ViewModel(){
                         state.value = InvitationState.ShowAlert("Gagal menolak undangan")
                     }
                 }else{
-                    println(response.body())
-                    println(response.errorBody())
-                    println(response.message())
-                    println(response.headers())
                     state.value = InvitationState.ShowToast(response.code().toString())
                     state.value = InvitationState.ShowToast(response.body().toString())
                     state.value = InvitationState.ShowAlert("Gagal menolak invitasi")

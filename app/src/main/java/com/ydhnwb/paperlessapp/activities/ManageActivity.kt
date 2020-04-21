@@ -9,15 +9,21 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import coil.api.load
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.fragments.manage.EmployeeFragment
 import com.ydhnwb.paperlessapp.fragments.manage.EtalaseFragment
 import com.ydhnwb.paperlessapp.fragments.manage.HomeFragment
 import com.ydhnwb.paperlessapp.fragments.manage.ProductFragment
 import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.models.User
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
+import com.ydhnwb.paperlessapp.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.activity_manage.*
 import kotlinx.android.synthetic.main.app_bar_manage.*
+import kotlinx.android.synthetic.main.nav_header_manage.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +33,7 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private val storeViewModel: StoreViewModel by viewModel()
+    private val userViewModel : UserViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +41,8 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setSupportActionBar(toolbar)
         supportActionBar?.title = getCurrentStore().name
         initComp()
+        userViewModel.profile(PaperlessUtil.getToken(this))
+        userViewModel.listenToCurrentUser().observe(this, Observer { handleNavUser(it) })
         storeViewModel.setCurrentManagedStore(getCurrentStore())
         if(savedInstanceState == null){
             openFirst = true
@@ -121,6 +130,14 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         nav_view.setNavigationItemSelectedListener(this)
     }
 
+    private fun handleNavUser(it : User){
+        with(nav_view.getHeaderView(0)){
+            user_image.load(R.drawable.ydhnwb)
+            user_name.text = it.name
+            user_email.text = it.email
+        }
+
+    }
     private fun getCurrentStore() = intent.getParcelableExtra<Store>("STORE")!!
 
 }

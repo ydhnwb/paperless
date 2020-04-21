@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
@@ -56,8 +57,24 @@ class InvitationAdapter (private var invitations : MutableList<Invitation>, priv
                         }.show()
                     }
                 }else{
-                    invitation_title.text = "Anda mengundang ${i.to?.name}"
-                    invitation_desc.text = "Anda mengundang ${i.to?.name} untuk menjadi karyawan di toko"
+                    if(i.status == null){
+                        invitation_title.text = "Anda mengundang ${i.to?.name}"
+                        invitation_status.setTextColor(ContextCompat.getColor(context, R.color.colorGrey))
+                        invitation_desc.text = "Anda mengundang ${i.to?.name} untuk menjadi karyawan di toko"
+                        invitation_status.text = "Menunggu"
+                    }else if(i.status != null){
+                        if(!i.status!!){
+                            invitation_status.setTextColor(ContextCompat.getColor(context, R.color.colorOrange))
+                            invitation_status.text = "Ditolak"
+                            invitation_title.text = "Undangan ke ${i.to?.name} telah ditolak"
+                            invitation_desc.text = "Undangan anda kepada ${i.to?.name} telah ditolak. Anda bisa mencoba untuk mengundangnya lagi."
+                        }else if(i.status!!){
+                            invitation_status.setTextColor(ContextCompat.getColor(context, R.color.colorGreen))
+                            invitation_status.text = "Diterima"
+                            invitation_title.text = "Undangan kepada ${i.to?.name} telah diterima"
+                            invitation_desc.text = "Undangan anda kepada ${i.to?.name} telah diterima"
+                        }
+                    }
                 }
             }
         }
