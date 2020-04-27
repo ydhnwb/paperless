@@ -3,24 +3,20 @@ package com.ydhnwb.paperlessapp.fragments.manage
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.CheckoutActivity
 import com.ydhnwb.paperlessapp.activities.ScannerActivity
-import com.ydhnwb.paperlessapp.adapters.EtalaseAdapter
 import com.ydhnwb.paperlessapp.adapters.SelectedProductAdapter
-import com.ydhnwb.paperlessapp.models.Category
+import com.ydhnwb.paperlessapp.fragments.BookmenuFragment
 import com.ydhnwb.paperlessapp.models.Product
+import com.ydhnwb.paperlessapp.utilities.CustomFragmentPagerAdapter
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.ProductState
 import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
@@ -29,29 +25,16 @@ import kotlinx.android.synthetic.main.bottomsheet_detail.view.*
 import kotlinx.android.synthetic.main.fragment_etalase.view.*
 import kotlinx.android.synthetic.main.fragment_etalase.view.btn_details
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
-    private val productViewModel: ProductViewModel by viewModel()
     private val parentStoreViewModel: StoreViewModel by sharedViewModel()
     private lateinit var bottomSheet: BottomSheetBehavior<*>
-    private var filteredProducts = mutableListOf<Product>()
+    private val productViewModel: ProductViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUIComponent()
-        productViewModel.listenProducts().observe(viewLifecycleOwner, Observer {
-            if(it.isNullOrEmpty()){
-                view.empty_view.visibility = View.VISIBLE
-            }else{
-                view.empty_view.visibility = View.GONE
-            }
-            view.rv_etalase.adapter?.let { adapter ->
-                if(adapter is EtalaseAdapter){
-                    adapter.updateList(it)
-                }
-            }
-        })
+        productViewModel.listenProducts().observe(viewLifecycleOwner, Observer { handleProducts(it) })
         if(productViewModel.listenProducts().value == null || productViewModel.listenProducts().value!!.isEmpty()){
             view.empty_view.visibility = View.VISIBLE
         }else{
@@ -59,19 +42,12 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
         }
         productViewModel.listenToUIState().observe(viewLifecycleOwner, Observer { handleUIState(it) })
         productViewModel.listenSelectedProducts().observe(viewLifecycleOwner, Observer { handleSelectedProduct(it) })
-        productViewModel.fetchAllProducts(PaperlessUtil.getToken(activity!!), parentStoreViewModel.getCurrentStore()?.id.toString())
+        if(!productViewModel.listenToHasFetched().value!!){
+            productViewModel.fetchAllProducts(PaperlessUtil.getToken(activity!!), parentStoreViewModel.getCurrentStore()?.id.toString())
+        }
     }
 
-    private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     private fun setupUIComponent(){
-        view!!.rv_etalase.apply {
-            layoutManager = if(this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
-                GridLayoutManager(activity, 2)
-            }else{
-                GridLayoutManager(activity, 4)
-            }
-            adapter = EtalaseAdapter(mutableListOf(), activity!!, productViewModel)
-        }
         view!!.rv_detail_order.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = SelectedProductAdapter(mutableListOf(), activity!!, productViewModel)
@@ -92,7 +68,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
                     putParcelableArrayListExtra("PRODUCT", selectedProducts)
                 })
             }else{
-                toast("Pilih produk terlebih dahulu")
+                toast(resources.getString(R.string.info_choose_product_first))
             }
         }
 
@@ -145,4 +121,22 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
             }
         }
     }
+
+    private fun handleProducts(it : List<Product>){
+        if(it.isNullOrEmpty()){
+            view!!.empty_view.visibility = View.VISIBLE
+        }else{
+            view!!.empty_view.visibility = View.GONE
+            val fragmentAdapter = CustomFragmentPagerAdapter(childFragmentManager)
+            for (c in it){
+                fragmentAdapter.addFragment(BookmenuFragment.instance(c.category!!), c.category!!.name!!)
+            }
+//            fragmentAdapter.addFragment(BookmenuFragment.instance(null), resources.getString(R.string.info_search_result))
+            view!!.viewpager.adapter = fragmentAdapter
+            view!!.tabs.setupWithViewPager(view!!.viewpager)
+        }
+    }
+
+    private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+
 }

@@ -22,6 +22,7 @@ class ProductViewModel(private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<ProductState> = SingleLiveEvent()
     private var products = MutableLiveData<List<Product>>()
     private var selectedProducts = MutableLiveData<List<Product>>()
+    private var hasFetched = MutableLiveData<Boolean>().apply { value = false }
 
     fun fetchAllProducts(token: String, storeId: String){
         state.value = ProductState.IsLoading(true)
@@ -37,6 +38,7 @@ class ProductViewModel(private val api : ApiService) : ViewModel(){
                     val body = response.body()
                     body?.let {
                         if (it.status){
+                            hasFetched.value = true
                             products.postValue(it.data)
                         }
                     }
@@ -277,6 +279,7 @@ class ProductViewModel(private val api : ApiService) : ViewModel(){
     fun listenSelectedProducts() = selectedProducts
     fun listenToUIState() = state
     fun listenProducts() = products
+    fun listenToHasFetched() = hasFetched
 }
 
 

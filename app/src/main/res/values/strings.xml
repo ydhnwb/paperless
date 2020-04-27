@@ -216,5 +216,7 @@
     <string name="empty_product">Belum ada produk</string>
     <string name="empty_employee">Belum ada karyawan di toko ini</string>
     <string name="info_all">Semua</string>
+    <string name="info_search_result">Hasil pencarian</string>
+    <string name="info_choose_product_first">Pilih produk terlebih dahulu</string>
 
 </resources>

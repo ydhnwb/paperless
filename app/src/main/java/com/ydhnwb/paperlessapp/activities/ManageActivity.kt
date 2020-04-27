@@ -19,6 +19,7 @@ import com.ydhnwb.paperlessapp.fragments.manage.ProductFragment
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
 import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import com.ydhnwb.paperlessapp.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.activity_manage.*
@@ -34,6 +35,8 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     private val storeViewModel: StoreViewModel by viewModel()
     private val userViewModel : UserViewModel by viewModel()
+    private val productViewModel: ProductViewModel by viewModel()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
