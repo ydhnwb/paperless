@@ -17,14 +17,17 @@ import kotlinx.android.synthetic.main.list_item_product_alt.view.*
 class DetailedProductAdapter (private var products : MutableList<Product>, private var context: Context, private var parentStore : Store) : RecyclerView.Adapter<DetailedProductAdapter.ViewHolder>(){
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         fun bind(product: Product, context: Context, store: Store){
-            itemView.product_image.load(product.image)
-            itemView.product_name.text = product.name
-            itemView.product_price.text = PaperlessUtil.setToIDR(product.price!!)
-            itemView.setOnClickListener {
-                context.startActivity(Intent(context, ProductActivity::class.java).apply {
-                    putExtra("PRODUCT", product)
-                    putExtra("STORE", store)
-                })
+            with(itemView){
+                product_image.load(product.image)
+                product_name.text = product.name
+                product_price.text = PaperlessUtil.setToIDR(product.price!!)
+                product_category.text = product.category?.name!!
+                setOnClickListener {
+                    context.startActivity(Intent(context, ProductActivity::class.java).apply {
+                        putExtra("PRODUCT", product)
+                        putExtra("STORE", store)
+                    })
+                }
             }
         }
     }

@@ -15,6 +15,7 @@ import com.ydhnwb.paperlessapp.activities.CheckoutActivity
 import com.ydhnwb.paperlessapp.activities.ScannerActivity
 import com.ydhnwb.paperlessapp.adapters.SelectedProductAdapter
 import com.ydhnwb.paperlessapp.fragments.BookmenuFragment
+import com.ydhnwb.paperlessapp.fragments.SearchEtalaseFragment
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.CustomFragmentPagerAdapter
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
@@ -123,12 +124,13 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
             if(it.isNullOrEmpty()){
                 view!!.empty_view.visibility = View.VISIBLE
             }else{
+                val filteredCategories = it.map { product -> product.category!! }.distinctBy { category -> category.name }
                 val fragmentAdapter = CustomFragmentPagerAdapter(childFragmentManager)
-                for (c in it){
-                    fragmentAdapter.addFragment(BookmenuFragment.instance(c.category!!), c.category!!.name!!)
+                for (c in filteredCategories){
+                    fragmentAdapter.addFragment(BookmenuFragment.instance(c), c.name!!)
                 }
+                if (!it.isNullOrEmpty()){ fragmentAdapter.addFragment(SearchEtalaseFragment(), resources.getString(R.string.info_search_result)) }
                 view!!.empty_view.visibility = View.GONE
-//            fragmentAdapter.addFragment(BookmenuFragment.instance(null), resources.getString(R.string.info_search_result))
                 view!!.viewpager.adapter = fragmentAdapter
                 view!!.tabs.setupWithViewPager(view!!.viewpager)
             }

@@ -22,6 +22,9 @@ class ProductViewModel(private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<ProductState> = SingleLiveEvent()
     private var products = MutableLiveData<List<Product>>()
     private var selectedProducts = MutableLiveData<List<Product>>()
+    private var filteredProducts = MutableLiveData<MutableList<Product>>().apply {
+        mutableListOf<Product>()
+    }
     private var hasFetched = MutableLiveData<Boolean>().apply { value = false }
 
     fun fetchAllProducts(token: String, storeId: String){
@@ -272,12 +275,23 @@ class ProductViewModel(private val api : ApiService) : ViewModel(){
             return null
         }
     }
+
+    fun filterByName(query : String){
+        products.value?.let {
+            val temp = it.filter { product ->
+                product.name!!.contains(query, true)
+            }
+            filteredProducts.postValue(temp.toMutableList())
+        }
+    }
+
     fun setHasFetched(state: Boolean){ hasFetched.value = state }
     fun clearAllSelectedProduct(){ selectedProducts.postValue(mutableListOf()) }
     fun listenSelectedProducts() = selectedProducts
     fun listenToUIState() = state
     fun listenProducts() = products
     fun listenToHasFetched() = hasFetched
+    fun listenToFilteredProducts() = filteredProducts
 }
 
 

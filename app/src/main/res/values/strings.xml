@@ -218,5 +218,6 @@
     <string name="info_all">Semua</string>
     <string name="info_search_result">Hasil pencarian</string>
     <string name="info_choose_product_first">Pilih produk terlebih dahulu</string>
+    <string name="hint_search_product">Cari</string>
 
 </resources>

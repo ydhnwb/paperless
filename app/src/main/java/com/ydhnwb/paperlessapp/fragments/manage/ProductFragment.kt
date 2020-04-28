@@ -38,7 +38,7 @@ class ProductFragment : Fragment(R.layout.fragment_product) {
             if(it.isNullOrEmpty()){ view.empty_view.visibility = View.VISIBLE }else{ view.empty_view.visibility = View.GONE }
             view.rv_manage_product.adapter?.let { i ->
                 if(i is DetailedProductAdapter){
-                    i.updateList(it)
+                    i.updateList(it.sortedBy { product -> product.name })
                 }
             }
             if(productViewModel.listenProducts().value == null || productViewModel.listenProducts().value!!.isEmpty()){
