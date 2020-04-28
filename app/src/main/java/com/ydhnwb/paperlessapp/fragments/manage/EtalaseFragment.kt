@@ -27,22 +27,19 @@ import kotlinx.android.synthetic.main.fragment_etalase.view.btn_details
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
-    private val parentStoreViewModel: StoreViewModel by sharedViewModel()
     private lateinit var bottomSheet: BottomSheetBehavior<*>
+    private val parentStoreViewModel: StoreViewModel by sharedViewModel()
     private val productViewModel: ProductViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUIComponent()
         productViewModel.listenProducts().observe(viewLifecycleOwner, Observer { handleProducts(it) })
-        if(productViewModel.listenProducts().value == null || productViewModel.listenProducts().value!!.isEmpty()){
-            view.empty_view.visibility = View.VISIBLE
-        }else{
-            view.empty_view.visibility = View.GONE
-        }
-        productViewModel.listenToUIState().observe(viewLifecycleOwner, Observer { handleUIState(it) })
+        if(productViewModel.listenProducts().value == null || productViewModel.listenProducts().value!!.isEmpty()){ view.empty_view.visibility = View.VISIBLE }else{ view.empty_view.visibility = View.GONE }
+        productViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
         productViewModel.listenSelectedProducts().observe(viewLifecycleOwner, Observer { handleSelectedProduct(it) })
         if(!productViewModel.listenToHasFetched().value!!){
+            productViewModel.clearAllSelectedProduct()
             productViewModel.fetchAllProducts(PaperlessUtil.getToken(activity!!), parentStoreViewModel.getCurrentStore()?.id.toString())
         }
     }
@@ -71,7 +68,6 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
                 toast(resources.getString(R.string.info_choose_product_first))
             }
         }
-
         view!!.btn_scan.setOnClickListener { startActivityForResult(Intent(activity, ScannerActivity::class.java), 0) }
     }
 
@@ -101,9 +97,9 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
             is ProductState.ShowToast -> toast(it.message)
             is ProductState.IsLoading -> {
                 if(it.state){
-                    view?.loading?.visibility = View.VISIBLE
+                    view!!.loading!!.visibility = View.VISIBLE
                 }else{
-                    view?.loading?.visibility = View.GONE
+                    view!!.loading!!.visibility = View.GONE
                 }
             }
         }
@@ -123,20 +119,26 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
     }
 
     private fun handleProducts(it : List<Product>){
-        if(it.isNullOrEmpty()){
-            view!!.empty_view.visibility = View.VISIBLE
-        }else{
-            view!!.empty_view.visibility = View.GONE
-            val fragmentAdapter = CustomFragmentPagerAdapter(childFragmentManager)
-            for (c in it){
-                fragmentAdapter.addFragment(BookmenuFragment.instance(c.category!!), c.category!!.name!!)
-            }
+        if (productViewModel.listenToHasFetched().value!!){
+            if(it.isNullOrEmpty()){
+                view!!.empty_view.visibility = View.VISIBLE
+            }else{
+                val fragmentAdapter = CustomFragmentPagerAdapter(childFragmentManager)
+                for (c in it){
+                    fragmentAdapter.addFragment(BookmenuFragment.instance(c.category!!), c.category!!.name!!)
+                }
+                view!!.empty_view.visibility = View.GONE
 //            fragmentAdapter.addFragment(BookmenuFragment.instance(null), resources.getString(R.string.info_search_result))
-            view!!.viewpager.adapter = fragmentAdapter
-            view!!.tabs.setupWithViewPager(view!!.viewpager)
+                view!!.viewpager.adapter = fragmentAdapter
+                view!!.tabs.setupWithViewPager(view!!.viewpager)
+            }
         }
     }
 
-    private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    private fun emptyTabAndViewPager(){
+        view!!.tabs.removeAllTabs()
+        view!!.viewpager.removeAllViews()
+    }
 
+    private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
 }

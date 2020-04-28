@@ -70,8 +70,7 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 }else{
                     navStatus = 0
                     openFirst = false
-                    fragment =
-                        HomeFragment.instance(getCurrentStore())
+                    fragment = HomeFragment.instance(getCurrentStore())
                 }
             }
             R.id.nav_etalase -> {
@@ -80,8 +79,8 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 }else{
                     openFirst = false
                     navStatus = 1
-                    fragment =
-                        EtalaseFragment()
+                    productViewModel.setHasFetched(false)
+                    fragment = EtalaseFragment()
                 }
             }
             R.id.nav_product -> {
@@ -121,7 +120,6 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             ft.replace(R.id.container_fragment, fragment)
             ft.commit()
         }
-
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
