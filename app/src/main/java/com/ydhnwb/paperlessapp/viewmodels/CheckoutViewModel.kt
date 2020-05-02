@@ -1,6 +1,5 @@
 package com.ydhnwb.paperlessapp.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Product
@@ -11,12 +10,9 @@ class CheckoutViewModel (private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<CheckoutState> = SingleLiveEvent()
     private var selectedProducts = MutableLiveData<List<Product>>().apply { postValue(mutableListOf()) }
     private var discountValue = MutableLiveData<String>()
-    private var hasFetched  = MutableLiveData<Boolean>()
 
-    fun setSelectedProducts(products: List<Product>){
-        hasFetched.value = true
-        selectedProducts.postValue(products)
-    }
+    fun setSelectedProducts(products: List<Product>){ selectedProducts.postValue(products) }
+
     fun setDiscountValue(value : String){ discountValue.value = value }
 
     fun calculateTotalPrice(): Int {
@@ -41,7 +37,6 @@ class CheckoutViewModel (private val api : ApiService) : ViewModel(){
     fun listenToState() = state
     fun listenToDiscountValue() = discountValue
     fun listenToSelectedProduct() = selectedProducts
-    fun listenToHasFetched() = hasFetched
 
 }
 

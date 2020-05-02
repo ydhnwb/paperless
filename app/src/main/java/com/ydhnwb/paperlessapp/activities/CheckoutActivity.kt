@@ -8,16 +8,22 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.models.OrderSend
 import com.ydhnwb.paperlessapp.models.Product
+import com.ydhnwb.paperlessapp.models.ProductSend
+import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.viewmodels.CheckoutState
 import com.ydhnwb.paperlessapp.viewmodels.CheckoutViewModel
+import com.ydhnwb.paperlessapp.viewmodels.OrderState
+import com.ydhnwb.paperlessapp.viewmodels.OrderViewModel
 import kotlinx.android.synthetic.main.activity_checkout.*
 import kotlinx.android.synthetic.main.content_checkout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : AppCompatActivity() {
     private val checkoutViewModel : CheckoutViewModel by viewModel()
+    private val orderViewModel: OrderViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +34,12 @@ class CheckoutActivity : AppCompatActivity() {
         listenerDiscount()
         behaviorDiscount()
         watcherDiscount()
+        orderViewModel.listenToState().observer(this, Observer { handleOrderState(it) })
         checkoutViewModel.listenToState().observer(this, Observer { handleUIState(it) })
         checkoutViewModel.listenToDiscountValue().observe(this, Observer { handleDiscountValue(it) })
         checkoutViewModel.listenToSelectedProduct().observe(this, Observer { calculateTotalPrice() })
         fill()
+        confirmOrder()
     }
 
 
@@ -66,7 +74,12 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun confirmOrder(){
         checkout_cash.setOnClickListener {
-
+            val productsToSend : List<ProductSend> = getSelectedProducts()!!.map{ p ->
+                ProductSend(id = p.id!!, price = p.price!!, quantity = p.selectedQuantity!!)
+            }.toList()
+            //3 is izzatur royhan for example
+            val orderSend = OrderSend(userId = 3, storeId = getParentStore().id, products = productsToSend)
+            orderViewModel.confirmOrder(PaperlessUtil.getToken(this@CheckoutActivity), orderSend)
         }
     }
 
@@ -81,8 +94,16 @@ class CheckoutActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleOrderState(it: OrderState){
+        when(it){
+            is OrderState.Success -> finish()
+            is OrderState.ShowToast -> toast(it.message)
+        }
+    }
+
     private fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     private fun handleDiscountValue(it: String){ calculateTotalPrice() }
     private fun calculateTotalPrice(){ checkout_total_price.text = PaperlessUtil.setToIDR(checkoutViewModel.calculateTotalPrice()) }
     private fun getSelectedProducts() : List<Product>? = intent.getParcelableArrayListExtra("PRODUCT")
+    private fun getParentStore() : Store = intent.getParcelableExtra("STORE")!!
 }

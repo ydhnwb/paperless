@@ -39,10 +39,16 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
         if(productViewModel.listenProducts().value == null || productViewModel.listenProducts().value!!.isEmpty()){ view.empty_view.visibility = View.VISIBLE }else{ view.empty_view.visibility = View.GONE }
         productViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
         productViewModel.listenSelectedProducts().observe(viewLifecycleOwner, Observer { handleSelectedProduct(it) })
-        if(!productViewModel.listenToHasFetched().value!!){
+        if(savedInstanceState != null){
+            if(!productViewModel.listenToHasFetched().value!!){
+                productViewModel.clearAllSelectedProduct()
+                productViewModel.fetchAllProducts(PaperlessUtil.getToken(activity!!), parentStoreViewModel.getCurrentStore()?.id.toString())
+            }
+        }else{
             productViewModel.clearAllSelectedProduct()
             productViewModel.fetchAllProducts(PaperlessUtil.getToken(activity!!), parentStoreViewModel.getCurrentStore()?.id.toString())
         }
+
     }
 
     private fun setupUIComponent(){
@@ -64,6 +70,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
             if(selectedProducts != null && selectedProducts.isNotEmpty()){
                 startActivity(Intent(activity!!, CheckoutActivity::class.java).apply {
                     putParcelableArrayListExtra("PRODUCT", selectedProducts)
+                    putExtra("STORE", parentStoreViewModel.getCurrentStore())
                 })
             }else{
                 toast(resources.getString(R.string.info_choose_product_first))

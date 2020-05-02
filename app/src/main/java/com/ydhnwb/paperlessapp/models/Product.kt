@@ -19,5 +19,14 @@ data class Product(
     @SerializedName("category") var category : Category? = null,
     @SerializedName("store") var store : Store? = null,
     @SerializedName("owner") var owner : User? = null,
+    @SerializedName("order") var orderAlt: OrderAlt? = null,
     var selectedQuantity : Int? = null
 ) : Parcelable
+
+@Parcelize
+data class ProductSend(
+    @SerializedName("id") var id : Int,
+    @SerializedName("quantity") var quantity : Int,
+    @SerializedName("price") var price : Int
+
+): Parcelable

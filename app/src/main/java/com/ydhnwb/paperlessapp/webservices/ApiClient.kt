@@ -150,4 +150,8 @@ interface ApiService {
 
     @GET("v1/invitation/in/{id}/reject")
     fun invitation_reject(@Header("Authorization") token : String, @Path("id") invitationId : String) : Call<WrappedResponse<Invitation>>
+
+    @Headers("Content-Type: application/json")
+    @POST("v1/order")
+    fun order_confirm(@Header("Authorization") token : String, @Body body : RequestBody) : Call<WrappedResponse<Order>>
 }
