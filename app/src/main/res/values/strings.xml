@@ -219,5 +219,6 @@
     <string name="info_search_result">Pencarian</string>
     <string name="info_choose_product_first">Pilih produk terlebih dahulu</string>
     <string name="hint_search_product">Cari</string>
+    <string name="error_discount_zero">Jumlah diskon tidak boleh nol</string>
 
 </resources>

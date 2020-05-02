@@ -33,4 +33,5 @@ val viewModelModules = module {
     viewModel { StoreViewModel(get()) }
     viewModel { UserViewModel(get()) }
     viewModel { InvitationViewModel(get()) }
+    viewModel { CheckoutViewModel(get()) }
 }

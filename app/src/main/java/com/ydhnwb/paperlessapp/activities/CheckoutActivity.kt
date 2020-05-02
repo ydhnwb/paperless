@@ -1,18 +1,23 @@
 package com.ydhnwb.paperlessapp.activities
 
-import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
-import com.google.android.material.snackbar.Snackbar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
-
+import com.ydhnwb.paperlessapp.viewmodels.CheckoutState
+import com.ydhnwb.paperlessapp.viewmodels.CheckoutViewModel
 import kotlinx.android.synthetic.main.activity_checkout.*
 import kotlinx.android.synthetic.main.content_checkout.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : AppCompatActivity() {
+    private val checkoutViewModel : CheckoutViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,42 +25,64 @@ class CheckoutActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
         toolbar.setNavigationOnClickListener { finish() }
-        fill()
         listenerDiscount()
         behaviorDiscount()
-        listenerPercent()
+        watcherDiscount()
+        checkoutViewModel.listenToState().observer(this, Observer { handleUIState(it) })
+        checkoutViewModel.listenToDiscountValue().observe(this, Observer { handleDiscountValue(it) })
+        checkoutViewModel.listenToSelectedProduct().observe(this, Observer { calculateTotalPrice() })
+        fill()
     }
 
-    private fun getSelectedProducts() : List<Product>? = intent.getParcelableArrayListExtra("PRODUCT")
 
-    private fun fill(){
-        getSelectedProducts()?.let {
-            checkout_total_price.text = PaperlessUtil.setToIDR(it.sumBy { product ->
-                product.selectedQuantity!! * product.price!!
-            })
-        }
-    }
-
-    private fun setVisibilityDiscountLayout(bool : Boolean){
-        if(bool){ checkout_layout_discount.visibility = View.VISIBLE }else{ checkout_layout_discount.visibility = View.GONE }
-    }
+    private fun fill() = getSelectedProducts()?.let { checkoutViewModel.setSelectedProducts(it) }
 
     private fun listenerDiscount(){
         checkout_switch_discount.setOnCheckedChangeListener { _, isChecked ->
-            setVisibilityDiscountLayout(isChecked)
+            if(isChecked){
+                checkout_layout_discount.visibility = View.VISIBLE
+            }else{
+                et_discount.text?.clear()
+                checkout_layout_discount.visibility = View.GONE
+            }
         }
     }
 
-    private fun behaviorDiscount(){
-        checkout_btn_discount.setOnClickListener {
-            checkout_switch_discount.isChecked = !checkout_switch_discount.isChecked
-        }
-
-    }
-    private fun listenerPercent(){
-        checkout_checkbox_percent.setOnCheckedChangeListener { _, isChecked ->
-            checkout_discount_indicator.text = if(isChecked) "%" else "Rp."
-        }
+    private fun behaviorDiscount() = checkout_btn_discount.setOnClickListener {
+        checkout_switch_discount.isChecked = !checkout_switch_discount.isChecked
     }
 
+    private fun watcherDiscount(){
+        et_discount.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (checkout_switch_discount.isChecked){
+                    checkoutViewModel.setDiscountValue(s.toString())
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+    }
+
+    private fun confirmOrder(){
+        checkout_cash.setOnClickListener {
+
+        }
+    }
+
+    private fun handleUIState(it: CheckoutState){
+        when(it){
+            is CheckoutState.ShowToast -> toast(it.message)
+            is CheckoutState.ResetDiscount -> {
+                if (checkout_switch_discount.isChecked){
+                    et_discount.text?.clear()
+                }
+            }
+        }
+    }
+
+    private fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    private fun handleDiscountValue(it: String){ calculateTotalPrice() }
+    private fun calculateTotalPrice(){ checkout_total_price.text = PaperlessUtil.setToIDR(checkoutViewModel.calculateTotalPrice()) }
+    private fun getSelectedProducts() : List<Product>? = intent.getParcelableArrayListExtra("PRODUCT")
 }
