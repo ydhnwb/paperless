@@ -125,8 +125,7 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun checkCustomerTarget(code : String, isStore: Boolean){
-        toast(code)
-        checkoutViewModel.setCustomerTarget(Customer(code, isStore))
+        checkoutViewModel.setCustomerTarget(PaperlessUtil.getToken(this@CheckoutActivity), Customer(code, isStore))
     }
 
     private fun customerViewBehavior(){
@@ -144,8 +143,8 @@ class CheckoutActivity : AppCompatActivity() {
     private fun handleCustomerChange(it : Customer?){
         customerViewBehavior()
         it?.let { x ->
-            customer_name.text = x.idCustomer
-            customer_desc.text = x.isStore.toString()
+            customer_name.text = x.name
+            customer_desc.text = x.desc
         }
     }
 

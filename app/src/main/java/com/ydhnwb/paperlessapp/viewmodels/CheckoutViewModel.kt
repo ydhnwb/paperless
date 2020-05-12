@@ -3,8 +3,13 @@ package com.ydhnwb.paperlessapp.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Product
+import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CheckoutViewModel (private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<CheckoutState> = SingleLiveEvent()
@@ -35,11 +40,32 @@ class CheckoutViewModel (private val api : ApiService) : ViewModel(){
         return totalPrice
     }
 
-    fun setCustomerTarget(customer: Customer) {
+    fun setCustomerTarget(token: String, customer: Customer) {
         currentCustomer.postValue(customer)
-//        if (customer.isStore){
-//            //fetch to get data info
-//        }
+        if (customer.isStore){
+            val id = customer.idCustomer.replace("STR", "")
+            api.store_general_get(token, id).enqueue(object : Callback<WrappedResponse<Store>>{
+                override fun onFailure(call: Call<WrappedResponse<Store>>, t: Throwable) { println(t.message) }
+
+                override fun onResponse(call: Call<WrappedResponse<Store>>, response: Response<WrappedResponse<Store>>) {
+                    if(response.isSuccessful){
+                        val x = response.body()
+                        if (x!!.status){
+                            customer.name = x.data?.name.toString()
+                            customer.desc = x.data?.address.toString()
+                            currentCustomer.postValue(customer)
+                        }
+                    }else{
+                        println(response.message())
+                        println(response.code())
+                    }
+                }
+            })
+        }else{
+            customer.name = "User ${customer.idCustomer}"
+            customer.desc = "${customer.isStore}"
+            currentCustomer.postValue(customer)
+        }
     }
     fun deleteCustomer() = currentCustomer.postValue(null)
 
@@ -58,6 +84,6 @@ sealed class CheckoutState {
 data class Customer(
     var idCustomer : String,
     var isStore : Boolean,
-    var name : String? = "Lorem",
-    var desc : String? = "Lorem"
+    var name : String = "",
+    var desc : String = ""
 )

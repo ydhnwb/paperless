@@ -154,4 +154,10 @@ interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("v1/order")
     fun order_confirm(@Header("Authorization") token : String, @Body body : RequestBody) : Call<WrappedResponse<Order>>
+
+    @GET("v1/store")
+    fun store_general_all(@Header("Authorization") token : String) : Call<WrappedListResponse<Store>>
+
+    @GET("v1/store/{id}")
+    fun store_general_get(@Header("Authorization") token : String, @Path("id") id : String) : Call<WrappedResponse<Store>>
 }
