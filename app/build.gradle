@@ -76,4 +76,5 @@ dependencies {
     implementation 'org.koin:koin-androidx-viewmodel:2.0.1'
     implementation 'com.github.florent37:shapeofview:1.4.7'
     implementation 'me.abhinay.input:currency-edittext:1.1'
+
 }

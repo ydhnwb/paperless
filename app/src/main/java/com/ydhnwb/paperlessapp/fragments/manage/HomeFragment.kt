@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.fragments.manage
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -15,6 +16,7 @@ import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.core.cartesian.series.Column
 import com.anychart.enums.*
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.ShowQRActivity
 import com.ydhnwb.paperlessapp.adapters.StoreMenuAdapter
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.StoreMenu

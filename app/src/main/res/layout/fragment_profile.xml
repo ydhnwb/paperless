@@ -51,28 +51,32 @@
             <LinearLayout
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:weightSum="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_margin="16dp"
                     android:id="@+id/profile_image"
                     android:scaleType="centerCrop"
                     android:src="@drawable/image_placeholder"
-                    android:layout_width="64dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.2"
                     android:layout_height="64dp"/>
                 <LinearLayout
+                    android:layout_weight="0.6"
                     android:gravity="center_vertical"
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:maxLines="1"
+                        android:maxLines="2"
                         android:id="@+id/profile_name"
                         android:textColor="@color/colorKeepWhite"
                         android:textStyle="bold"
                         android:textSize="18sp"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
                         android:maxLines="1"
@@ -80,6 +84,25 @@
                         android:id="@+id/profile_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="0.2"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:id="@+id/profile_qr"
+                        android:background="@null"
+                        android:padding="8dp"
+                        android:tint="@color/colorKeepWhite"
+                        android:src="@drawable/ic_grid_on_black_24dp"
+                        android:layout_height="wrap_content"/>
+
                 </LinearLayout>
 
 

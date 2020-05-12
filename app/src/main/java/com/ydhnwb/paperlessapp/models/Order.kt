@@ -32,7 +32,9 @@ data class OrderAlt(
 @Parcelize
 data class OrderSend(
     @SerializedName("id") var id : Int? = null,
-    @SerializedName("user_id") var userId : Int? = null,
-    @SerializedName("store_id") var storeId : Int? = null,
+    @SerializedName("sell_by_store") var sellByStore : Int? = null,
+    @SerializedName("buy_by_store") var boughtByStore : Int? = null,
+    @SerializedName("buy_by_user") var boughtByUser : Int? = null,
+    @SerializedName("discount") var discountInPrice : Int = 0,
     @SerializedName("products") var products : List<ProductSend> = mutableListOf()
 ): Parcelable

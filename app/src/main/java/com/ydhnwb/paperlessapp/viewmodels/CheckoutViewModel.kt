@@ -10,6 +10,7 @@ class CheckoutViewModel (private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<CheckoutState> = SingleLiveEvent()
     private var selectedProducts = MutableLiveData<List<Product>>().apply { postValue(mutableListOf()) }
     private var discountValue = MutableLiveData<String>()
+    private var currentCustomer = MutableLiveData<Customer?>()
 
     fun setSelectedProducts(products: List<Product>){ selectedProducts.postValue(products) }
 
@@ -34,9 +35,18 @@ class CheckoutViewModel (private val api : ApiService) : ViewModel(){
         return totalPrice
     }
 
+    fun setCustomerTarget(customer: Customer) {
+        currentCustomer.postValue(customer)
+//        if (customer.isStore){
+//            //fetch to get data info
+//        }
+    }
+    fun deleteCustomer() = currentCustomer.postValue(null)
+
     fun listenToState() = state
     fun listenToDiscountValue() = discountValue
     fun listenToSelectedProduct() = selectedProducts
+    fun listenToCurrentCustomer() = currentCustomer
 
 }
 
@@ -44,3 +54,10 @@ sealed class CheckoutState {
     object ResetDiscount : CheckoutState()
     data class ShowToast(var message : String) : CheckoutState()
 }
+
+data class Customer(
+    var idCustomer : String,
+    var isStore : Boolean,
+    var name : String? = "Lorem",
+    var desc : String? = "Lorem"
+)

@@ -14,6 +14,7 @@ import coil.transform.CircleCropTransformation
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.LoginActivity
 import com.ydhnwb.paperlessapp.activities.RegisterActivity
+import com.ydhnwb.paperlessapp.activities.ShowQRActivity
 import com.ydhnwb.paperlessapp.adapters.PreferenceAdapter
 import com.ydhnwb.paperlessapp.models.Preference
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
@@ -50,11 +51,15 @@ class ProfileFragment : Fragment() {
         }else{
             userViewModel.listenToCurrentUser().observe(viewLifecycleOwner, Observer {
                 it?.let {
-                    view.profile_image.load(R.drawable.ydhnwb){
-                        transformations(CircleCropTransformation())
-                    }
+                    view.profile_image.load(R.drawable.ydhnwb){ transformations(CircleCropTransformation()) }
                     view.profile_name.text = it.name
                     view.profile_email.text = it.email
+                    view.profile_qr.setOnClickListener { _ ->
+                        startActivity(Intent(activity, ShowQRActivity::class.java).apply {
+                            putExtra("ID", it.id.toString())
+                            putExtra("IS_STORE", false)
+                        })
+                    }
                 }
             })
             userViewModel.getUIState().observer(viewLifecycleOwner, Observer {

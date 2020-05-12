@@ -4,17 +4,19 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.zxing.Result
 import com.ydhnwb.paperlessapp.R
 import kotlinx.android.synthetic.main.activity_scanner.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
+
 
 class ScannerActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
     private lateinit var scannerView: ZXingScannerView
@@ -41,9 +43,15 @@ class ScannerActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
     override fun handleResult(rawResult: Result?) {
         rawResult?.let {
+            val notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            val r = RingtoneManager.getRingtone(applicationContext, notification)
+            r.play()
             println(it.text)
-            val i = Intent().putExtra("CODE", it.text)
+            val i = Intent()
+            i.putExtra("CODE", it.text)
+            i.putExtra("IS_STORE", it.text.contains(resources.getString(R.string.qr_suffix_store), true))
             setResult(Activity.RESULT_OK, i)
+
             finish()
         }
     }

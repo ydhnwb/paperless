@@ -49,7 +49,7 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         storeViewModel.setCurrentManagedStore(getCurrentStore())
         if(savedInstanceState == null){
             openFirst = true
-            val item = nav_view.getMenu().getItem(0).setChecked(true)
+            val item = nav_view.menu.getItem(0).setChecked(true)
             onNavigationItemSelected(item)
         }
     }
@@ -57,6 +57,20 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.manage, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.action_code -> {
+                startActivity(Intent(this, ShowQRActivity::class.java).apply {
+                    putExtra("ID", getCurrentStore().id.toString())
+                    putExtra("IS_STORE", true)
+                })
+                true
+            }
+            else ->  super.onOptionsItemSelected(item)
+
+        }
     }
 
     override fun onBackPressed() { if (drawer_layout.isDrawerOpen(GravityCompat.START)) { drawer_layout.closeDrawer(GravityCompat.START) } else { super.onBackPressed() } }

@@ -183,6 +183,58 @@
                     </RelativeLayout>
 
                 </LinearLayout>
+                <LinearLayout
+                    android:visibility="gone"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingEnd="16dp"
+                    android:id="@+id/checkout_customer_info"
+                    android:background="?attr/selectableItemBackground"
+                    android:weightSum="2"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="48dp"
+                        android:src="@color/colorBlackSteel"
+                        android:layout_height="48dp"/>
+
+                    <LinearLayout
+                        android:layout_marginStart="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:maxLines="2"
+                            android:id="@+id/customer_name"
+                            android:textColor="@color/colorBlackSteel"
+                            android:textStyle="bold"
+                            android:text="@string/lorem"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:maxLines="2"
+                            android:id="@+id/customer_desc"
+                            android:textColor="@color/colorBlackSteel"
+                            android:text="@string/lorem_long"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="wrap_content"
+                            android:layout_gravity="end"
+                            android:id="@+id/customer_delete"
+                            android:textAllCaps="false"
+                            android:text="@string/info_delete"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
 
                 <View
                     android:background="@color/colorGrey"

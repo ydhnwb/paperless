@@ -18,14 +18,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activities.ShowQRActivity"></activity>
+        <activity
+            android:name=".activities.ScanCustomerActivity"
+            android:label="@string/title_activity_select_customer"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.InvitationActivity"
             android:label="@string/title_activity_invitation"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SearchUserActivity"
             android:label="@string/title_activity_search_user"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.ScannerActivity" />
         <activity
             android:name=".activities.CheckoutActivity"

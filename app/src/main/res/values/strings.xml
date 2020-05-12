@@ -220,5 +220,12 @@
     <string name="info_choose_product_first">Pilih produk terlebih dahulu</string>
     <string name="hint_search_product">Cari</string>
     <string name="error_discount_zero">Jumlah diskon tidak boleh nol</string>
+    <string name="title_activity_select_customer">SelectCustomerActivity</string>
+    <string name="checkout_choose_target_type">Scan QR Code pengguna atau toko untuk melanjutkan.</string>
+    <string name="scan_store">Scan toko</string>
+    <string name="scan_user">Scan pengguna</string>
+    <string name="show_qr">Lihat QR</string>
+    <string name="menu_show_qr">Tampilkan QR Code</string>
+    <string name="qr_suffix_store">STR</string>
 
 </resources>
