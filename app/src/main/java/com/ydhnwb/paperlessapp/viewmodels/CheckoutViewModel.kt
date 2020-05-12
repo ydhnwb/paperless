@@ -37,6 +37,7 @@ class CheckoutViewModel (private val api : ApiService) : ViewModel(){
             state.value = CheckoutState.ShowToast("Diskon tidak valid")
             return totalPrice
         }
+        state.value = CheckoutState.ResetDiscount
         return totalPrice
     }
 

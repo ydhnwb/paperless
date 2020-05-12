@@ -71,6 +71,8 @@ class CheckoutActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (checkout_switch_discount.isChecked){
                     checkoutViewModel.setDiscountValue(s.toString())
+                }else{
+                    checkoutViewModel.setDiscountValue(s.toString())
                 }
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
