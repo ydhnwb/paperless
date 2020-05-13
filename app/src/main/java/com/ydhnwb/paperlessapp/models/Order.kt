@@ -38,3 +38,4 @@ data class OrderSend(
     @SerializedName("discount") var discountInPrice : Int = 0,
     @SerializedName("products") var products : List<ProductSend> = mutableListOf()
 ): Parcelable
+

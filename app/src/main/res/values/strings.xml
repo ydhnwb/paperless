@@ -227,5 +227,9 @@
     <string name="show_qr">Lihat QR</string>
     <string name="menu_show_qr">Tampilkan QR Code</string>
     <string name="qr_suffix_store">STR</string>
+    <string name="etc_coming_soon">Coming soon</string>
+    <string name="info_successfully_checkout">Pesanan dibuat</string>
+    <string name="alert_failed">Gagal saat membuat pesanan.</string>
+    <string name="alert_failed_by_code">Kesalahan dari server saat membuat pesanan</string>
 
 </resources>

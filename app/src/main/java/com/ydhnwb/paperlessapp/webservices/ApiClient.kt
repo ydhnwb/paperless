@@ -160,4 +160,7 @@ interface ApiService {
 
     @GET("v1/store/{id}")
     fun store_general_get(@Header("Authorization") token : String, @Path("id") id : String) : Call<WrappedResponse<Store>>
+
+    @GET("v1/own/store/{id}/employee")
+    fun store_employee(@Header("Authorization") token : String, @Path("id") invitationId : String) : Call<WrappedResponse<Invitation>>
 }
