@@ -31,9 +31,7 @@ class InviteDialog : DialogFragment(){
 
     private val invitationViewModel : InvitationViewModel by viewModel()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_invitation, container)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.dialog_invitation, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,20 +66,14 @@ class InviteDialog : DialogFragment(){
             is InvitationState.ShowAlert -> {
                 AlertDialog.Builder(activity).apply {
                     setMessage(it.message)
-                    setPositiveButton(resources.getString(R.string.info_understand)){ d, which ->
-                        d.dismiss()
-                    }
+                    setPositiveButton(resources.getString(R.string.info_understand)){ d, _ -> d.dismiss() }
                 }.show()
             }
             is InvitationState.IsLoading -> {
                 with(view!!){
                     btn_add_staff.isEnabled = !it.state
                     btn_add_cashier.isEnabled = !it.state
-                    if (it.state){
-                        loading.visibility = View.VISIBLE
-                    }else{
-                        loading.visibility = View.GONE
-                    }
+                    if (it.state){ loading.visibility = View.VISIBLE }else{ loading.visibility = View.GONE }
                 }
             }
         }
