@@ -162,5 +162,13 @@ interface ApiService {
     fun store_general_get(@Header("Authorization") token : String, @Path("id") id : String) : Call<WrappedResponse<Store>>
 
     @GET("v1/own/store/{id}/employee")
-    fun store_employee(@Header("Authorization") token : String, @Path("id") invitationId : String) : Call<WrappedResponse<Invitation>>
+    fun store_employee(@Header("Authorization") token : String, @Path("id") storeId : String) : Call<WrappedListResponse<User>>
+
+    @FormUrlEncoded
+    @POST("v1/transaction")
+    fun transaction_store(@Header("Authorization") token : String, @Field("store_id") storeId : String) : Call<WrappedListResponse<Transaction>>
+
+    @GET("v1/user_transaction")
+    fun transaction_user(@Header("Authorization") token : String) : Call<WrappedListResponse<Transaction>>
+
 }

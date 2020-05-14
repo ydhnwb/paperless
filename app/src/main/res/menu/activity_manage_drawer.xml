@@ -16,10 +16,16 @@
             android:id="@+id/nav_product"
             android:icon="@drawable/ic_inbox_black_24dp"
             android:title="@string/menu_product" />
+
         <item
             android:id="@+id/nav_employee"
             android:icon="@drawable/ic_supervisor_account_black_24dp"
             android:title="@string/menu_employee" />
+
+        <item
+            android:id="@+id/nav_transaction"
+            android:icon="@drawable/ic_compare_arrows_black_24dp"
+            android:title="@string/menu_transaction"/>
     </group>
 
     <item android:title="Communicate">

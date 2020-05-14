@@ -37,7 +37,6 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private val userViewModel : UserViewModel by viewModel()
     private val productViewModel: ProductViewModel by viewModel()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage)
@@ -69,7 +68,6 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 true
             }
             else ->  super.onOptionsItemSelected(item)
-
         }
     }
 
@@ -84,7 +82,7 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 }else{
                     navStatus = 0
                     openFirst = false
-                    fragment = HomeFragment.instance(getCurrentStore())
+                    fragment = HomeFragment()
                 }
             }
             R.id.nav_etalase -> {
@@ -113,13 +111,21 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 }else{
                     openFirst = false
                     navStatus = 3
-                    fragment = EmployeeFragment.instance(getCurrentStore())
+                    fragment = EmployeeFragment()
                 }
             }
 
-            R.id.nav_setting -> {
-                startActivity(Intent(this@ManageActivity, RegisterActivity::class.java))
+            R.id.nav_transaction -> {
+                if(navStatus == 4 && !openFirst){
+                    drawer_layout.closeDrawer(GravityCompat.START)
+                }else{
+                    openFirst = false
+                    navStatus = 4
+                    fragment = EmployeeFragment()
+                }
             }
+
+            R.id.nav_setting -> { startActivity(Intent(this@ManageActivity, RegisterActivity::class.java)) }
 
             else -> {
                 openFirst = false
@@ -151,8 +157,8 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             user_name.text = it.name
             user_email.text = it.email
         }
-
     }
+
     private fun getCurrentStore() = intent.getParcelableExtra<Store>("STORE")!!
 
 }

@@ -231,5 +231,6 @@
     <string name="info_successfully_checkout">Pesanan dibuat</string>
     <string name="alert_failed">Gagal saat membuat pesanan.</string>
     <string name="alert_failed_by_code">Kesalahan dari server saat membuat pesanan</string>
+    <string name="menu_transaction">Transaksi</string>
 
 </resources>

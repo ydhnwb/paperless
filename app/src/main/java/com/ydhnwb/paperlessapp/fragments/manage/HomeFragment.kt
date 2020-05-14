@@ -1,13 +1,10 @@
 package com.ydhnwb.paperlessapp.fragments.manage
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.api.load
 import com.anychart.APIlib
 import com.anychart.AnyChart
@@ -16,28 +13,20 @@ import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.core.cartesian.series.Column
 import com.anychart.enums.*
 import com.ydhnwb.paperlessapp.R
-import com.ydhnwb.paperlessapp.activities.ShowQRActivity
 import com.ydhnwb.paperlessapp.adapters.StoreMenuAdapter
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.StoreMenu
+import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import kotlinx.android.synthetic.main.chart_bar.view.*
 import kotlinx.android.synthetic.main.chart_pie.*
 import kotlinx.android.synthetic.main.chart_pie.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var storeMenus : List<StoreMenu>
-
-    companion object {
-        fun instance(store: Store): HomeFragment{
-            val args = Bundle()
-            args.putParcelable("store", store)
-            return HomeFragment().apply {
-                arguments = args
-            }
-        }
-    }
+    private val parentStoreViewModel : StoreViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,13 +37,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun fill(){
-        arguments?.let {
-            val store : Store = it.getParcelable("store")!!
-            with(view!!){
-                store_name.text = store.name
-                store_address.text = store.address
-                store_image.load(store.store_logo)
-            }
+        val store : Store = parentStoreViewModel.getCurrentStore()!!
+        with(view!!){
+            store_name.text = store.name
+            store_address.text = store.address
+            store_image.load(store.store_logo)
         }
     }
 
@@ -67,7 +54,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         )
 
         view!!.rv_store_menu.apply {
-            adapter = StoreMenuAdapter(storeMenus, context, arguments?.getParcelable<Store>("store")!!)
+            adapter = StoreMenuAdapter(storeMenus, context, parentStoreViewModel.getCurrentStore()!!)
             layoutManager = GridLayoutManager(activity, 2)
         }
     }

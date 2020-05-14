@@ -13,21 +13,14 @@ import com.ydhnwb.paperlessapp.adapters.EmployeeAdapter
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.viewmodels.EmployeeState
 import com.ydhnwb.paperlessapp.viewmodels.EmployeeViewModel
+import com.ydhnwb.paperlessapp.viewmodels.StoreViewModel
 import kotlinx.android.synthetic.main.fragment_employee.view.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EmployeeFragment : Fragment(R.layout.fragment_employee) {
     private val employeeViewModel: EmployeeViewModel by viewModel()
-
-    companion object {
-        fun instance(store: Store): EmployeeFragment{
-            val args = Bundle()
-            args.putParcelable("store", store)
-            return EmployeeFragment().apply {
-                arguments = args
-            }
-        }
-    }
+    private val parentStoreViewModel : StoreViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,7 +44,7 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
             view.empty_view.visibility = View.GONE
         }
         view.fab.setOnClickListener {
-            val store : Store = arguments?.getParcelable("store")!!
+            val store : Store = parentStoreViewModel.getCurrentStore()!!
             startActivity(Intent(activity, SearchUserActivity::class.java).apply {
                 putExtra("store", store)
             })
