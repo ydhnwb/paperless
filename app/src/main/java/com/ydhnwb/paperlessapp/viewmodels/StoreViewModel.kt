@@ -242,6 +242,7 @@ class StoreViewModel(private val api : ApiService) : ViewModel(){
     fun listenToOtherStore() = otherStore
     fun listenUIState() = state
     fun getCurrentStore() = currentManagedStore.value
+    fun listenToCurrentStore() = currentManagedStore
 }
 
 

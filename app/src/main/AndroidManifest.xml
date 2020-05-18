@@ -18,7 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.ShowQRActivity"></activity>
+        <activity
+            android:name=".activities.CatalogActivity"
+            android:label="@string/title_activity_catalog"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activities.ShowQRActivity" />
         <activity
             android:name=".activities.ScanCustomerActivity"
             android:label="@string/title_activity_select_customer"

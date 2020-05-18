@@ -161,8 +161,6 @@ interface ApiService {
     @GET("v1/store/{id}")
     fun store_general_get(@Header("Authorization") token : String, @Path("id") id : String) : Call<WrappedResponse<Store>>
 
-    @GET("v1/own/store/{id}/employee")
-    fun store_employee(@Header("Authorization") token : String, @Path("id") storeId : String) : Call<WrappedListResponse<User>>
 
     @FormUrlEncoded
     @POST("v1/transaction")
@@ -171,4 +169,9 @@ interface ApiService {
     @GET("v1/user_transaction")
     fun transaction_user(@Header("Authorization") token : String) : Call<WrappedListResponse<Transaction>>
 
+    @GET("v1/own/store/{storeId}/employee")
+    fun store_employee(@Header("Authorization") token : String, @Path("storeId") storeId : String) : Call<WrappedResponse<EmployeeResponse>>
+
+    @GET("v1/product")
+    fun catalog_search(@Header("Authorization") token : String, @Query("query") query : String) : Call<WrappedListResponse<Product>>
 }

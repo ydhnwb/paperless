@@ -34,7 +34,7 @@ class BookmenuFragment : Fragment(R.layout.fragment_bookmenu){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        productViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUItate(it) })
+        productViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
         if (arguments == null){
             view.bookmenu_empty_view.visibility = View.VISIBLE
             productViewModel.listenProducts().observe(viewLifecycleOwner, Observer {
@@ -57,7 +57,7 @@ class BookmenuFragment : Fragment(R.layout.fragment_bookmenu){
         }
     }
 
-    private fun handleUItate(it: ProductState){
+    private fun handleUIState(it: ProductState){
         when(it){
             is ProductState.IsLoading -> {
                 if (it.state){
@@ -71,9 +71,7 @@ class BookmenuFragment : Fragment(R.layout.fragment_bookmenu){
 
     private fun setupUI(){
         view!!.rv_bookmenu.apply {
-            layoutManager = if(this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
-                GridLayoutManager(activity, 2)
-            }else{
+            layoutManager = if(this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){ GridLayoutManager(activity, 2) }else{
                 GridLayoutManager(activity, 4)
             }
             adapter = EtalaseAdapter(mutableListOf(), activity!!, productViewModel)

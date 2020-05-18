@@ -9,7 +9,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import org.koin.dsl.module
-import retrofit2.Retrofit
 
 class MyApp : Application(){
     override fun onCreate() {
@@ -37,4 +36,5 @@ val viewModelModules = module {
     viewModel { OrderViewModel(get()) }
     viewModel { CustomerViewModel(get()) }
     viewModel { TransactionViewModel(get()) }
+    viewModel { CatalogViewModel(get()) }
 }

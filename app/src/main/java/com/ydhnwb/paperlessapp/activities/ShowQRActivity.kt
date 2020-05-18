@@ -17,7 +17,6 @@ class ShowQRActivity : AppCompatActivity() {
         setContentView(R.layout.activity_show_q_r)
         supportActionBar?.hide()
         val code = if(getIsStore()) "STR${getIdExtra()}" else "USR${getIdExtra()}"
-        Toast.makeText(this, code, Toast.LENGTH_LONG).show()
         val x = QRCodeWriter().encode(code, BarcodeFormat.QR_CODE, 700, 700)
         qr.load(PaperlessUtil.createBitmap(x))
     }

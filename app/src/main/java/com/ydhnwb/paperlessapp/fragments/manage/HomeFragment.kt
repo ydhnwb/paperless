@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import coil.api.load
 import com.anychart.APIlib
@@ -37,12 +38,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun fill(){
-        val store : Store = parentStoreViewModel.getCurrentStore()!!
-        with(view!!){
-            store_name.text = store.name
-            store_address.text = store.address
-            store_image.load(store.store_logo)
-        }
+        parentStoreViewModel.listenToCurrentStore().observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                with(view!!){
+                    store_name.text = it.name
+                    store_address.text = it.address
+                    store_image.load(it.store_logo)
+                    view!!.rv_store_menu.apply {
+                        adapter = StoreMenuAdapter(storeMenus, context, parentStoreViewModel.getCurrentStore()!!)
+                        layoutManager = GridLayoutManager(activity, 2)
+                    }
+                }
+            }
+        })
+
     }
 
     private fun storeMenu(){
@@ -52,11 +61,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             StoreMenu(resources.getString(R.string.store_menu_customer), R.drawable.ic_doodle_enthusiast, ContextCompat.getColor(activity!!, R.color.colorOrange)),
             StoreMenu(resources.getString(R.string.store_menu_invitation), R.drawable.ic_doodle_connection, ContextCompat.getColor(activity!!, R.color.colorGreen))
         )
-
-        view!!.rv_store_menu.apply {
-            adapter = StoreMenuAdapter(storeMenus, context, parentStoreViewModel.getCurrentStore()!!)
-            layoutManager = GridLayoutManager(activity, 2)
-        }
     }
 
     private fun dummyChart(){

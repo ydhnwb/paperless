@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CatalogActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                app:contentInsetStart="8dp"
+                app:contentInsetEnd="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <com.mancj.materialsearchbar.MaterialSearchBar
+                    app:mt_backIconTint="@color/colorBlackSteel"
+                    app:mt_searchIconUseTint="true"
+                    app:mt_searchIconTint="@color/colorBlackSteel"
+                    app:mt_clearIconUseTint="true"
+                    app:mt_clearIconTint="@color/colorBlackSteel"
+                    app:mt_searchBarColor="@color/colorWhite"
+                    app:mt_hint="@string/hint_search_catalog"
+                    android:id="@+id/search_bar"
+                    app:mt_highlightedTextColor="@color/colorBlackSteel"
+                    app:mt_textColor="@color/colorBlackSteel"
+                    app:mt_hintColor="@color/colorBlackSteel"
+                    app:mt_placeholderColor="@color/colorBlackSteel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            </androidx.appcompat.widget.Toolbar>
+
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                app:tabMode="scrollable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <include layout="@layout/content_catalog" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
