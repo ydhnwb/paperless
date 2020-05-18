@@ -174,4 +174,7 @@ interface ApiService {
 
     @GET("v1/product")
     fun catalog_search(@Header("Authorization") token : String, @Query("query") query : String) : Call<WrappedListResponse<Product>>
+
+    @GET("v1/store_as_employee")
+    fun store_as_employee(@Header("Authorization") token : String) : Call<WrappedResponse<Store>>
 }

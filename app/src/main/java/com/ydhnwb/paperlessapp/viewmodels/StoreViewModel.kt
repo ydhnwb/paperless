@@ -21,7 +21,7 @@ import java.lang.Exception
 class StoreViewModel(private val api : ApiService) : ViewModel(){
     private var state : SingleLiveEvent<StoreState> = SingleLiveEvent()
     private var myStores = MutableLiveData<List<Store>>()
-    private var otherStore = MutableLiveData<List<Store>>()
+    private var otherStore = MutableLiveData<Store>()
     private var currentManagedStore = MutableLiveData<Store>()
 
     fun setCurrentManagedStore(store: Store) = currentManagedStore.postValue(store)
@@ -202,10 +202,6 @@ class StoreViewModel(private val api : ApiService) : ViewModel(){
     }
 
     fun fetchOtherStore(){
-        state.value = StoreState.IsLoading(true, true)
-        val list= mutableListOf<Store>()
-        otherStore.postValue(list)
-        state.value = StoreState.IsLoading(false, true)
     }
 
     fun storeDelete(token: String, storeId: String){
@@ -236,6 +232,9 @@ class StoreViewModel(private val api : ApiService) : ViewModel(){
             state.value = StoreState.ShowToast(e.message.toString())
             state.value = StoreState.IsLoading(false)
         }
+    }
+
+    fun storeAsEmployee(token: String){
     }
 
     fun listenToMyStore() = myStores

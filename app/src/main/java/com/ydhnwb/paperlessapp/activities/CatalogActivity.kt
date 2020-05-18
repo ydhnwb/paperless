@@ -62,16 +62,16 @@ class CatalogActivity : AppCompatActivity() {
             val categories = it.map { product -> product.category!! }.distinctBy { category -> category.name }
             val fragmentAdapter = CustomFragmentPagerAdapter(supportFragmentManager)
             if(catalogViewModel.listenToProducts().value != null && it.isNotEmpty()){
-                fragmentAdapter.addFragment(CatalogFragment(), resources.getString(R.string.common_all))
+                fragmentAdapter.addFragment(CatalogFragment(), resources.getString(R.string.common_all).toUpperCase())
             }
-            for (c in categories){ fragmentAdapter.addFragment(CatalogFragment.instance(c), c.name!!) }
+            for (c in categories){ fragmentAdapter.addFragment(CatalogFragment.instance(c), c.name!!.toUpperCase()) }
             viewpager.adapter = fragmentAdapter
             tabs.setupWithViewPager(viewpager)
         }
     }
 
     private fun fetchFirst(){
-        if(catalogViewModel.listenToHasFetched().value!!){
+        if(!catalogViewModel.listenToHasFetched().value!!){
             catalogViewModel.search(PaperlessUtil.getToken(this), getPassedQuery()!!)
         }
     }

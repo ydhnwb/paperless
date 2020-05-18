@@ -24,7 +24,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         storeViewModel.listenToMyStore().observe(viewLifecycleOwner, Observer { attachToMyStores(it) })
-        storeViewModel.listenToOtherStore().observe(viewLifecycleOwner, Observer { attachToOtherStores(it) })
+//        storeViewModel.listenToOtherStore().observe(viewLifecycleOwner, Observer { attachToOtherStores(it) })
         storeViewModel.listenUIState().observe(viewLifecycleOwner, Observer { handleUIState(it) })
         view.add_store.setOnClickListener { startActivity(Intent(activity, CreateStoreActivity::class.java)) }
     }

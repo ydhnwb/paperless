@@ -144,10 +144,5 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
         }
     }
 
-    private fun emptyTabAndViewPager(){
-        view!!.tabs.removeAllTabs()
-        view!!.viewpager.removeAllViews()
-    }
-
     private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
 }

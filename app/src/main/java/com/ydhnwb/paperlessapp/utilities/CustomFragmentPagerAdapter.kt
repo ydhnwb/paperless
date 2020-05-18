@@ -13,6 +13,10 @@ class CustomFragmentPagerAdapter (fm : FragmentManager) : FragmentPagerAdapter(f
         titles.add(title)
     }
 
+    fun emptyFragment() = fragments.clear()
+
+    fun emptyTitles() = titles.clear()
+
     override fun getItem(position: Int) = fragments[position]
 
     override fun getCount() = fragments.size
