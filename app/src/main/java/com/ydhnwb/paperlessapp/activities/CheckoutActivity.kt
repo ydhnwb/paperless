@@ -26,7 +26,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : AppCompatActivity() {
     private val checkoutViewModel : CheckoutViewModel by viewModel()
-    private val orderViewModel: OrderViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,6 @@ class CheckoutActivity : AppCompatActivity() {
         listenerDiscount()
         behaviorDiscount()
         watcherDiscount()
-        orderViewModel.listenToState().observer(this, Observer { handleOrderState(it) })
         checkoutViewModel.listenToState().observer(this, Observer { handleUIState(it) })
         checkoutViewModel.listenToDiscountValue().observe(this, Observer { handleDiscountValue(it) })
         checkoutViewModel.listenToSelectedProduct().observe(this, Observer { calculateTotalPrice() })
@@ -160,12 +158,6 @@ class CheckoutActivity : AppCompatActivity() {
         }.show()
     }
 
-    private fun handleOrderState(it: OrderState){
-        when(it){
-            is OrderState.Success -> finish()
-            is OrderState.ShowToast -> toast(it.message)
-        }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

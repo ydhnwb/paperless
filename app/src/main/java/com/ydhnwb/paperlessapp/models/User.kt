@@ -10,7 +10,8 @@ data class User(
     @SerializedName("name") var name : String?,
     @SerializedName("email") var email : String?,
     @SerializedName("phone") var phone : String?,
-    @SerializedName("api_token") var api_token : String?
+    @SerializedName("api_token") var api_token : String?,
+    @SerializedName("orders") var orders : List<Order> = mutableListOf()
 ) : Parcelable {
     constructor() : this(null, null, null, null, null)
 }

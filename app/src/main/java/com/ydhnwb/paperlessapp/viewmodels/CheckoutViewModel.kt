@@ -81,6 +81,8 @@ class CheckoutViewModel (private val api : ApiService) : ViewModel(){
                 }
             })
         }else{
+            //ydhnwb
+            val id = customer.idCustomer.replace("USR", "")
             customer.name = "User ${customer.idCustomer}"
             customer.desc = "${customer.isStore}"
             currentCustomer.postValue(customer)

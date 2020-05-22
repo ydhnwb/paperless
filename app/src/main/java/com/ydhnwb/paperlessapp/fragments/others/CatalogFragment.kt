@@ -1,4 +1,4 @@
-package com.ydhnwb.paperlessapp.fragments.catalogs
+package com.ydhnwb.paperlessapp.fragments.others
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.adapters.CatalogAdapter
 import com.ydhnwb.paperlessapp.models.Category
-import com.ydhnwb.paperlessapp.viewmodels.CatalogState
 import com.ydhnwb.paperlessapp.viewmodels.CatalogViewModel
 import kotlinx.android.synthetic.main.fragment_catalog.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel

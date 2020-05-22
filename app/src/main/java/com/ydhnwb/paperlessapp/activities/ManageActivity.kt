@@ -12,10 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
-import com.ydhnwb.paperlessapp.fragments.manage.EmployeeFragment
-import com.ydhnwb.paperlessapp.fragments.manage.EtalaseFragment
-import com.ydhnwb.paperlessapp.fragments.manage.HomeFragment
-import com.ydhnwb.paperlessapp.fragments.manage.ProductFragment
+import com.ydhnwb.paperlessapp.fragments.manage.*
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
@@ -121,7 +118,7 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 }else{
                     openFirst = false
                     navStatus = 4
-                    fragment = EmployeeFragment()
+                    fragment = HistoryFragment()
                 }
             }
 

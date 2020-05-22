@@ -33,8 +33,7 @@ val viewModelModules = module {
     viewModel { UserViewModel(get()) }
     viewModel { InvitationViewModel(get()) }
     viewModel { CheckoutViewModel(get()) }
-    viewModel { OrderViewModel(get()) }
     viewModel { CustomerViewModel(get()) }
-    viewModel { TransactionViewModel(get()) }
     viewModel { CatalogViewModel(get()) }
+    viewModel { HistoryViewModel(get()) }
 }

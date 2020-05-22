@@ -39,3 +39,23 @@ data class OrderSend(
     @SerializedName("products") var products : List<ProductSend> = mutableListOf()
 ): Parcelable
 
+
+@Parcelize
+data class OrderHistory(
+    @SerializedName("id") var id : Int? = null,
+    @SerializedName("sell_by_store") var sellByStore : Store? = null,
+    @SerializedName("buy_by_store") var boughtByStore : Store? = null,
+    @SerializedName("buy_by_user") var boughtByUser : User? = null,
+    @SerializedName("order_details") var orderDetails : List<OrderHistoryDetail> = mutableListOf()
+) : Parcelable
+
+@Parcelize
+data class OrderHistoryDetail (
+    @SerializedName("id") var id : Int? = null,
+    @SerializedName("product_id") var productId:  Int? = null,
+    @SerializedName("name") var productName :  String? = null,
+    @SerializedName("image") var productImage :  String? = null,
+    @SerializedName("price") var productPrice :  Int? = null,
+    @SerializedName("quantity") var quantity: Int? = null,
+    @SerializedName("sold_at") var soldAt :  String? = null
+): Parcelable

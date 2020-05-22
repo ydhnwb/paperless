@@ -3,12 +3,11 @@ package com.ydhnwb.paperlessapp.activities
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.ydhnwb.paperlessapp.R
-import com.ydhnwb.paperlessapp.fragments.catalogs.CatalogFragment
+import com.ydhnwb.paperlessapp.fragments.others.CatalogFragment
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.CustomFragmentPagerAdapter
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
@@ -18,6 +17,7 @@ import com.ydhnwb.paperlessapp.viewmodels.CatalogViewModel
 import kotlinx.android.synthetic.main.activity_catalog.*
 import kotlinx.android.synthetic.main.content_catalog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class CatalogActivity : AppCompatActivity() {
     private val catalogViewModel : CatalogViewModel by viewModel()
@@ -62,9 +62,9 @@ class CatalogActivity : AppCompatActivity() {
             val categories = it.map { product -> product.category!! }.distinctBy { category -> category.name }
             val fragmentAdapter = CustomFragmentPagerAdapter(supportFragmentManager)
             if(catalogViewModel.listenToProducts().value != null && it.isNotEmpty()){
-                fragmentAdapter.addFragment(CatalogFragment(), resources.getString(R.string.common_all).toUpperCase())
+                fragmentAdapter.addFragment(CatalogFragment(), resources.getString(R.string.common_all))
             }
-            for (c in categories){ fragmentAdapter.addFragment(CatalogFragment.instance(c), c.name!!.toUpperCase()) }
+            for (c in categories){ fragmentAdapter.addFragment(CatalogFragment.instance(c), c.name!!.toUpperCase(Locale.getDefault())) }
             viewpager.adapter = fragmentAdapter
             tabs.setupWithViewPager(viewpager)
         }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="6dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:background="?attr/selectableItemBackground"
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/history_pov"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_marginEnd="8dp"
+                android:maxLines="1"
+                android:id="@+id/history_pov_store"
+                android:text="@string/lorem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="28dp"
+                android:id="@+id/history_pov_image"
+                android:src="@drawable/ydhnwb"
+                android:scaleType="centerCrop"
+                android:layout_height="28dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="64dp"
+                app:cardCornerRadius="6dp"
+                android:layout_height="64dp">
+                <ImageView
+                    android:src="@drawable/ydhnwb"
+                    android:id="@+id/history_image"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_marginStart="16dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/history_title"
+                    android:maxLines="3"
+                    android:textStyle="bold"
+                    android:text="@string/lorem_long"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/history_total_price"
+                    android:text="@string/lorem"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/history_date"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="end"
+                    android:text="@string/lorem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</com.google.android.material.card.MaterialCardView>

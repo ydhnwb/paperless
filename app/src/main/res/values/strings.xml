@@ -234,6 +234,8 @@
     <string name="menu_transaction">Transaksi</string>
     <string name="title_activity_catalog">CatalogActivity</string>
     <string name="info_empty_query">Ketikkan nama produk untuk mulai mencari</string>
-    <string name="common_all">Semua</string>
+    <string name="common_all">SEMUA</string>
+    <string name="history_in">IN</string>
+    <string name="history_out">OUT</string>
 
 </resources>
