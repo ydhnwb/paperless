@@ -237,5 +237,7 @@
     <string name="common_all">SEMUA</string>
     <string name="history_in">IN</string>
     <string name="history_out">OUT</string>
+    <string name="title_activity_detail_product"> </string>
+    <string name="title_activity_store_profile"> </string>
 
 </resources>

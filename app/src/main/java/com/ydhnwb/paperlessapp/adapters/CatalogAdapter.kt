@@ -1,12 +1,14 @@
 package com.ydhnwb.paperlessapp.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.DetailProductActivity
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.list_item_catalog.view.*
@@ -32,9 +34,15 @@ class CatalogAdapter (private var catalogs : MutableList<Product>, private var c
                 catalog_image.load(catalog.image)
                 catalog_name.text = catalog.name
                 catalog_price.text = PaperlessUtil.setToIDR(catalog.price!!)
-                catalog_store_name.text = catalog.store?.name!!
+                if (catalog.store != null){
+                    catalog_store_name.text = catalog.store?.name!!
+                }else{
+                    catalog_store_name.visibility = View.GONE
+                }
                 setOnClickListener {
-                    println()
+                    context.startActivity(Intent(context, DetailProductActivity::class.java).apply {
+                        putExtra("product", catalog)
+                    })
                 }
             }
         }

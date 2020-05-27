@@ -19,9 +19,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.StoreProfileActivity"
+            android:label="@string/title_activity_store_profile"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activities.DetailProductActivity"
+            android:label="@string/title_activity_detail_product"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activities.CatalogActivity"
             android:label="@string/title_activity_catalog"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.ShowQRActivity" />
         <activity
             android:name=".activities.ScanCustomerActivity"

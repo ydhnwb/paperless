@@ -2,17 +2,12 @@ package com.ydhnwb.paperlessapp.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.ydhnwb.paperlessapp.models.Order
-import com.ydhnwb.paperlessapp.models.OrderSend
-import com.ydhnwb.paperlessapp.models.Product
-import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.models.*
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiService
 import okhttp3.MediaType
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -73,19 +68,41 @@ class CheckoutViewModel (private val api : ApiService) : ViewModel(){
                             customer.name = x.data?.name.toString()
                             customer.desc = x.data?.address.toString()
                             currentCustomer.postValue(customer)
+                        }else{
+                            state.value = CheckoutState.ShowToast("Data not found")
                         }
                     }else{
+                        state.value = CheckoutState.ShowToast("Data not found")
                         println(response.message())
                         println(response.code())
                     }
                 }
             })
         }else{
-            //ydhnwb
             val id = customer.idCustomer.replace("USR", "")
-            customer.name = "User ${customer.idCustomer}"
-            customer.desc = "${customer.isStore}"
-            currentCustomer.postValue(customer)
+            api.user_by_id(token, id).enqueue(object: Callback<WrappedResponse<User>>{
+                override fun onFailure(call: Call<WrappedResponse<User>>, t: Throwable) {
+                    println(t.message)
+                    state.value = CheckoutState.ShowToast(t.message.toString())
+                }
+
+                override fun onResponse(call: Call<WrappedResponse<User>>, response: Response<WrappedResponse<User>>) {
+                    if(response.isSuccessful){
+                        val x = response.body()
+                        if (x!!.status){
+                            customer.name = x.data?.name.toString()
+                            customer.desc = x.data?.phone.toString()
+                            currentCustomer.postValue(customer)
+                        }else{
+                            state.value = CheckoutState.ShowToast("Data not found")
+                        }
+                    }else{
+                        println(response.message())
+                        println(response.code())
+                        state.value = CheckoutState.ShowToast("Data not found")
+                    }
+                }
+            })
         }
     }
 

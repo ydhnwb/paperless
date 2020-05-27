@@ -28,6 +28,7 @@
                 <com.mancj.materialsearchbar.MaterialSearchBar
                     app:mt_backIconTint="@color/colorBlackSteel"
                     app:mt_searchIconUseTint="true"
+                    app:mt_maxSuggestionsCount="0"
                     app:mt_searchIconTint="@color/colorBlackSteel"
                     app:mt_clearIconUseTint="true"
                     app:mt_clearIconTint="@color/colorBlackSteel"

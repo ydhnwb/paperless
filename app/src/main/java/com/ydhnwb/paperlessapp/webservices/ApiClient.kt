@@ -171,4 +171,8 @@ interface ApiService {
 
     @GET("v1/store_as_employee")
     fun store_as_employee(@Header("Authorization") token : String) : Call<WrappedResponse<Store>>
+
+
+    @GET("v1/user/{id}")
+    fun user_by_id(@Header("Authorization") token : String, @Path("id") userId : String) : Call<WrappedResponse<User>>
 }

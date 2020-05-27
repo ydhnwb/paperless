@@ -14,7 +14,8 @@ data class Store(
     @SerializedName("phone") var phone : String?,
     @SerializedName("address") var address : String?,
     @SerializedName("rating") var rating : Float?,
-    @SerializedName("store_logo") var store_logo : String?
+    @SerializedName("store_logo") var store_logo : String?,
+    @SerializedName("products") var products : List<Product> = mutableListOf()
 
 ) : Parcelable{
     constructor() : this(null, null, null, null, null, null,null,

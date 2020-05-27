@@ -19,10 +19,12 @@ import java.io.File
 import java.lang.Exception
 
 class StoreViewModel(private val api : ApiService) : ViewModel(){
-    private var state : SingleLiveEvent<StoreState> = SingleLiveEvent()
-    private var myStores = MutableLiveData<List<Store>>()
-    private var otherStore = MutableLiveData<Store>()
-    private var currentManagedStore = MutableLiveData<Store>()
+    private val state : SingleLiveEvent<StoreState> = SingleLiveEvent()
+    private val myStores = MutableLiveData<List<Store>>()
+    private val otherStore = MutableLiveData<Store>()
+    private val currentManagedStore = MutableLiveData<Store>()
+    private val store = MutableLiveData<Store>()
+    private val hasFetched = MutableLiveData<Boolean>(false)
 
     fun setCurrentManagedStore(store: Store) = currentManagedStore.postValue(store)
 
@@ -237,11 +239,39 @@ class StoreViewModel(private val api : ApiService) : ViewModel(){
     fun storeAsEmployee(token: String){
     }
 
+    fun fetchStoreById(token: String, storeId : String){
+        state.value = StoreState.IsLoading(true)
+        api.store_general_get(token, storeId).enqueue(object: Callback<WrappedResponse<Store>>{
+            override fun onFailure(call: Call<WrappedResponse<Store>>, t: Throwable) {
+                println(t.message)
+                state.value = StoreState.ShowToast(t.message.toString())
+                state.value = StoreState.IsLoading(false)
+            }
+
+            override fun onResponse(call: Call<WrappedResponse<Store>>, response: Response<WrappedResponse<Store>>) {
+                if(response.isSuccessful){
+                    val b = response.body()
+                    if(b!!.status){
+                        store.postValue(b.data)
+                        hasFetched.value = true
+                    }else{
+                        state.value = StoreState.ShowToast(b.message)
+                    }
+                }else{
+                    state.value = StoreState.ShowToast("Tidak dapat mengambil data")
+                }
+                state.value = StoreState.IsLoading(false)
+            }
+        })
+    }
+
     fun listenToMyStore() = myStores
     fun listenToOtherStore() = otherStore
     fun listenUIState() = state
     fun getCurrentStore() = currentManagedStore.value
     fun listenToCurrentStore() = currentManagedStore
+    fun listenToStore() = store
+    fun listenToHasFetched() = hasFetched
 }
 
 
