@@ -3,7 +3,6 @@ package com.ydhnwb.paperlessapp.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import coil.api.load
 import com.google.android.material.appbar.AppBarLayout
@@ -50,7 +49,7 @@ class DetailProductActivity : AppCompatActivity() {
                 product_store_name.text = store.name
                 product_store_address.text = store.address
                 product_store.setOnClickListener {
-                    startActivity(Intent(this@DetailProductActivity, StoreProfileActivity::class.java).apply {
+                    startActivity(Intent(this@DetailProductActivity, StorePageActivity::class.java).apply {
                         putExtra("store_id", store.id)
                     })
                 }

@@ -50,13 +50,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:layout_width="wrap_content"
         android:layout_margin="16dp"
         android:id="@+id/fab"
+        android:textAllCaps="false"
+        android:text="@string/btn_add_employee"
+        app:icon="@drawable/ic_person_add_black_24dp"
         android:tint="@color/colorBlackSteel"
         android:backgroundTint="@color/colorFlueGreen"
-        android:src="@drawable/ic_person_add_black_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content"/>

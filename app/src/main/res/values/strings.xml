@@ -239,5 +239,8 @@
     <string name="history_out">OUT</string>
     <string name="title_activity_detail_product"> </string>
     <string name="title_activity_store_profile"> </string>
+    <string name="title_activity_store_page">StorePageActivity</string>
+    <string name="btn_add_product">Tambah produk</string>
+    <string name="btn_add_employee">Tambah karyawan</string>
 
 </resources>
