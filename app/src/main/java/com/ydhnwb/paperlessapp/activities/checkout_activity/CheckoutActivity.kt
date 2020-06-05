@@ -170,7 +170,7 @@ class CheckoutActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 0 && resultCode == Activity.RESULT_OK && data != null ){
-            checkCustomerTarget(data.getStringExtra("CODE"), data.getBooleanExtra("IS_STORE", false))
+            checkCustomerTarget(data.getStringExtra("CODE")!!, data.getBooleanExtra("IS_STORE", false))
         }
     }
 

@@ -33,7 +33,7 @@ class OrderRepository(private val api: ApiService) {
                         completion(false, Error("Gagal saat membuat pesanan (${b.message}"))
                     }
                 }else{
-                    completion(false, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
                 }
             }
         })
@@ -59,7 +59,7 @@ class OrderRepository(private val api: ApiService) {
                             completion(null, Error("Pengguna tidak ditemukan"))
                         }
                     }else{
-                        completion(null, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                        completion(null, Error("Error ${response.message()} with status code ${response.code()}"))
                     }
                 }
             })
@@ -82,7 +82,7 @@ class OrderRepository(private val api: ApiService) {
                             completion(null, Error("Pengguna tidak ditemukan"))
                         }
                     }else{
-                        completion(null, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                        completion(null, Error("Error ${response.message()} with status code ${response.code()}"))
                     }
                 }
             })

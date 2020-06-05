@@ -175,4 +175,11 @@ interface ApiService {
 
     @GET("v1/user/{id}")
     fun user_by_id(@Header("Authorization") token : String, @Path("id") userId : String) : Call<WrappedResponse<User>>
+
+    @GET("v1/my_workplace")
+    fun my_workplace(@Header("Authorization") token : String) : Call<WrappedResponse<Store>>
+
+    @DELETE("v1/own/store/{id_store}/employee/{id_employee}")
+    fun employee_remove(@Header("Authorization")token:String, @Path("id_store") storeId: String,@Path("id_employee") employeeId : String) : Call<WrappedResponse<Store>>
+
 }

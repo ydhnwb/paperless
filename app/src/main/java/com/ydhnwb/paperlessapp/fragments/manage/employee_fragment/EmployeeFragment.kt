@@ -44,13 +44,17 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
         when(it){
             is EmployeeState.IsLoading -> { if(it.state){ view!!.loading.visibility = View.VISIBLE }else{ view!!.loading.visibility = View.GONE } }
             is EmployeeState.ShowToast -> toast(it.message)
+            is EmployeeState.SuccessDelete -> {
+                toast(resources.getString(R.string.info_success_delete_employee))
+                employeeViewModel.fetchEmployees(PaperlessUtil.getToken(activity!!), parentStoreViewModel.listenToCurrentStore().value?.id.toString())
+            }
         }
     }
 
     private fun setupUI(){
         view!!.rv_employee.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = EmployeeAdapter(mutableListOf(), activity!!)
+            adapter = EmployeeAdapter(mutableListOf(), activity!!, employeeViewModel, parentStoreViewModel.listenToCurrentStore().value?.id.toString())
         }
     }
 

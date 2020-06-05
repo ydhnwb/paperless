@@ -251,5 +251,6 @@
     <string name="action_info">Info</string>
     <string name="ask_checkout">Buat pesanan sekarang juga?</string>
     <string name="info_create_order">Buat pesanan</string>
+    <string name="info_success_delete_employee">Karyawan berhasil dihapus</string>
 
 </resources>

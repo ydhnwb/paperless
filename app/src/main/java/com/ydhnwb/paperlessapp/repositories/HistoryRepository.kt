@@ -27,7 +27,7 @@ class HistoryRepository (private val api: ApiService){
                     val b = response.body()
                     completion(b?.data, null)
                 }else{
-                    completion(null, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    completion(null, Error("Error ${response.message()} with status code ${response.code()}"))
                 }
             }
         })

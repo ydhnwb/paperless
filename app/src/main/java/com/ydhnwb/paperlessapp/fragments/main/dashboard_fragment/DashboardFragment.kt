@@ -7,7 +7,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.api.load
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.manage_activity.ManageActivity
 import com.ydhnwb.paperlessapp.activities.store_activity.CreateStoreActivity
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
@@ -23,6 +25,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
         setupUI()
         dashboardViewModel.listenToMyStores().observe(viewLifecycleOwner, Observer { attachToMyStores(it) })
         dashboardViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
+        dashboardViewModel.listenToMyWorkplace().observe(viewLifecycleOwner, Observer { handleMyWorkplace(it) })
         view.add_store.setOnClickListener { startActivity(Intent(activity, CreateStoreActivity::class.java)) }
     }
 
@@ -49,46 +52,44 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
         showEmptyMyStore(my_stores.isNullOrEmpty())
     }
 
-//    private fun attachToOtherStores(other_stores: List<Store>) {
-//        view!!.rv_other_stores.adapter?.let {
-//            if(it is StoreAdapter){
-//                it.updateList(other_stores)
-//            }
-//        }
-//        showEmptyOtherStore(other_stores.isNullOrEmpty())
-//    }
+
+    private fun handleMyWorkplace(it: Store){
+        if (dashboardViewModel.listenToMyWorkplace().value == null){
+            requireView().workplace_root.visibility = View.GONE
+        }else{
+            if(dashboardViewModel.listenToMyWorkplace().value?.id == null){
+                requireView().workplace_root.visibility = View.GONE
+            }else{
+                requireView().workplace_root.visibility = View.VISIBLE
+                with(requireView()){
+                    workplace_name.text = it.name
+                    workplace_logo.load(it.store_logo)
+                    workplace_layout.setOnClickListener {_ ->
+                        startActivity(Intent(requireActivity(), ManageActivity::class.java).apply {
+                            putExtra("STORE", it)
+                        })
+                    }
+                }
+            }
+        }
+    }
 
     private fun setupUI(){
         view!!.rv_my_stores.apply {
             layoutManager = LinearLayoutManager(activity).apply { orientation = LinearLayoutManager.HORIZONTAL }
-            adapter =
-                StoreAdapter(
-                    mutableListOf(),
-                    activity!!,
-                    dashboardViewModel
-                )
-        }
-        view!!.rv_other_stores.apply {
-            layoutManager = LinearLayoutManager(activity).apply {
-                orientation = LinearLayoutManager.HORIZONTAL
-            }
-            adapter =
-                StoreAdapter(
-                    mutableListOf(),
-                    activity!!,
-                    dashboardViewModel
-                )
+            adapter = StoreAdapter(mutableListOf(), activity!!, dashboardViewModel)
         }
     }
 
     override fun onResume() {
         super.onResume()
         dashboardViewModel.fetchMyStores(PaperlessUtil.getToken(requireActivity()))
+        dashboardViewModel.fetchMyWorkplace(PaperlessUtil.getToken(requireActivity()))
     }
 
     private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     private fun isMyStoreLoading(state: Boolean) { if(state){ view!!.loading_mystore.visibility = View.VISIBLE }else { view!!.loading_mystore.visibility = View.GONE } }
     private fun isOtherStoreLoading(state: Boolean) { if(state){ view!!.loading_other_store.visibility = View.VISIBLE }else { view!!.loading_other_store.visibility = View.GONE } }
     private fun showEmptyMyStore(state: Boolean) { if(state){ view!!.empty_store.visibility = View.VISIBLE }else { view!!.empty_store.visibility = View.GONE } }
-//    private fun showEmptyOtherStore(state: Boolean) { if(state){ view!!.empty_other_store.visibility = View.VISIBLE }else{ view!!.empty_other_store.visibility = View.GONE } }
+    private fun showEmptyOtherStore(state: Boolean) { if(state){ view!!.empty_other_store.visibility = View.VISIBLE }else{ view!!.empty_other_store.visibility = View.GONE } }
 }

@@ -52,7 +52,7 @@ class StoreRepository (private val api: ApiService){
                         completion(false, Error("Cannot delete store"))
                     }
                 }else{
-                    completion(false, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
                 }
             }
         })
@@ -83,7 +83,7 @@ class StoreRepository (private val api: ApiService){
                         }
                     }
                 }else{
-                    completion(false, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
                 }
             }
         })
@@ -117,7 +117,7 @@ class StoreRepository (private val api: ApiService){
                         }
                     }
                 }else{
-                    completion(false, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
                 }
             }
         })
@@ -149,7 +149,7 @@ class StoreRepository (private val api: ApiService){
                         }
                     }
                 }else{
-                    completion(false, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
                 }
             }
         })
@@ -171,7 +171,29 @@ class StoreRepository (private val api: ApiService){
                         completion(null, Error("Cannot get store data. Try again later"))
                     }
                 }else{
-                    completion(null, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    completion(null, Error("Error ${response.message()} with status code ${response.code()}"))
+                }
+            }
+        })
+    }
+
+    fun fetchMyWorkplace(token: String, completion: (Store?, Error?) -> Unit){
+        api.my_workplace(token).enqueue(object: Callback<WrappedResponse<Store>>{
+            override fun onFailure(call: Call<WrappedResponse<Store>>, t: Throwable) {
+                println(t.message)
+                completion(null, Error(t.message.toString()))
+            }
+
+            override fun onResponse(call: Call<WrappedResponse<Store>>, response: Response<WrappedResponse<Store>>) {
+                if(response.isSuccessful){
+                    val b = response.body()
+                    if(b!!.status){
+                        completion(b.data, null)
+                    }else{
+                        completion(null, Error())
+                    }
+                }else{
+                    completion(null, Error("${response.message()} with status code ${response.code()}"))
                 }
             }
         })

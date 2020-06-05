@@ -25,7 +25,7 @@ class DetailProductActivity : AppCompatActivity() {
         fill()
     }
     private fun initCollapsingToolbar(){
-        app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+        app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             var scrollRange = -1
             if (scrollRange == -1) { scrollRange = app_bar.totalScrollRange }
             when {

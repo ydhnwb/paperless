@@ -26,7 +26,7 @@ class CategoryRepository (private val api: ApiService) {
                         completion(null, Error("Cannot get categories"))
                     }
                 }else{
-                    completion(null, Error("Error ${response.code()} with status code ${response.code()}"))
+                    completion(null, Error("Error ${response.message()} with status code ${response.code()}"))
                 }
             }
         })

@@ -28,7 +28,7 @@ class InvitationRepository (private val api: ApiService){
                         }
                     }
                 }else{
-                    completion(null, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    completion(null, Error("Error ${response.message()} with status code ${response.code()}"))
                 }
             }
         })
@@ -53,7 +53,7 @@ class InvitationRepository (private val api: ApiService){
                         }
                     }
                 }else{
-                    completion(false, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
                 }
             }
         })
