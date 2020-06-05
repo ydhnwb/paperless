@@ -5,14 +5,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.ydhnwb.paperlessapp.R
-import com.ydhnwb.paperlessapp.fragments.DashboardFragment
+import com.ydhnwb.paperlessapp.fragments.main.dashboard_fragment.DashboardFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
-import android.graphics.Color
 import android.widget.Toast
-import com.ydhnwb.paperlessapp.fragments.ExploreFragment
-import com.ydhnwb.paperlessapp.fragments.NotificationFragment
-import com.ydhnwb.paperlessapp.fragments.ProfileFragment
+import com.ydhnwb.paperlessapp.activities.login_activity.LoginActivity
+import com.ydhnwb.paperlessapp.fragments.main.explore_fragment.ExploreFragment
+import com.ydhnwb.paperlessapp.fragments.main.notification_fragment.NotificationFragment
+import com.ydhnwb.paperlessapp.fragments.main.profile.ProfileFragment
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 
 
@@ -45,36 +45,42 @@ class MainActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.navigation_dashboard -> {
                 if(navStatus != 0){
-                    fragment = DashboardFragment()
+                    fragment =
+                        DashboardFragment()
                     navStatus = 0
                 }
             }
             R.id.navigation_explore -> {
                 if(navStatus != 1){
-                    fragment = ExploreFragment()
+                    fragment =
+                        ExploreFragment()
                     navStatus = 1
                 }
             }
             R.id.navigation_notifications -> {
                 if(navStatus != 2){
-                    fragment = NotificationFragment()
+                    fragment =
+                        NotificationFragment()
                     navStatus = 2
                 }
             }
             R.id.navigation_profile -> {
                 if(navStatus != 3){
-                    fragment = ProfileFragment()
+                    fragment =
+                        ProfileFragment()
                     navStatus = 3
                 }
             }
             else -> {
                 navStatus = 0
-                fragment = DashboardFragment()
+                fragment =
+                    DashboardFragment()
             }
         }
         if(fragment == null){
             navStatus = 0
-            fragment = DashboardFragment()
+            fragment =
+                DashboardFragment()
         }
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()

@@ -239,8 +239,17 @@
     <string name="history_out">OUT</string>
     <string name="title_activity_detail_product"> </string>
     <string name="title_activity_store_profile"> </string>
-    <string name="title_activity_store_page">StorePageActivity</string>
+    <string name="title_activity_store_page"> </string>
     <string name="btn_add_product">Tambah produk</string>
     <string name="btn_add_employee">Tambah karyawan</string>
+    <string name="failed_register">Tidak dapat membuat akun. Mungkin email sudah pernah didaftarkan</string>
+    <string name="info_success_create_product">Success create product</string>
+    <string name="info_success_update_product">Success update product</string>
+    <string name="info_success_delete_product">Success delete product</string>
+    <string name="info_please_select_image">Mohon pilih gambar terlebih dahulu</string>
+    <string name="info_success_update_store">Update successful</string>
+    <string name="action_info">Info</string>
+    <string name="ask_checkout">Buat pesanan sekarang juga?</string>
+    <string name="info_create_order">Buat pesanan</string>
 
 </resources>

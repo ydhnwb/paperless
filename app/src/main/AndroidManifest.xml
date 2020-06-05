@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activities.StorePageActivity"
+            android:name=".activities.store_page_activity.StorePageActivity"
             android:label="@string/title_activity_store_page"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
@@ -27,29 +27,29 @@
             android:label="@string/title_activity_detail_product"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.CatalogActivity"
+            android:name=".activities.catalog_activity.CatalogActivity"
             android:label="@string/title_activity_catalog"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.ShowQRActivity" />
         <activity
-            android:name=".activities.InvitationActivity"
+            android:name=".activities.invitation_activity.InvitationActivity"
             android:label="@string/title_activity_invitation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.SearchUserActivity"
+            android:name=".activities.search_user_activity.SearchUserActivity"
             android:label="@string/title_activity_search_user"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.ScannerActivity" />
         <activity
-            android:name=".activities.CheckoutActivity"
+            android:name=".activities.checkout_activity.CheckoutActivity"
             android:label="@string/title_activity_checkout"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.ProductActivity"
+            android:name=".activities.product_activity.ProductActivity"
             android:label="@string/title_activity_product"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.CreateStoreActivity"
+            android:name=".activities.store_activity.CreateStoreActivity"
             android:label="@string/title_activity_create_store"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -57,12 +57,12 @@
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.ManageActivity"
+            android:name=".activities.manage_activity.ManageActivity"
             android:label="@string/title_activity_manage"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.register_activity.RegisterActivity" />
         <activity android:name=".activities.IntroActivity" />
-        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.login_activity.LoginActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name">

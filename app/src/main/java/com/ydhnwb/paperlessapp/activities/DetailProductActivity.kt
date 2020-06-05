@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import coil.api.load
 import com.google.android.material.appbar.AppBarLayout
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.store_page_activity.StorePageActivity
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.activity_detail_product.*

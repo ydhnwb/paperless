@@ -12,8 +12,8 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
-import com.ydhnwb.paperlessapp.viewmodels.InvitationState
-import com.ydhnwb.paperlessapp.viewmodels.InvitationViewModel
+import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationState
+import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationViewModel
 import kotlinx.android.synthetic.main.dialog_invitation.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

@@ -14,6 +14,7 @@ import com.github.paolorotolo.appintro.AppIntro2
 import com.github.paolorotolo.appintro.AppIntroFragment
 import com.github.paolorotolo.appintro.model.SliderPage
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.login_activity.LoginActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 
 class IntroActivity : AppIntro2(){

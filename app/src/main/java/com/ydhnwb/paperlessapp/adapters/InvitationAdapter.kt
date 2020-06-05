@@ -10,9 +10,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationViewModel
 import com.ydhnwb.paperlessapp.models.Invitation
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
-import com.ydhnwb.paperlessapp.viewmodels.InvitationViewModel
 import kotlinx.android.synthetic.main.list_item_invitation.view.*
 
 class InvitationAdapter (private var invitations : MutableList<Invitation>, private var context: Context, private var userView : Boolean, private val invitationViewModel : InvitationViewModel)

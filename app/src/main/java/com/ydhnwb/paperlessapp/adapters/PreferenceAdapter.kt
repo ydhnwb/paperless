@@ -5,13 +5,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
-import com.ydhnwb.paperlessapp.activities.InvitationActivity
-import com.ydhnwb.paperlessapp.activities.LoginActivity
+import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationActivity
+import com.ydhnwb.paperlessapp.activities.login_activity.LoginActivity
 import com.ydhnwb.paperlessapp.models.Preference
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.list_item_preference.view.*

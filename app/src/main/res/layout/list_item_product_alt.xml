@@ -14,12 +14,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/product_image"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_doodle_advanced"
+        <com.google.android.material.card.MaterialCardView
+            app:cardCornerRadius="8dp"
             android:layout_width="74dp"
-            android:layout_height="74dp"/>
+            android:layout_height="74dp">
+
+            <ImageView
+                android:id="@+id/product_image"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_doodle_advanced"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
         <LinearLayout
             android:layout_marginStart="8dp"
             android:orientation="vertical"

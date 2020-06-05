@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.manage_activity.ManageStoreViewModel
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
-import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
 import kotlinx.android.synthetic.main.list_item_product.view.*
 
-class EtalaseAdapter (private var products : MutableList<Product>, private var context: Context, private var productViewModel: ProductViewModel) : RecyclerView.Adapter<EtalaseAdapter.ViewHolder>(){
+class EtalaseAdapter (private var products : MutableList<Product>, private var context: Context, private var pvm: ManageStoreViewModel) : RecyclerView.Adapter<EtalaseAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_product, parent, false))
@@ -20,7 +20,7 @@ class EtalaseAdapter (private var products : MutableList<Product>, private var c
 
     override fun getItemCount() = products.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(products[position], context, productViewModel)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(products[position], context, pvm)
 
     fun updateList(prs : List<Product>){
         products.clear()
@@ -29,14 +29,16 @@ class EtalaseAdapter (private var products : MutableList<Product>, private var c
     }
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        fun bind(product: Product, context: Context, productViewModel: ProductViewModel){
-            itemView.product_name.text = product.name
-            itemView.product_price.text = PaperlessUtil.setToIDR(product.price!!)
-            itemView.product_image.load(product.image)
-            itemView.setOnClickListener {
-                val p = product.copy()
-                p.selectedQuantity = 1
-                productViewModel.addSelectedProduct(p)
+        fun bind(product: Product, context: Context, pvm: ManageStoreViewModel){
+            with(itemView){
+                product_name.text = product.name
+                product_price.text = PaperlessUtil.setToIDR(product.price!!)
+                product_image.load(product.image)
+                setOnClickListener {
+                    val p = product.copy()
+                    p.selectedQuantity = 1
+                    pvm.addSelectedProduct(p)
+                }
             }
         }
     }

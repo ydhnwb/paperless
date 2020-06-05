@@ -8,21 +8,19 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.manage_activity.ManageStoreViewModel
 import com.ydhnwb.paperlessapp.adapters.EtalaseAdapter
 import com.ydhnwb.paperlessapp.models.Product
-import com.ydhnwb.paperlessapp.viewmodels.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_search_etalase.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SearchEtalaseFragment : Fragment(R.layout.fragment_search_etalase){
-    private val productViewModel : ProductViewModel by sharedViewModel()
+    private val manageStoreViewModel : ManageStoreViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        productViewModel.listenToFilteredProducts().observe(viewLifecycleOwner, Observer {
-            handleState(it)
-        })
+        manageStoreViewModel.listenToFilteredProducts().observe(viewLifecycleOwner, Observer { handleState(it) })
     }
 
     private fun setupUI(){
@@ -32,7 +30,7 @@ class SearchEtalaseFragment : Fragment(R.layout.fragment_search_etalase){
             }else{
                 GridLayoutManager(activity, 4)
             }
-            adapter = EtalaseAdapter(mutableListOf(), activity!!, productViewModel)
+            adapter = EtalaseAdapter(mutableListOf(), activity!!, manageStoreViewModel)
         }
         view!!.search_bar.setOnSearchActionListener(object: MaterialSearchBar.OnSearchActionListener{
             override fun onButtonClicked(buttonCode: Int) {}
@@ -40,7 +38,7 @@ class SearchEtalaseFragment : Fragment(R.layout.fragment_search_etalase){
             override fun onSearchConfirmed(text: CharSequence?) {
                 text?.let {
                     it.toString().trim().isNotEmpty().let { _ ->
-                        productViewModel.filterByName(it.toString().trim())
+                        manageStoreViewModel.filterByName(it.toString().trim())
                         view!!.search_bar.clearFocus()
                     }
                 }
@@ -48,7 +46,7 @@ class SearchEtalaseFragment : Fragment(R.layout.fragment_search_etalase){
         })
     }
 
-    private fun handleState(it : MutableList<Product>){
+    private fun handleState(it : List<Product>){
         view!!.rv_search_result.adapter?.let { a ->
             a as EtalaseAdapter
             a.updateList(it)

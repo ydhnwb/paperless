@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.catalog_activity.CatalogViewModel
 import com.ydhnwb.paperlessapp.adapters.CatalogAdapter
 import com.ydhnwb.paperlessapp.models.Category
-import com.ydhnwb.paperlessapp.viewmodels.CatalogViewModel
 import kotlinx.android.synthetic.main.fragment_catalog.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -35,7 +35,7 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog){
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         if(arguments == null){
-            catalogViewModel.listenToProducts().observe(viewLifecycleOwner, Observer {
+            catalogViewModel.listenToCatalogs().observe(viewLifecycleOwner, Observer {
                 view.rv_catalog_products.adapter?.let { adapter ->
                     if(adapter is CatalogAdapter){
                         adapter.updateList(it)
@@ -44,7 +44,7 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog){
             })
         }else{
             arguments?.getParcelable<Category>("category")!!.let {c ->
-                catalogViewModel.listenToProducts().observe(viewLifecycleOwner, Observer {
+                catalogViewModel.listenToCatalogs().observe(viewLifecycleOwner, Observer {
                     view.rv_catalog_products.adapter?.let { a -> if(a is CatalogAdapter){
                         val filtered = it.filter { product -> product.category!!.name!!.equals(c.name) }
                         a.updateList(filtered)
@@ -62,6 +62,4 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog){
             adapter = CatalogAdapter(mutableListOf(), activity!!)
         }
     }
-
-    private fun toast(m: String) = Toast.makeText(activity, m, Toast.LENGTH_LONG).show()
 }

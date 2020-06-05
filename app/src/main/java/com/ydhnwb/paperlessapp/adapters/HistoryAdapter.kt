@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.OrderHistory
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.list_item_history.view.*
 
 class HistoryAdapter(private val histories : MutableList<OrderHistory>, private val context: Context, private var isIn : Boolean) :
@@ -22,7 +23,7 @@ class HistoryAdapter(private val histories : MutableList<OrderHistory>, private 
                     history_date.text = order.orderDetails[0].soldAt
                     history_image.load(order.orderDetails[0].productImage)
                 }
-                history_total_price.text = order.orderDetails.sumBy { detail -> detail.quantity!! * detail.productPrice!! }.toString()
+                history_total_price.text = PaperlessUtil.setToIDR(order.orderDetails.sumBy { detail -> detail.quantity!! * detail.productPrice!! })
                 history_title.text = order.orderDetails.joinToString { d -> d.productName!! }
                 if(isIn){
                     println(order.boughtByStore)

@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
-import com.ydhnwb.paperlessapp.activities.InvitationActivity
+import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationActivity
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.StoreMenu
 import kotlinx.android.synthetic.main.list_item_store_menu.view.*
