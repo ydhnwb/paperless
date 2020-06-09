@@ -1,19 +1,16 @@
 package com.ydhnwb.paperlessapp.fragments.dialog
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
-import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationState
-import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationViewModel
 import kotlinx.android.synthetic.main.dialog_invitation.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,7 +26,7 @@ class InviteDialog : DialogFragment(){
         }
     }
 
-    private val invitationViewModel : InvitationViewModel by viewModel()
+    private val invitationViewModel : InvitationDialogViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.dialog_invitation, container)
 
@@ -48,29 +45,27 @@ class InviteDialog : DialogFragment(){
 
     private fun fill(user : User){ view!!.user_name.text = user.name }
     private fun sendInvitationBehavior(user: User, store: Store){
-        view!!.btn_add_cashier.setOnClickListener {
+        requireView().btn_add_cashier.setOnClickListener {
             invitationViewModel.invite(PaperlessUtil.getToken(activity!!), store.id!!, false, user.id!!)
         }
-        view!!.btn_add_staff.setOnClickListener {
+        requireView().btn_add_staff.setOnClickListener {
             invitationViewModel.invite(PaperlessUtil.getToken(activity!!), store.id!!, true, user.id!!)
         }
     }
-    private fun toast(m : String) = Toast.makeText(activity, m, Toast.LENGTH_LONG).show()
-    private fun handleUIState(it: InvitationState){
+    private fun alert(m : String) = AlertDialog.Builder(requireActivity()).apply {
+        setMessage(m)
+        setPositiveButton(resources.getString(R.string.info_understand)){ d, _ -> d.dismiss()}
+    }.show()
+
+    private fun handleUIState(it: InvitationDialogState){
         when(it){
-            is InvitationState.Success -> {
-                toast(resources.getString(R.string.info_successfully_invite))
+            is InvitationDialogState.Success -> {
+                alert(resources.getString(R.string.info_successfully_invite))
                 this.dismiss()
             }
-            is InvitationState.ShowToast -> toast(it.message)
-            is InvitationState.ShowAlert -> {
-                AlertDialog.Builder(activity).apply {
-                    setMessage(it.message)
-                    setPositiveButton(resources.getString(R.string.info_understand)){ d, _ -> d.dismiss() }
-                }.show()
-            }
-            is InvitationState.IsLoading -> {
-                with(view!!){
+            is InvitationDialogState.ShowAlert -> alert(it.message)
+            is InvitationDialogState.IsLoading -> {
+                with(requireView()){
                     btn_add_staff.isEnabled = !it.state
                     btn_add_cashier.isEnabled = !it.state
                     if (it.state){ loading.visibility = View.VISIBLE }else{ loading.visibility = View.GONE }

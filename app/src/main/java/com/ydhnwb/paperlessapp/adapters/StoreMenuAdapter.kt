@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.analytic_activity.AnalyticActivity
 import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationActivity
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.StoreMenu
@@ -32,7 +33,9 @@ class StoreMenuAdapter (private var storeMenus : List<StoreMenu>, private var co
                 setOnClickListener {
                     when(i){
                         0 -> {
-                            Toast.makeText(context, "Laporan", Toast.LENGTH_LONG).show()
+                            context.startActivity(Intent(context, AnalyticActivity::class.java).apply {
+                                putExtra("store", store)
+                            })
                         }
                         1 -> context.startActivity(Intent(context, InvitationActivity::class.java).apply {
                             putExtra("store", store)

@@ -27,16 +27,7 @@ class InvitationViewModel (private val invitationRepository: InvitationRepositor
         }
     }
 
-    fun invite(token: String, storeId: Int, role: Boolean, to: Int){
-        setLoading()
-        invitationRepository.invite(token, storeId, role, to){ bool, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> alert(m) } }
-            if(bool){
-                success()
-            }
-        }
-    }
+
 
 
     fun fetchInvitationIn(token: String){

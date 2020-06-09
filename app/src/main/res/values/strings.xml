@@ -252,5 +252,11 @@
     <string name="ask_checkout">Buat pesanan sekarang juga?</string>
     <string name="info_create_order">Buat pesanan</string>
     <string name="info_success_delete_employee">Karyawan berhasil dihapus</string>
+    <string name="title_activity_analytic">Analitik</string>
+    <string name="tab_title_selling">Penjualan</string>
+    <string name="tab_title_purchasement">Pembelian</string>
+    <string name="tab_title_customer">Customer</string>
+    <string name="product_cluster">Sebaran produk yang terjual</string>
+    <string name="transaction_by_hour">Jumlah transaksi tiap jam</string>
 
 </resources>

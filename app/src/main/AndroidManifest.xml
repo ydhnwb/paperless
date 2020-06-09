@@ -19,9 +19,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.analytic_activity.AnalyticActivity"
+            android:label="@string/title_activity_analytic"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".activities.store_page_activity.StorePageActivity"
             android:label="@string/title_activity_store_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.DetailProductActivity"
             android:label="@string/title_activity_detail_product"

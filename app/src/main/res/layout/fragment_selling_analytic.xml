@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:id="@+id/analytic_hour"
+            android:elevation="2dp"
+            android:layout_margin="8dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:background="?attr/selectableItemBackground"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="500dp">
+
+                <TextView
+                    android:layout_marginBottom="16dp"
+                    android:textColor="@color/colorBlackSteel"
+                    android:textStyle="bold"
+                    android:text="@string/transaction_by_hour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <include layout="@layout/chart_bar"/>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:elevation="2dp"
+            android:id="@+id/analytic_sebaran"
+            android:layout_margin="8dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:background="?attr/selectableItemBackground"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="600dp">
+
+                <TextView
+                    android:layout_marginBottom="16dp"
+                    android:textColor="@color/colorBlackSteel"
+                    android:textStyle="bold"
+                    android:text="@string/product_cluster"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <include layout="@layout/chart_pie"/>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </LinearLayout>
+
+
+</ScrollView>

@@ -46,6 +46,7 @@ data class OrderHistory(
     @SerializedName("sell_by_store") var sellByStore : Store? = null,
     @SerializedName("buy_by_store") var boughtByStore : Store? = null,
     @SerializedName("buy_by_user") var boughtByUser : User? = null,
+    @SerializedName("datetime") var datetime : String? = null,
     @SerializedName("order_details") var orderDetails : List<OrderHistoryDetail> = mutableListOf()
 ) : Parcelable
 
