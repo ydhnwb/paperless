@@ -77,10 +77,7 @@ class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
             it.forEach { (t, u) -> dataPie.add(ValueDataEntry(t, u)) }
             pie.data(data)
             pie.labels().position("outside")
-            pie.legend()
-                .position("center-bottom")
-                .itemsLayout(LegendLayout.HORIZONTAL)
-                .align(Align.CENTER)
+            pie.legend().position("center-bottom").itemsLayout(LegendLayout.HORIZONTAL).align(Align.CENTER)
             view!!.pie_chart.setChart(pie)
         }
     }
@@ -101,7 +98,7 @@ class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
             val column: Column = cartesian.column(data)
 
             cartesian.animation(false)
-//            cartesian.yScale().minimum(0)
+            cartesian.yScale().minimum(0.0)
             cartesian.yAxis(0).labels().format("{%Value}{numDecimals:0}")
             cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
             cartesian.tooltip().format("Jumlah transaksi {%Value}")
@@ -110,11 +107,8 @@ class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
 
             cartesian.xAxis(0).title("Jam")
             cartesian.yAxis(0).title("Jumlah transaksi")
-
             view!!.bar_chart.setChart(cartesian)
         }
-
-
     }
 
 }

@@ -41,7 +41,7 @@ class SellingAnalyticViewModel (private val historyRepository: HistoryRepository
 
     private fun fetchSellingProducts() {
         GlobalScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.Main){
                 val pivot = mutableListOf<OrderHistoryDetail>()
                 sellingHistory.value?.let { temp -> temp.map { history -> history.orderDetails.map { pivot.add(it) } } }
                 val h = hashMapOf<String, Int>()
@@ -60,12 +60,12 @@ class SellingAnalyticViewModel (private val historyRepository: HistoryRepository
 
     private fun transformTransactionByHour(){
         GlobalScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.Main){
                 val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm")
                 val cal = Calendar.getInstance()
                 val pivot = hashMapOf<Int, Int>()
                 sellingHistory.value?.let {
-                    it.map { orderHistory ->  
+                    it.map { orderHistory ->
                         val date = sdf.parse(orderHistory.datetime!!)
                         cal.time = date!!
                         if(pivot.containsKey(cal.get(Calendar.HOUR_OF_DAY))){
@@ -75,8 +75,8 @@ class SellingAnalyticViewModel (private val historyRepository: HistoryRepository
                             pivot.put(cal.get(Calendar.HOUR_OF_DAY), 1)
                         }
                     }
+                    sellingByHour.postValue(pivot)
                 }
-                sellingByHour.postValue(pivot)
             }
         }
     }
