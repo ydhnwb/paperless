@@ -61,18 +61,25 @@ class CheckoutViewModel (private val orderRepository: OrderRepository) : ViewMod
     fun calculateTotalPrice(): Int {
         val totalPrice = selectedProducts.value!!.sumBy { product -> product.price!! * product.selectedQuantity!! }
         if(discountValue.value != null && discountValue.value!!.isNotEmpty()){
-            val discountAmount = discountValue.value!!.toIntOrNull()
-            if (discountAmount != null){
-                if (discountAmount > totalPrice){
-                    state.value = CheckoutState.ResetDiscount
-                    alert("Diskon tidak boleh melebihi harga pembelian")
+            if(discountValue.value!!.toString().substring(0,1) == "0"){
+                state.value = CheckoutState.ResetDiscount
+                alert("Diskon tidak bisa diawali dengan nol")
+                return totalPrice
+            }else{
+                val discountAmount = discountValue.value!!.toIntOrNull()
+                if (discountAmount != null){
+                    if (discountAmount > totalPrice){
+                        state.value = CheckoutState.ResetDiscount
+                        alert("Diskon tidak boleh melebihi harga pembelian")
+                    }else{
+                        return totalPrice - discountAmount
+                    }
                 }else{
-                    return totalPrice - discountAmount
+                    state.value = CheckoutState.ResetDiscount
+                    alert("Diskon tidak valid")
+                    return totalPrice
                 }
             }
-            state.value = CheckoutState.ResetDiscount
-            alert("Diskon tidak valid")
-            return totalPrice
         }
         state.value = CheckoutState.ResetDiscount
         return totalPrice

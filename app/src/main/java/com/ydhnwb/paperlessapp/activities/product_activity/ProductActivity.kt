@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.ContextThemeWrapper
 import android.view.Menu
 import android.view.MenuItem
@@ -11,6 +13,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import coil.api.load
 import com.fxn.pix.Pix
@@ -20,6 +23,7 @@ import com.ydhnwb.paperlessapp.models.Category
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
 import kotlinx.android.synthetic.main.activity_product.*
 import kotlinx.android.synthetic.main.content_product.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,6 +44,7 @@ class ProductActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener { finish() }
 //        checkBoxAvailableOnline()
         checkBoxHaveStock()
+        priceEditTextBehavior()
         productCreateEditViewModel.fetchCategories()
         productCreateEditViewModel.listenToCategories().observe(this, Observer { attachToSpinner(it) })
         productCreateEditViewModel.listenToUIState().observer(this, Observer { handleUIState(it) })
@@ -235,6 +240,26 @@ class ProductActivity : AppCompatActivity() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun priceEditTextBehavior(){
+        et_prodouct_price.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                if(s.toString().trim().isNotEmpty()){
+                    validatePrice(s.toString())
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        })
+    }
+
+    private fun validatePrice(price: String){
+        if(price.trim().substring(0,1).equals("0")){
+            et_prodouct_price.text?.clear()
+            showInfoAlert(resources.getString(R.string.validate_price_not_valid))
         }
     }
 }

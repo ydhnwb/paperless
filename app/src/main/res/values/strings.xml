@@ -258,5 +258,6 @@
     <string name="tab_title_customer">Customer</string>
     <string name="product_cluster">Sebaran produk yang terjual</string>
     <string name="transaction_by_hour">Jumlah transaksi tiap jam</string>
+    <string name="validate_price_not_valid">Harga tidak valid</string>
 
 </resources>
