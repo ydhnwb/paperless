@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.graphics.Bitmap
 import com.google.zxing.common.BitMatrix
+import java.text.DateFormatSymbols
 import java.text.NumberFormat
 import java.util.*
 
@@ -68,6 +69,10 @@ class PaperlessUtil {
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
             return bitmap
+        }
+
+        fun getMonthByMonthInt(month: Int): String? {
+            return DateFormatSymbols().months[month-1]
         }
 
     }

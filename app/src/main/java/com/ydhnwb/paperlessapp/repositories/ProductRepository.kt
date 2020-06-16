@@ -56,6 +56,8 @@ class ProductRepository (private val api: ApiService){
                         if (it.status){
                             completion(it.data, null)
 //                            hasFetched.value = true
+                        }else{
+                            completion(null, Error())
                         }
                     }
                 }else{
@@ -157,7 +159,7 @@ class ProductRepository (private val api: ApiService){
                         if(it.status){
                             completion(it.data, null)
                         }else{
-                            completion(null, Error("Cannot get product catalog. Try again later"))
+                            completion(null, Error())
                         }
                     }
                 }else{

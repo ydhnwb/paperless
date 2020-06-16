@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.OrderHistory
 import com.ydhnwb.paperlessapp.models.OrderHistoryDetail
+import com.ydhnwb.paperlessapp.models.ProfitByMonth
 import com.ydhnwb.paperlessapp.repositories.HistoryRepository
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -19,6 +21,8 @@ class SellingAnalyticViewModel (private val historyRepository: HistoryRepository
     private val state: SingleLiveEvent<SellingAnalyticState> = SingleLiveEvent()
     private val sellingProductCluster = MutableLiveData<HashMap<String, Int>>()
     private val sellingByHour = MutableLiveData<HashMap<Int, Int>>()
+    private val sellingByMonth = MutableLiveData<HashMap<String, Int>>()
+    private val sellingProfitByMonth = MutableLiveData<HashMap<String, Int>>()
 
     private fun setLoading() { state.value = SellingAnalyticState.IsLoading(true) }
     private fun hideLoading() { state.value = SellingAnalyticState.IsLoading(false) }
@@ -35,6 +39,9 @@ class SellingAnalyticViewModel (private val historyRepository: HistoryRepository
                 sellingHistory.postValue(orders)
                 fetchSellingProducts()
                 transformTransactionByHour()
+                transformTransactionByMonth()
+                transformTransactionByMonth()
+                transformProfitByMonth()
             }
         }
     }
@@ -81,11 +88,84 @@ class SellingAnalyticViewModel (private val historyRepository: HistoryRepository
         }
     }
 
+    private fun transformProfitByMonth(){
+        GlobalScope.launch {
+            withContext(Dispatchers.Main){
+                val listOfOrder = mutableListOf<OrderHistory>()
+                val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm")
+                val cal = Calendar.getInstance()
+                val pivot = mutableListOf<ProfitByMonth>()
+                val pivot2 = hashMapOf<String, Int>()
+                sellingHistory.value?.let {
+                    it.map { orderHistory ->
+                        val date = sdf.parse(orderHistory.datetime!!)
+                        orderHistory.date = date
+                        listOfOrder.add(orderHistory)
+                    }
+
+                    listOfOrder.map {
+                        cal.time = it.date!!
+                        val year = cal.get(Calendar.YEAR)
+                        val month = PaperlessUtil.getMonthByMonthInt(cal.get(Calendar.MONTH)+1)
+                        val concated = "$month $year"
+                        val sumPrice = it.orderDetails.sumBy { orderDetail -> orderDetail.productPrice!! }
+                        pivot.add(ProfitByMonth(concated, sumPrice))
+                    }
+                    for( o in pivot){
+                        if (pivot2.containsKey(o.month)){
+                            val r = pivot2.get(o.month)!!
+                            pivot2.put(o.month, r+o.profit!!)
+                        }else{
+                            pivot2.put(o.month, o.profit!!)
+                        }
+                    }
+                    sellingProfitByMonth.postValue(pivot2)
+                }
+            }
+        }
+    }
+
+
+    private fun transformTransactionByMonth(){
+        GlobalScope.launch {
+            withContext(Dispatchers.Main){
+                val listOfdate = mutableListOf<Date>()
+                val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm")
+                val cal = Calendar.getInstance()
+                val pivot = hashMapOf<String, Int>()
+                sellingHistory.value?.let {
+                    it.map { orderHistory ->
+                        val date = sdf.parse(orderHistory.datetime!!)
+                        date?.let { d ->
+                            listOfdate.add(d)
+                        }
+                    }
+                    listOfdate.sortDescending()
+                    listOfdate.forEach { date ->
+                        cal.time = date
+                        val year = cal.get(Calendar.YEAR)
+                        val month = PaperlessUtil.getMonthByMonthInt(cal.get(Calendar.MONTH)+1)
+                        val concated = "$month $year"
+                        if(pivot.containsKey(concated)){
+                            var i = pivot[concated]!!
+                            pivot.put(concated, ++i)
+                        }else{
+                            pivot.put(concated, 1)
+                        }
+                    }
+                    sellingByMonth.postValue(pivot)
+                }
+            }
+        }
+    }
+
 
     fun listenToUIState() = state
     fun listenToHistory() = sellingHistory
     fun listenToSellingProductCluster() = sellingProductCluster
     fun listenToSellingByHour() = sellingByHour
+    fun listenToSellingByMonth() = sellingByMonth
+    fun listenToSellingByProfit() = sellingProfitByMonth
 }
 
 sealed class SellingAnalyticState {

@@ -3,6 +3,7 @@ package com.ydhnwb.paperlessapp.models
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Parcelize
 data class Order (
@@ -47,7 +48,8 @@ data class OrderHistory(
     @SerializedName("buy_by_store") var boughtByStore : Store? = null,
     @SerializedName("buy_by_user") var boughtByUser : User? = null,
     @SerializedName("datetime") var datetime : String? = null,
-    @SerializedName("order_details") var orderDetails : List<OrderHistoryDetail> = mutableListOf()
+    @SerializedName("order_details") var orderDetails : List<OrderHistoryDetail> = mutableListOf(),
+    var date : Date? = null
 ) : Parcelable
 
 @Parcelize

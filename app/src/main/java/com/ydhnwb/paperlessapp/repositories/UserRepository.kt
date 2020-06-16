@@ -24,11 +24,11 @@ class UserRepository (private val api: ApiService) {
                         if(it.status){
                             completion("Bearer ${it.data!!.api_token}", null)
                         }else{
-                            completion(null, Error("${it.message} with status code ${response.code()}"))
+                            completion(null, Error("Tidak dapat masuk. Pastikan email dan password bendar dan sudah verifikasi email"))
                         }
                     }
                 }else{
-                    completion(null, Error("Tidak dapat masuk. Periksa email dan kata sandi anda"))
+                    completion(null, Error("Tidak dapat masuk. Periksa email dan kata sandi anda."))
                 }
             }
         })

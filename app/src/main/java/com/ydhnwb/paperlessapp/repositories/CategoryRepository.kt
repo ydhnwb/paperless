@@ -23,7 +23,7 @@ class CategoryRepository (private val api: ApiService) {
                         val cats = b.data
                         completion(cats, null)
                     }else{
-                        completion(null, Error("Cannot get categories"))
+                        completion(null, Error())
                     }
                 }else{
                     completion(null, Error("Error ${response.message()} with status code ${response.code()}"))

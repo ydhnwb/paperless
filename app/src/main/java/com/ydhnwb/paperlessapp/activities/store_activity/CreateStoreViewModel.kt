@@ -28,13 +28,13 @@ class CreateStoreViewModel (private val storeRepository: StoreRepository) : View
             state.value = CreateStoreState.Validate(store_name = "Nama toko tidak boleh kosong")
             return false
         }else if(store.description.isNullOrEmpty()){
-            state.value = CreateStoreState.Validate(store_name = "Deskripsi toko tidak boleh kosong")
+            state.value = CreateStoreState.Validate(store_desc = "Deskripsi toko tidak boleh kosong")
             return false
-        }else if(store.phone.isNullOrEmpty() || store.phone.toString().length < 12){
-            state.value = CreateStoreState.Validate("Nomor telepon tidak valid")
+        }else if(store.phone.isNullOrEmpty() || store.phone.toString().length < 13 || !store.phone.toString().startsWith("+62")){
+            state.value = CreateStoreState.Validate(store_phone = "Nomor telepon tidak valid")
             return false
         }else if(!PaperlessUtil.isValidEmail(store.email.toString())){
-            state.value = CreateStoreState.Validate(store_name = "Email tidak valid")
+            state.value = CreateStoreState.Validate(store_email = "Email tidak valid")
             return false
         }else if(store.address.isNullOrEmpty()){
             state.value = CreateStoreState.Validate(store_address = "Alamat toko tidak boleh kosong")

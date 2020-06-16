@@ -152,7 +152,7 @@
     <string name="btn_add_image">Pilih foto</string>
     <string name="hint_store_name">Masukkan nama toko</string>
     <string name="hint_store_description">Deskripsi toko</string>
-    <string name="hint_store_phone">Nomor telepon toko</string>
+    <string name="hint_store_phone">Nomor telepon toko +62...</string>
     <string name="hint_store_address">Alamat toko</string>
     <string name="btn_create_store">Buat toko</string>
     <string name="info_store_created">Toko berhasil dibuat</string>
@@ -259,5 +259,7 @@
     <string name="product_cluster">Sebaran produk yang terjual</string>
     <string name="transaction_by_hour">Jumlah transaksi tiap jam</string>
     <string name="validate_price_not_valid">Harga tidak valid</string>
+    <string name="transaction_by_month">Performa penjualan perbulan</string>
+    <string name="transaction_by_month_profit">Penjualan tiap bulan</string>
 
 </resources>

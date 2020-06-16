@@ -24,6 +24,8 @@ class EmployeeRepository (private val api: ApiService){
                     b?.let {
                         if(it.status){
                             completion(it.data!!, null)
+                        }else{
+                            completion(null, Error())
                         }
                     }
                 }else{

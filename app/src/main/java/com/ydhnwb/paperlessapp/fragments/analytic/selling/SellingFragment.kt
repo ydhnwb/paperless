@@ -2,26 +2,26 @@ package com.ydhnwb.paperlessapp.fragments.analytic.selling
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.anychart.APIlib
 import com.anychart.AnyChart
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
+import com.anychart.charts.Cartesian
 import com.anychart.core.cartesian.series.Column
-import com.anychart.enums.Align
-import com.anychart.enums.HoverMode
-import com.anychart.enums.LegendLayout
-import com.anychart.enums.TooltipPositionMode
+import com.anychart.enums.*
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.models.ProfitByMonth
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.gone
+import com.ydhnwb.paperlessapp.utilities.extensions.visible
 import kotlinx.android.synthetic.main.chart_bar.view.*
 import kotlinx.android.synthetic.main.chart_pie.view.*
 import kotlinx.android.synthetic.main.fragment_selling_analytic.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
     private val sellingViewModel: SellingAnalyticViewModel by viewModel()
@@ -43,6 +43,8 @@ class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
             val store = it.getParcelable<Store>("store")
             store?.let { s->
                 sellingViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { d -> handleUIState(d) })
+                sellingViewModel.listenToSellingByProfit().observe(viewLifecycleOwner, Observer { d -> handleProfitByMonth(d) })
+                sellingViewModel.listenToSellingByMonth().observe(viewLifecycleOwner, Observer { d -> handleSellingByMonth(d) })
                 sellingViewModel.listenToSellingByHour().observe(viewLifecycleOwner, Observer { d -> handleSellingByHour(d) })
                 sellingViewModel.listenToSellingProductCluster().observe(viewLifecycleOwner, Observer { data -> handlePie(data) })
                 sellingViewModel.fetchStoreInfo(PaperlessUtil.getToken(requireActivity()), s.id.toString())
@@ -54,13 +56,17 @@ class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
         when(it){
             is SellingAnalyticState.IsLoading -> {
                 if(it.state){
-                    view!!.loading.visibility = View.VISIBLE
-                    view!!.analytic_hour.visibility = View.GONE
-                    view!!.analytic_sebaran.visibility = View.GONE
+                    view!!.loading.visible()
+                    view!!.analytic_hour.gone()
+                    view!!.analytic_sebaran.gone()
+                    view!!.analytic_month.gone()
+                    view!!.analytic_month_profit.gone()
                 }else{
-                    view!!.loading.visibility = View.GONE
-                    view!!.analytic_hour.visibility = View.VISIBLE
-                    view!!.analytic_sebaran.visibility = View.VISIBLE
+                    view!!.loading.gone()
+                    view!!.analytic_hour.visible()
+                    view!!.analytic_sebaran.visible()
+                    view!!.analytic_month.visible()
+                    view!!.analytic_month_profit.visible()
                 }
             }
         }
@@ -79,6 +85,74 @@ class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
             pie.labels().position("outside")
             pie.legend().position("center-bottom").itemsLayout(LegendLayout.HORIZONTAL).align(Align.CENTER)
             view!!.pie_chart.setChart(pie)
+        }
+    }
+
+    private fun handleSellingByMonth(it: HashMap<String, Int>){
+        if(sellingViewModel.listenToSellingByMonth().value != null){
+            view!!.bar_chart_monthly.setProgressBar(view!!.bar_progress_bar_monthly)
+            APIlib.getInstance().setActiveAnyChartView(view!!.bar_chart_monthly)
+
+
+            val cartesian: Cartesian = AnyChart.column()
+
+            val data: MutableList<DataEntry> = ArrayList()
+            it.forEach { (k, v) -> data.add(ValueDataEntry(k, v)) }
+
+            val column: Column = cartesian.column(data)
+
+            column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0.0)
+                .offsetY(5.0)
+                .format("Jumlah trans.{%Value}{groupsSeparator: }")
+
+            cartesian.animation(false)
+            cartesian.yScale().minimum(0.0)
+            cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
+            cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
+            cartesian.interactivity().hoverMode(HoverMode.BY_X)
+
+            cartesian.xAxis(0).title("Periode")
+            cartesian.yAxis(0).title("Jumlah transaksi")
+            view!!.bar_chart_monthly.setChart(cartesian)
+
+        }
+    }
+
+    private fun handleProfitByMonth(it: HashMap<String, Int>){
+        if(sellingViewModel.listenToSellingByMonth().value != null){
+            view!!.bar_chart_monthly_profit.setProgressBar(view!!.bar_progress_bar_monthly_profit)
+            APIlib.getInstance().setActiveAnyChartView(view!!.bar_chart_monthly_profit)
+
+
+            val cartesian: Cartesian = AnyChart.column()
+
+            val data: MutableList<DataEntry> = ArrayList()
+            it.forEach { (key, v) -> data.add(ValueDataEntry(key, v)) }
+
+            val column: Column = cartesian.column(data)
+
+            column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0.0)
+                .offsetY(5.0)
+                .format("Penjualan .{%Value}{groupsSeparator: }")
+
+            cartesian.animation(false)
+            cartesian.yScale().minimum(0.0)
+            cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
+            cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
+            cartesian.interactivity().hoverMode(HoverMode.BY_X)
+
+            cartesian.xAxis(0).title("Bulan")
+            cartesian.yAxis(0).title("Penjualan")
+            view!!.bar_chart_monthly_profit.setChart(cartesian)
+
         }
     }
 

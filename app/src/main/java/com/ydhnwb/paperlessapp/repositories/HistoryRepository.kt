@@ -14,7 +14,7 @@ import retrofit2.Response
 class HistoryRepository (private val api: ApiService){
     fun fetchHistory(token: String, storeId: Int?, completion: (History?, Error?) -> Unit){
         val histSend = HistorySendParam(storeId)
-        val g = GsonBuilder().serializeNulls().create()
+        val g = GsonBuilder().create()
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), g.toJson(histSend))
         api.history_get(token, body).enqueue(object : Callback<WrappedResponse<History>> {
             override fun onFailure(call: Call<WrappedResponse<History>>, t: Throwable) {

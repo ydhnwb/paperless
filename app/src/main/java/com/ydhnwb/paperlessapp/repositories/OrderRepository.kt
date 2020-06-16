@@ -16,7 +16,8 @@ import retrofit2.Response
 
 class OrderRepository(private val api: ApiService) {
     fun confirmOrder(token: String, orderSend: OrderSend, completion: (Boolean, Error?) -> Unit){
-        val g = GsonBuilder().serializeNulls().create()
+        val g = GsonBuilder().create()
+
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), g.toJson(orderSend))
         api.order_confirm(token, body).enqueue(object : Callback<WrappedResponse<Order>> {
             override fun onFailure(call: Call<WrappedResponse<Order>>, t: Throwable) {

@@ -75,7 +75,7 @@ class InvitationRepository (private val api: ApiService){
                         if (it.status){
                             completion(it.data, null)
                         }
-                        completion(it.data, Error("Cannot get data"))
+                        completion(it.data, Error())
                     }
                 }else{
                     completion(null, Error("Error ${response.errorBody()} with status code ${response.code()}"))

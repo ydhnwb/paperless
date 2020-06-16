@@ -27,7 +27,7 @@ class StoreRepository (private val api: ApiService){
                     if(body.status){
                         completion(body.data, null)
                     }else{
-                        completion(null, Error("Cannot get list of store. Please check your internet connection"))
+                        completion(null, Error())
                     }
                 }else{
                     completion(null, Error("Error ${response.message()} with status code ${response.code()}"))

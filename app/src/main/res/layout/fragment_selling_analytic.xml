@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -16,6 +14,90 @@
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:id="@+id/analytic_month_profit"
+            android:elevation="2dp"
+            android:layout_margin="8dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:background="?attr/selectableItemBackground"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="500dp">
+
+                <TextView
+                    android:layout_marginBottom="16dp"
+                    android:textColor="@color/colorBlackSteel"
+                    android:textStyle="bold"
+                    android:text="@string/transaction_by_month_profit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <com.anychart.AnyChartView
+                        android:layout_centerInParent="true"
+                        android:id="@+id/bar_chart_monthly_profit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <ProgressBar
+                        android:id="@+id/bar_progress_bar_monthly_profit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:id="@+id/analytic_month"
+            android:elevation="2dp"
+            android:layout_margin="8dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:background="?attr/selectableItemBackground"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="500dp">
+
+                <TextView
+                    android:layout_marginBottom="16dp"
+                    android:textColor="@color/colorBlackSteel"
+                    android:textStyle="bold"
+                    android:text="@string/transaction_by_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <com.anychart.AnyChartView
+                        android:layout_centerInParent="true"
+                        android:id="@+id/bar_chart_monthly"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <ProgressBar
+                        android:id="@+id/bar_progress_bar_monthly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
