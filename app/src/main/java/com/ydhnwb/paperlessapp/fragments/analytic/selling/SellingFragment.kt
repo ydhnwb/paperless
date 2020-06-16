@@ -141,7 +141,7 @@ class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("Penjualan .{%Value}{groupsSeparator: }")
+                .format("Penjualan {%Value}{groupsSeparator: }")
 
             cartesian.animation(false)
             cartesian.yScale().minimum(0.0)

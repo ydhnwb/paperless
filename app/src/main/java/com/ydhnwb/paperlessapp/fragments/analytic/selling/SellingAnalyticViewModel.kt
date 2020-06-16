@@ -108,10 +108,10 @@ class SellingAnalyticViewModel (private val historyRepository: HistoryRepository
                         val year = cal.get(Calendar.YEAR)
                         val month = PaperlessUtil.getMonthByMonthInt(cal.get(Calendar.MONTH)+1)
                         val concated = "$month $year"
-                        val sumPrice = it.orderDetails.sumBy { orderDetail -> orderDetail.productPrice!! }
+                        val sumPrice = it.orderDetails.sumBy { orderDetail -> orderDetail.productPrice!!*orderDetail.quantity!! }
                         pivot.add(ProfitByMonth(concated, sumPrice))
                     }
-                    for( o in pivot){
+                    for(o in pivot){
                         if (pivot2.containsKey(o.month)){
                             val r = pivot2.get(o.month)!!
                             pivot2.put(o.month, r+o.profit!!)

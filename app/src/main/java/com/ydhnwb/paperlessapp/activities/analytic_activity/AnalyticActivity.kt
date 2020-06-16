@@ -25,7 +25,7 @@ class AnalyticActivity : AppCompatActivity() {
     private fun setupUI(){
         val fragmentAdapter = CustomFragmentPagerAdapter(supportFragmentManager)
         fragmentAdapter.addFragment(SellingFragment.instance(getStore()), resources.getString(R.string.tab_title_selling))
-        fragmentAdapter.addFragment(PurchasementFragment(), resources.getString(R.string.tab_title_purchasement))
+        fragmentAdapter.addFragment(PurchasementFragment.instance(getStore()), resources.getString(R.string.tab_title_purchasement))
         fragmentAdapter.addFragment(CustomerAnalyticFragment(), resources.getString(R.string.tab_title_customer))
         viewpager.adapter = fragmentAdapter
         tabs.setupWithViewPager(viewpager)

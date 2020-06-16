@@ -261,5 +261,6 @@
     <string name="validate_price_not_valid">Harga tidak valid</string>
     <string name="transaction_by_month">Performa penjualan perbulan</string>
     <string name="transaction_by_month_profit">Penjualan tiap bulan</string>
+    <string name="spent_by_month">Pengeluaran tiap bulan</string>
 
 </resources>
