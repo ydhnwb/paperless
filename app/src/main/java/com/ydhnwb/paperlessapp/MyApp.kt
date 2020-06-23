@@ -3,6 +3,7 @@ package com.ydhnwb.paperlessapp
 import android.app.Application
 import com.ydhnwb.paperlessapp.activities.catalog_activity.CatalogViewModel
 import com.ydhnwb.paperlessapp.activities.checkout_activity.CheckoutViewModel
+import com.ydhnwb.paperlessapp.activities.detail_order_activity.DetailOrderViewModel
 import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationViewModel
 import com.ydhnwb.paperlessapp.activities.login_activity.LoginViewModel
 import com.ydhnwb.paperlessapp.activities.manage_activity.ManageStoreViewModel
@@ -11,6 +12,7 @@ import com.ydhnwb.paperlessapp.activities.register_activity.RegisterViewModel
 import com.ydhnwb.paperlessapp.activities.search_user_activity.SearchUserViewModel
 import com.ydhnwb.paperlessapp.activities.store_activity.CreateStoreViewModel
 import com.ydhnwb.paperlessapp.activities.store_page_activity.StorePageViewModel
+import com.ydhnwb.paperlessapp.fragments.analytic.customer.CustomerAnalyticViewModel
 import com.ydhnwb.paperlessapp.fragments.analytic.purchasement.PurchasementFragmentViewModel
 import com.ydhnwb.paperlessapp.fragments.analytic.selling.SellingAnalyticViewModel
 import com.ydhnwb.paperlessapp.fragments.dialog.InvitationDialogViewModel
@@ -77,4 +79,6 @@ val viewModelModules = module {
     viewModel { InvitationDialogViewModel(get()) }
     viewModel { SellingAnalyticViewModel(get()) }
     viewModel { PurchasementFragmentViewModel(get()) }
+    viewModel { CustomerAnalyticViewModel(get()) }
+    viewModel { DetailOrderViewModel(get()) }
 }

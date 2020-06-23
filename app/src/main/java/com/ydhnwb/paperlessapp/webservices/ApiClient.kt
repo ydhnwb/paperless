@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.webservices
 
+import com.google.gson.annotations.SerializedName
 import com.ydhnwb.paperlessapp.BuildConfig
 import com.ydhnwb.paperlessapp.models.*
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
@@ -177,9 +178,20 @@ interface ApiService {
     fun user_by_id(@Header("Authorization") token : String, @Path("id") userId : String) : Call<WrappedResponse<User>>
 
     @GET("v1/my_workplace")
-    fun my_workplace(@Header("Authorization") token : String) : Call<WrappedResponse<Store>>
+    fun my_workplace(@Header("Authorization") token : String) : Call<WrappedResponse<MyWorkplace>>
 
     @DELETE("v1/own/store/{id_store}/employee/{id_employee}")
     fun employee_remove(@Header("Authorization")token:String, @Path("id_store") storeId: String,@Path("id_employee") employeeId : String) : Call<WrappedResponse<Store>>
 
+    @FormUrlEncoded
+    @POST("v1/report")
+    fun download_report(@Header("Authorization") token : String, @Field("store_id") storeId : String) : Call<WrappedResponse<UrlRes>>
+
+    @FormUrlEncoded
+    @POST("v1/invoice")
+    fun download_invoice(@Header("Authorization") token : String, @Field("order_id") orderId : String) : Call<WrappedResponse<UrlRes>>
 }
+
+data class UrlRes(
+    @SerializedName("url") var url : String
+)

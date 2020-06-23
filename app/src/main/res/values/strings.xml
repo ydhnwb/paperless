@@ -262,5 +262,16 @@
     <string name="transaction_by_month">Performa penjualan perbulan</string>
     <string name="transaction_by_month_profit">Penjualan tiap bulan</string>
     <string name="spent_by_month">Pengeluaran tiap bulan</string>
+    <string name="store_who_buy">Toko yang sering berbelanja</string>
+    <string name="user_who_buy">Pengguna yang sering berbelanja</string>
+    <string name="cashier">Cashier</string>
+    <string name="staff">Staff</string>
+    <string name="info_forbidden">Anda tidak mempunyai izin untuk membuka</string>
+    <string name="store_menu_analytic">Analitik</string>
+    <string name="store_menu_more">Lainnya</string>
+    <string name="title_activity_detail_order">DetailOrderActivity</string>
+    <string name="info_success_download">Invoice berhasil diunduh. Cek folder downloads anda</string>
+    <string name="info_success_download_report">Invoice berhasil diunduh. Cek folder downloads anda</string>
+    <string name="btn_download_invoice">Download invoice</string>
 
 </resources>

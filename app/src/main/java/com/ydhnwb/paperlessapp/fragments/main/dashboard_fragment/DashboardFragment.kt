@@ -16,6 +16,7 @@ import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.ydhnwb.paperlessapp.fragments.main.dashboard_fragment.DashboardState
+import com.ydhnwb.paperlessapp.models.MyWorkplace
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard){
     private val dashboardViewModel: DashboardViewModel by viewModel()
@@ -53,20 +54,22 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
     }
 
 
-    private fun handleMyWorkplace(it: Store){
+    private fun handleMyWorkplace(it: MyWorkplace){
         if (dashboardViewModel.listenToMyWorkplace().value == null){
             requireView().workplace_root.visibility = View.GONE
         }else{
-            if(dashboardViewModel.listenToMyWorkplace().value?.id == null){
+            if(dashboardViewModel.listenToMyWorkplace().value?.store?.id == null){
                 requireView().workplace_root.visibility = View.GONE
             }else{
                 requireView().workplace_root.visibility = View.VISIBLE
                 with(requireView()){
-                    workplace_name.text = it.name
-                    workplace_logo.load(it.store_logo)
+                    workplace_name.text = it.store?.name.toString()
+                    workplace_logo.load(it.store?.store_logo)
+                    workplace_role.text = if(it.role == 0){ resources.getString(R.string.cashier) }else{ resources.getString(R.string.staff) }
                     workplace_layout.setOnClickListener {_ ->
                         startActivity(Intent(requireActivity(), ManageActivity::class.java).apply {
-                            putExtra("STORE", it)
+                            putExtra("STORE", it.store)
+                            putExtra("ROLE", it.role)
                         })
                     }
                 }

@@ -1,12 +1,14 @@
 package com.ydhnwb.paperlessapp.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.activities.detail_order_activity.DetailOrderActivity
 import com.ydhnwb.paperlessapp.models.OrderHistory
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.list_item_history.view.*
@@ -47,7 +49,9 @@ class HistoryAdapter(private val histories : MutableList<OrderHistory>, private 
                     history_pov_image.load(order.sellByStore?.store_logo)
                 }
                 setOnClickListener {
-                    println()
+                    context.startActivity(Intent(context, DetailOrderActivity::class.java).apply {
+                        putExtra("ORDER", order)
+                    })
                 }
             }
         }

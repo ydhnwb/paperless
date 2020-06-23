@@ -144,14 +144,34 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <TextView
-                                    android:id="@+id/workplace_name"
-                                    android:textStyle="bold"
-                                    android:padding="16dp"
-                                    android:textColor="#fff"
-                                    android:maxLines="2"
+
+                                <LinearLayout
+                                    android:orientation="vertical"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
+                                    android:layout_height="wrap_content">
+                                    <TextView
+                                        android:text="Lorem"
+                                        android:id="@+id/workplace_name"
+                                        android:textStyle="bold"
+                                        android:paddingStart="16dp"
+                                        android:paddingTop="16dp"
+                                        android:textColor="#fff"
+                                        android:maxLines="2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"/>
+
+                                    <TextView
+                                        android:layout_marginBottom="8dp"
+                                        android:text="Cashier"
+                                        android:id="@+id/workplace_role"
+                                        android:textStyle="italic"
+                                        android:layout_marginStart="16dp"
+                                        android:textColor="#fff"
+                                        android:maxLines="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"/>
+
+                                </LinearLayout>
                             </RelativeLayout>
 
                         </RelativeLayout>

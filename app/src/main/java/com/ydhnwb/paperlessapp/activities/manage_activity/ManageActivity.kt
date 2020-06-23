@@ -23,6 +23,7 @@ import com.ydhnwb.paperlessapp.fragments.manage.product_fragment.ProductFragment
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
 import kotlinx.android.synthetic.main.activity_manage.*
 import kotlinx.android.synthetic.main.app_bar_manage.*
 import kotlinx.android.synthetic.main.nav_header_manage.view.*
@@ -81,14 +82,14 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 }else{
                     navStatus = 0
                     openFirst = false
-                    fragment =
-                        HomeFragment()
+                    fragment = HomeFragment()
                 }
             }
             R.id.nav_etalase -> {
                 if(navStatus == 1 && !openFirst){
                     drawer_layout.closeDrawer(GravityCompat.START)
                 }else{
+                    manageStoreViewModel.fetchAllProduct(PaperlessUtil.getToken(this@ManageActivity), getCurrentStore().id.toString())
                     openFirst = false
                     navStatus = 1
                     fragment = EtalaseFragment()
@@ -98,10 +99,13 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 if(navStatus == 2 && !openFirst){
                     drawer_layout.closeDrawer(GravityCompat.START)
                 }else{
-                    openFirst = false
-                    navStatus = 2
-                    fragment =
-                        ProductFragment()
+                    if(isAllowedToFragment()){
+                        openFirst = false
+                        navStatus = 2
+                        fragment = ProductFragment()
+                    }else{
+                        showInfoAlert(resources.getString(R.string.info_forbidden))
+                    }
                 }
             }
 
@@ -109,10 +113,13 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 if(navStatus == 3 && !openFirst){
                     drawer_layout.closeDrawer(GravityCompat.START)
                 }else{
-                    openFirst = false
-                    navStatus = 3
-                    fragment =
-                        EmployeeFragment()
+                    if(isAllowedToFragment()){
+                        openFirst = false
+                        navStatus = 3
+                        fragment = EmployeeFragment()
+                    }else{
+                        showInfoAlert(resources.getString(R.string.info_forbidden))
+                    }
                 }
             }
 
@@ -120,10 +127,13 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 if(navStatus == 4 && !openFirst){
                     drawer_layout.closeDrawer(GravityCompat.START)
                 }else{
-                    openFirst = false
-                    navStatus = 4
-                    fragment =
-                        HistoryFragment()
+                    if(isAllowedToFragment()){
+                        openFirst = false
+                        navStatus = 4
+                        fragment = HistoryFragment()
+                    }else{
+                        showInfoAlert(resources.getString(R.string.info_forbidden))
+                    }
                 }
             }
 
@@ -132,8 +142,7 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             else -> {
                 openFirst = false
                 navStatus = 0
-                fragment =
-                    HomeFragment()
+                fragment = HomeFragment()
             }
         }
 
@@ -162,6 +171,14 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
     }
 
+    private fun isAllowedToFragment(): Boolean{
+        if(getRole() == 0){
+            return false
+        }
+        return true
+    }
+
     private fun getCurrentStore() = intent.getParcelableExtra<Store>("STORE")!!
+    private fun getRole() = intent.getIntExtra("ROLE", -1)
 
 }

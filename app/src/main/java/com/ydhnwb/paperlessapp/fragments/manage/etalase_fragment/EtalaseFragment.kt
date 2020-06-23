@@ -106,7 +106,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
             is ManageStoreState.ShowToast -> toast(it.message)
             is ManageStoreState.IsLoading -> {
                 if(it.state){
-                    view!!.loading!!.visibility = View.VISIBLE
+                    view!!.loading!!.visibility = View.GONE
                 }else{
                     view!!.loading!!.visibility = View.GONE
                 }

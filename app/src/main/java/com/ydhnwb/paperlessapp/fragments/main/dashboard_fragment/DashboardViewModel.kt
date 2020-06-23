@@ -2,6 +2,7 @@ package com.ydhnwb.paperlessapp.fragments.main.dashboard_fragment
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ydhnwb.paperlessapp.models.MyWorkplace
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.repositories.StoreRepository
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
@@ -9,7 +10,7 @@ import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 class DashboardViewModel(private val storeRepository: StoreRepository) : ViewModel() {
     private val state: SingleLiveEvent<DashboardState> = SingleLiveEvent()
     private val myStores = MutableLiveData<List<Store>>()
-    private val myWorkplace = MutableLiveData<Store>()
+    private val myWorkplace = MutableLiveData<MyWorkplace>()
 
     private fun setLoading(){ state.value = DashboardState.IsLoading(true) }
     private fun hideLoading(){ state.value = DashboardState.IsLoading(false) }

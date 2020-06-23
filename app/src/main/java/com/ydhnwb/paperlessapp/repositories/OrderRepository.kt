@@ -8,6 +8,7 @@ import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.models.Customer
 import com.ydhnwb.paperlessapp.webservices.ApiService
+import com.ydhnwb.paperlessapp.webservices.UrlRes
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -88,5 +89,28 @@ class OrderRepository(private val api: ApiService) {
                 }
             })
         }
+    }
+
+    fun downloadInvoice(token: String, orderId: String, completion: (String?, Error?) -> Unit){
+        api.download_invoice(token, orderId).enqueue(object: Callback<WrappedResponse<UrlRes>>{
+            override fun onFailure(call: Call<WrappedResponse<UrlRes>>, t: Throwable) {
+                println(t.message.toString())
+                completion(null, Error(t.message.toString()))
+            }
+
+            override fun onResponse(call: Call<WrappedResponse<UrlRes>>, response: Response<WrappedResponse<UrlRes>>) {
+                if(response.isSuccessful){
+                    val b = response.body()
+                    if(b!!.status){
+                        completion(b.data!!.url, null)
+                    }else{
+                        completion(null, Error("${response.message()}"))
+                    }
+                }else{
+                    completion(null, Error("${response.message()}"))
+                }
+            }
+
+        })
     }
 }

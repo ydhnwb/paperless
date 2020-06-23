@@ -11,21 +11,22 @@ import coil.api.load
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.analytic_activity.AnalyticActivity
 import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationActivity
+import com.ydhnwb.paperlessapp.fragments.manage.home_fragment.HomeClickInterface
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.StoreMenu
 import kotlinx.android.synthetic.main.list_item_store_menu.view.*
 
-class StoreMenuAdapter (private var storeMenus : List<StoreMenu>, private var context : Context, private val store : Store) : RecyclerView.Adapter<StoreMenuAdapter.ViewHolder>(){
+class StoreMenuAdapter (private var storeMenus : List<StoreMenu>, private var context : Context, private val store : Store, private val homeClickInterface: HomeClickInterface) : RecyclerView.Adapter<StoreMenuAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_store_menu, parent, false))
     }
 
     override fun getItemCount() = storeMenus.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(storeMenus[position], context, position, store)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(storeMenus[position], context, position, store, homeClickInterface)
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        fun bind(storeMenu: StoreMenu, context: Context, i : Int, store : Store){
+        fun bind(storeMenu: StoreMenu, context: Context, i : Int, store : Store, homeClickInterface: HomeClickInterface){
             with(itemView){
                 store_menu_title.text = storeMenu.title
                 store_menu_img.load(storeMenu.image)
@@ -40,6 +41,9 @@ class StoreMenuAdapter (private var storeMenus : List<StoreMenu>, private var co
                         1 -> context.startActivity(Intent(context, InvitationActivity::class.java).apply {
                             putExtra("store", store)
                         })
+                        2 -> {
+                            homeClickInterface.report()
+                        }
                         else -> println("Ya")
                     }
                 }

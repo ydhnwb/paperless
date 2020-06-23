@@ -25,6 +25,18 @@ class ManageStoreViewModel (private val storeRepository: StoreRepository,private
     private fun setLoading(){ state.value = ManageStoreState.IsLoading(true) }
     private fun hideLoading(){ state.value = ManageStoreState.IsLoading(false) }
     private fun toast(message: String){ state.value = ManageStoreState.ShowToast(message) }
+    private fun downloadedUrl(url : String){ state.value = ManageStoreState.DownloadedUrl(url) }
+
+    fun downloadReport(token: String, storeId: String){
+        setLoading()
+        storeRepository.downloadReport(token, storeId){ url, e ->
+            hideLoading()
+            e?.let { it.message?.let { m -> toast(m) } }
+            url?.let {
+                downloadedUrl(it)
+            }
+        }
+    }
 
     fun setCurrentManagedStore(store: Store) = currentStore.postValue(store)
 
@@ -137,4 +149,5 @@ class ManageStoreViewModel (private val storeRepository: StoreRepository,private
 sealed class ManageStoreState{
     data class IsLoading(var state : Boolean) : ManageStoreState()
     data class ShowToast(var message : String) : ManageStoreState()
+    data class DownloadedUrl(var url : String) : ManageStoreState()
 }

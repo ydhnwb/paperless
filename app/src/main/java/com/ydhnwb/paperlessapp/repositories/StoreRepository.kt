@@ -1,9 +1,11 @@
 package com.ydhnwb.paperlessapp.repositories
 
+import com.ydhnwb.paperlessapp.models.MyWorkplace
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiService
+import com.ydhnwb.paperlessapp.webservices.UrlRes
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -177,14 +179,14 @@ class StoreRepository (private val api: ApiService){
         })
     }
 
-    fun fetchMyWorkplace(token: String, completion: (Store?, Error?) -> Unit){
-        api.my_workplace(token).enqueue(object: Callback<WrappedResponse<Store>>{
-            override fun onFailure(call: Call<WrappedResponse<Store>>, t: Throwable) {
+    fun fetchMyWorkplace(token: String, completion: (MyWorkplace?, Error?) -> Unit){
+        api.my_workplace(token).enqueue(object: Callback<WrappedResponse<MyWorkplace>>{
+            override fun onFailure(call: Call<WrappedResponse<MyWorkplace>>, t: Throwable) {
                 println(t.message)
                 completion(null, Error(t.message.toString()))
             }
 
-            override fun onResponse(call: Call<WrappedResponse<Store>>, response: Response<WrappedResponse<Store>>) {
+            override fun onResponse(call: Call<WrappedResponse<MyWorkplace>>, response: Response<WrappedResponse<MyWorkplace>>) {
                 if(response.isSuccessful){
                     val b = response.body()
                     if(b!!.status){
@@ -196,6 +198,29 @@ class StoreRepository (private val api: ApiService){
                     completion(null, Error("${response.message()} with status code ${response.code()}"))
                 }
             }
+        })
+    }
+
+    fun downloadReport(token: String,storeId: String, completion: (String?, Error?) -> Unit){
+        api.download_report(token, storeId).enqueue(object: Callback<WrappedResponse<UrlRes>>{
+            override fun onFailure(call: Call<WrappedResponse<UrlRes>>, t: Throwable) {
+                println(t.message)
+                completion(null, Error(t.message.toString()))
+            }
+
+            override fun onResponse(call: Call<WrappedResponse<UrlRes>>, response: Response<WrappedResponse<UrlRes>>) {
+                if(response.isSuccessful){
+                    val d = response.body()
+                    if(d!!.status){
+                        completion(d.data!!.url, null)
+                    }else{
+                        completion(null, Error())
+                    }
+                }else{
+                    completion(null, Error("${response.message()}"))
+                }
+            }
+
         })
     }
 }
