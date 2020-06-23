@@ -46,7 +46,6 @@
                 app:cardCornerRadius="6dp"
                 android:layout_height="64dp">
                 <ImageView
-                    android:src="@drawable/ydhnwb"
                     android:id="@+id/history_image"
                     android:scaleType="centerCrop"
                     android:layout_width="match_parent"

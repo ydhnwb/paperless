@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +34,14 @@ class DetailOrderActivity : AppCompatActivity() {
         setupRecyclerView()
         downloadInvoice()
         observeState()
+        fill()
+    }
+
+    private fun fill(){
+        getOrder()?.let {
+            detail_orderId.text = "#${it.id}"
+            detail_order_date.text = it.datetime.toString()
+        }
     }
 
     private fun registerDownloadReceiver() = registerReceiver(onDownloadComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
@@ -66,6 +73,7 @@ class DetailOrderActivity : AppCompatActivity() {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             if (downloadID == id) {
                 showInfoAlert(resources.getString(R.string.info_success_download))
+                showToast(resources.getString(R.string.info_success_download))
             }
         }
     }

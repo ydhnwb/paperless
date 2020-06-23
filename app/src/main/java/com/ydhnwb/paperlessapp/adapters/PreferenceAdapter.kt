@@ -11,6 +11,7 @@ import coil.api.load
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationActivity
 import com.ydhnwb.paperlessapp.activities.login_activity.LoginActivity
+import com.ydhnwb.paperlessapp.activities.user_history.UserHistoryActivity
 import com.ydhnwb.paperlessapp.models.Preference
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.list_item_preference.view.*
@@ -28,7 +29,9 @@ class PreferenceAdapter (private var context: Context, private var prefs : List<
             itemView.pref_name.text = context.getString(pref.name)
             itemView.setOnClickListener {
                 when(i){
+                    0 -> println()
                     1 -> context.startActivity(Intent(context, InvitationActivity::class.java))
+                    2 -> context.startActivity(Intent(context, UserHistoryActivity::class.java))
                     3 -> {
                         PaperlessUtil.clearToken(context)
                         context.startActivity(Intent(context, LoginActivity::class.java))

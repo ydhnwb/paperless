@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/detail_order_sell_to"
+                    android:id="@+id/detail_orderId"
                     android:textColor="@color/colorBlackSteel"
                     android:textSize="18sp"
                     android:textStyle="bold"

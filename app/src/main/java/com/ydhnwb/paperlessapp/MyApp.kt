@@ -12,6 +12,7 @@ import com.ydhnwb.paperlessapp.activities.register_activity.RegisterViewModel
 import com.ydhnwb.paperlessapp.activities.search_user_activity.SearchUserViewModel
 import com.ydhnwb.paperlessapp.activities.store_activity.CreateStoreViewModel
 import com.ydhnwb.paperlessapp.activities.store_page_activity.StorePageViewModel
+import com.ydhnwb.paperlessapp.activities.user_history.UserHistoryViewModel
 import com.ydhnwb.paperlessapp.fragments.analytic.customer.CustomerAnalyticViewModel
 import com.ydhnwb.paperlessapp.fragments.analytic.purchasement.PurchasementFragmentViewModel
 import com.ydhnwb.paperlessapp.fragments.analytic.selling.SellingAnalyticViewModel
@@ -81,4 +82,5 @@ val viewModelModules = module {
     viewModel { PurchasementFragmentViewModel(get()) }
     viewModel { CustomerAnalyticViewModel(get()) }
     viewModel { DetailOrderViewModel(get()) }
+    viewModel { UserHistoryViewModel(get()) }
 }

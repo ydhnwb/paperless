@@ -27,7 +27,6 @@ class HistoryAdapter(private val histories : MutableList<OrderHistory>, private 
                 history_total_price.text = PaperlessUtil.setToIDR(order.orderDetails.sumBy { detail -> detail.quantity!! * detail.productPrice!! })
                 history_title.text = order.orderDetails.joinToString { d -> d.productName!! }
                 if(isIn){
-                    println(order.boughtByStore)
                     if(order.boughtByStore?.id == null && order.boughtByUser?.id == null){
                         history_pov.visibility = View.GONE
                     }else{

@@ -269,9 +269,11 @@
     <string name="info_forbidden">Anda tidak mempunyai izin untuk membuka</string>
     <string name="store_menu_analytic">Analitik</string>
     <string name="store_menu_more">Lainnya</string>
-    <string name="title_activity_detail_order">DetailOrderActivity</string>
+    <string name="title_activity_detail_order">Detail order</string>
     <string name="info_success_download">Invoice berhasil diunduh. Cek folder downloads anda</string>
     <string name="info_success_download_report">Invoice berhasil diunduh. Cek folder downloads anda</string>
     <string name="btn_download_invoice">Download invoice</string>
+    <string name="title_activity_user_history">Riawayat pembelian</string>
+    <string name="pref_purchasement">Pembelian</string>
 
 </resources>

@@ -12,6 +12,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class HistoryRepository (private val api: ApiService){
+
     fun fetchHistory(token: String, storeId: Int?, completion: (History?, Error?) -> Unit){
         val histSend = HistorySendParam(storeId)
         val g = GsonBuilder().create()
