@@ -1,29 +1,29 @@
 package com.ydhnwb.paperlessapp
 
 import android.app.Application
-import com.ydhnwb.paperlessapp.activities.catalog_activity.CatalogViewModel
-import com.ydhnwb.paperlessapp.activities.checkout_activity.CheckoutViewModel
-import com.ydhnwb.paperlessapp.activities.detail_order_activity.DetailOrderViewModel
-import com.ydhnwb.paperlessapp.activities.invitation_activity.InvitationViewModel
-import com.ydhnwb.paperlessapp.activities.login_activity.LoginViewModel
-import com.ydhnwb.paperlessapp.activities.manage_activity.ManageStoreViewModel
-import com.ydhnwb.paperlessapp.activities.product_activity.ProductCreateEditViewModel
-import com.ydhnwb.paperlessapp.activities.register_activity.RegisterViewModel
-import com.ydhnwb.paperlessapp.activities.search_user_activity.SearchUserViewModel
-import com.ydhnwb.paperlessapp.activities.store_activity.CreateStoreViewModel
-import com.ydhnwb.paperlessapp.activities.store_page_activity.StorePageViewModel
-import com.ydhnwb.paperlessapp.activities.user_history.UserHistoryViewModel
-import com.ydhnwb.paperlessapp.fragments.analytic.customer.CustomerAnalyticViewModel
-import com.ydhnwb.paperlessapp.fragments.analytic.purchasement.PurchasementFragmentViewModel
-import com.ydhnwb.paperlessapp.fragments.analytic.selling.SellingAnalyticViewModel
+import com.ydhnwb.paperlessapp.ui.catalog.CatalogViewModel
+import com.ydhnwb.paperlessapp.ui.checkout.CheckoutViewModel
+import com.ydhnwb.paperlessapp.ui.detail_order.DetailOrderViewModel
+import com.ydhnwb.paperlessapp.ui.invitation.InvitationViewModel
+import com.ydhnwb.paperlessapp.ui.login.LoginViewModel
+import com.ydhnwb.paperlessapp.ui.manage.ManageStoreViewModel
+import com.ydhnwb.paperlessapp.ui.product.ProductCreateEditViewModel
+import com.ydhnwb.paperlessapp.ui.register.RegisterViewModel
+import com.ydhnwb.paperlessapp.ui.search_user.SearchUserViewModel
+import com.ydhnwb.paperlessapp.ui.store.CreateStoreViewModel
+import com.ydhnwb.paperlessapp.ui.store_page.StorePageViewModel
+import com.ydhnwb.paperlessapp.ui.user_history.UserHistoryViewModel
+import com.ydhnwb.paperlessapp.ui.analytic.customer.CustomerAnalyticViewModel
+import com.ydhnwb.paperlessapp.ui.analytic.purchasement.PurchasementFragmentViewModel
+import com.ydhnwb.paperlessapp.ui.analytic.selling.SellingAnalyticViewModel
 import com.ydhnwb.paperlessapp.fragments.dialog.InvitationDialogViewModel
-import com.ydhnwb.paperlessapp.fragments.main.dashboard_fragment.DashboardViewModel
-import com.ydhnwb.paperlessapp.fragments.main.explore_fragment.ExploreViewModel
-import com.ydhnwb.paperlessapp.fragments.main.notification_fragment.NotificationViewModel
-import com.ydhnwb.paperlessapp.fragments.main.profile.ProfileViewModel
-import com.ydhnwb.paperlessapp.fragments.manage.employee_fragment.EmployeeViewModel
-import com.ydhnwb.paperlessapp.fragments.manage.product_fragment.ProductViewModel
-import com.ydhnwb.paperlessapp.fragments.others.list_history_fragment.ListHistoryViewModel
+import com.ydhnwb.paperlessapp.ui.main.dashboard.DashboardViewModel
+import com.ydhnwb.paperlessapp.ui.main.explore.ExploreViewModel
+import com.ydhnwb.paperlessapp.ui.main.notification.NotificationViewModel
+import com.ydhnwb.paperlessapp.ui.main.profile.ProfileViewModel
+import com.ydhnwb.paperlessapp.ui.manage.employee.EmployeeViewModel
+import com.ydhnwb.paperlessapp.ui.manage.product.ProductViewModel
+import com.ydhnwb.paperlessapp.ui.manage.history.list_history.ListHistoryViewModel
 import com.ydhnwb.paperlessapp.repositories.*
 import com.ydhnwb.paperlessapp.webservices.ApiClient
 import org.koin.android.ext.koin.androidContext
@@ -67,7 +67,11 @@ val viewModelModules = module {
     viewModel { ExploreViewModel(get()) }
     viewModel { ProductCreateEditViewModel(get(), get()) }
     viewModel { ProductViewModel(get()) }
-    viewModel { ListHistoryViewModel(get()) }
+    viewModel {
+        ListHistoryViewModel(
+            get()
+        )
+    }
     viewModel { EmployeeViewModel(get()) }
     viewModel { ManageStoreViewModel(get(), get(), get()) }
     viewModel { CreateStoreViewModel(get()) }

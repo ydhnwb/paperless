@@ -145,11 +145,10 @@
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+
         <CheckBox
-            android:visibility="invisible"
-            android:layout_marginTop="8dp"
-            android:id="@+id/cb_product_online_available"
-            android:text="@string/hint_product_online_available"
+            android:id="@+id/cb_product_promo"
+            android:text="@string/is_promo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -157,16 +156,18 @@
             android:layout_width="match_parent"
             app:errorEnabled="true"
             android:visibility="gone"
+            android:id="@+id/in_product_promo"
+            android:hint="@string/hint_product_promo_percent"
             app:boxBackgroundColor="@android:color/transparent"
-            android:id="@+id/in_product_weight"
-            android:hint="@string/hint_product_weight"
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:inputType="numberDecimal"
-                android:id="@+id/et_product_weight"
+                android:inputType="numberSigned"
+                android:id="@+id/et_product_promo"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"

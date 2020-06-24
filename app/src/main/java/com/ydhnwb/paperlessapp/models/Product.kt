@@ -12,14 +12,13 @@ data class Product(
     @SerializedName("code") var code : String? = null,
     @SerializedName("image") var image : String? = null,
     @SerializedName("price") var price : Int? = null,
-    @SerializedName("weight") var weight : Double? = 1.0,
     @SerializedName("status") var status : Boolean? = null,
-    @SerializedName("available_online") var availableOnline : Boolean = false,
     @SerializedName("quantity") var qty : Int? = null,
     @SerializedName("category") var category : Category? = null,
     @SerializedName("store") var store : Store? = null,
     @SerializedName("owner") var owner : User? = null,
     @SerializedName("order") var orderAlt: OrderAlt? = null,
+    @SerializedName("discount_by_percent") var discountByPercent : Float? = null,
     var selectedQuantity : Int? = null
 ) : Parcelable
 

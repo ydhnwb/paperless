@@ -275,5 +275,9 @@
     <string name="btn_download_invoice">Download invoice</string>
     <string name="title_activity_user_history">Riawayat pembelian</string>
     <string name="pref_purchasement">Pembelian</string>
+    <string name="is_promo">Produk ini sedang promo</string>
+    <string name="hint_product_promo_percent">Promo dalam persen</string>
+    <string name="error_discount_not_valid">Diskon tidak valid</string>
+    <string name="error_discount_exception">Masukkan diskon yang benar</string>
 
 </resources>

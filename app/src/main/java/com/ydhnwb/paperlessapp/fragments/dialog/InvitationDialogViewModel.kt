@@ -20,7 +20,6 @@ class InvitationDialogViewModel (private val invitationRepository: InvitationRep
             if(bool){ success() }
         }
     }
-
     fun listenToUIState() = state
 }
 

@@ -76,52 +76,35 @@ interface ApiService {
 
     @Multipart
     @POST("v1/own/store/{id}/product")
-    fun product_store(@Header("Authorization") token : String,
+    fun product_store(@Header("Authorization") token: String,
                       @Path("id") storeId : String,
-                      @Part("name") name : String,
-                      @Part("description") description : String,
-                      @Part("code") code : String?,
-                      @Part("price") price : Int,
+                      @PartMap partMap : HashMap<String, RequestBody>,
                       @Part("category_id") categoryId : Int,
-                      @Part("available_online") isOnline : Boolean = false,
-                      @Part("weight") weight : Double? = 1.0,
-                      @Part("status") status : Boolean = true,
-                      @Part("quantity") qty : Int? = null,
-                      @Part image : MultipartBody.Part)
-            : Call<WrappedResponse<Product>>
+                      @Part image : MultipartBody.Part) : Call<WrappedResponse<Product>>
 
     @Multipart
     @POST("v1/own/store/{id}/product/{productId}")
-    fun product_update(@Header("Authorization") token : String,
-                      @Path("id") storeId : String,
-                      @Path("productId") productId : String,
-                      @Part("name") name : String,
-                      @Part("description") description : String,
-                      @Part("code") code : String?,
-                      @Part("price") price : Int,
-                      @Part("category_id") categoryId : Int,
-                      @Part("available_online") isOnline : Boolean = false,
-                      @Part("weight") weight : Double? = 1.0,
-                      @Part("status") status : Boolean = true,
-                      @Part("quantity") qty : Int?)
-            : Call<WrappedResponse<Product>>
-
-    @Multipart
-    @POST("v1/own/store/{id}/product/{productId}")
-    fun product_update(@Header("Authorization") token : String,
+    fun product_update(@Header("Authorization") token: String,
                        @Path("id") storeId : String,
                        @Path("productId") productId : String,
-                       @Part("name") name : String,
-                       @Part("description") description : String,
-                       @Part("code") code : String?,
-                       @Part("price") price : Int,
+                       @PartMap partMap : HashMap<String, RequestBody>,
                        @Part("category_id") categoryId : Int,
-                       @Part("available_online") isOnline : Boolean = false,
-                       @Part("weight") weight : Double? = 1.0,
-                       @Part("status") status : Boolean = true,
-                       @Part("quantity") qty : Int?,
-                       @Part image : MultipartBody.Part)
-            : Call<WrappedResponse<Product>>
+                       @Part image : MultipartBody.Part
+    ) : Call<WrappedResponse<Product>>
+
+    @Multipart
+    @POST("v1/own/store/{id}/product/{productId}")
+    fun product_update(@Header("Authorization") token: String,
+                       @Path("id") storeId : String,
+                       @Path("productId") productId : String,
+                       @PartMap partMap : HashMap<String, RequestBody>,
+                       @Part("category_id") categoryId : Int
+    ) : Call<WrappedResponse<Product>>
+
+    @FormUrlEncoded
+    @PATCH("v1/promo")
+    fun promo_apply(@Header("Authorization") token : String, @Field("product_id") productId: String,
+                    @Field("discount_by_percent") discountByPercent : Float) : Call<WrappedResponse<Product>>
 
     @DELETE("v1/own/store/{id}/product/{productId}")
     fun product_delete(@Header("Authorization") token : String, @Path("id") storeId : String, @Path("productId") productId: String)
@@ -135,13 +118,10 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("v1/invitation/out")
-    fun invite(@Header("Authorization") token : String, @Field("requested_by_store") requestedByStoreId : Int,
-               @Field("role") role : Int, @Field("to") to : Int)
-            : Call<WrappedResponse<Invitation>>
+    fun invite(@Header("Authorization") token : String, @Field("requested_by_store") requestedByStoreId : Int, @Field("role") role : Int, @Field("to") to : Int): Call<WrappedResponse<Invitation>>
 
     @GET("v1/own/store/{storeId}/invitation/out")
-    fun invitation_sent(@Header("Authorization") token : String, @Path("storeId") storeId : Int) :
-            Call<WrappedListResponse<Invitation>>
+    fun invitation_sent(@Header("Authorization") token : String, @Path("storeId") storeId : Int) : Call<WrappedListResponse<Invitation>>
 
     @GET("v1/invitation/in")
     fun invitation_in(@Header("Authorization") token : String) : Call<WrappedListResponse<Invitation>>
@@ -169,9 +149,6 @@ interface ApiService {
 
     @GET("v1/product")
     fun catalog_search(@Header("Authorization") token : String, @Query("query") query : String) : Call<WrappedListResponse<Product>>
-
-    @GET("v1/store_as_employee")
-    fun store_as_employee(@Header("Authorization") token : String) : Call<WrappedResponse<Store>>
 
 
     @GET("v1/user/{id}")

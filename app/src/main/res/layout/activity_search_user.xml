@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.search_user_activity.SearchUserActivity">
+    tools:context=".ui.search_user.SearchUserActivity">
 
     <com.mancj.materialsearchbar.MaterialSearchBar
         android:id="@+id/search_bar"

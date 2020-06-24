@@ -1,6 +1,8 @@
 package com.ydhnwb.paperlessapp.repositories
 
+import com.google.gson.Gson
 import com.ydhnwb.paperlessapp.models.Product
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiService
@@ -14,11 +16,39 @@ import java.io.File
 
 class ProductRepository (private val api: ApiService){
 
+    fun applyPromo(token: String, productId: String, discountValueByPercent : Float, completion: (Boolean, Error?) -> Unit){
+        api.promo_apply(token, productId, discountValueByPercent).enqueue(object : Callback<WrappedResponse<Product>>{
+            override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
+                println(t.message)
+                completion(false, Error(t.message.toString()))
+            }
+
+            override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
+                when{
+                    response.isSuccessful -> {
+                        val body = response.body()
+                        if(body!!.status){
+                            completion(true, null)
+                        }else{
+                            completion(false, Error(body.message))
+                        }
+                    }
+                    !response.isSuccessful -> {
+                        println(response.message())
+                        completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
+                    }
+                }
+            }
+        })
+    }
+
+
     fun createProduct(token: String, storeId : String, product: Product, categoryId : Int, completion: (Boolean, Error?) -> Unit){
+        val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
         val file = File(product.image.toString())
         val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
         val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
-        api.product_store(token, storeId, product.name.toString(), product.description.toString() ,product.code, product.price!!, categoryId, product.availableOnline, product.weight, true, product.qty, image).enqueue(object : Callback<WrappedResponse<Product>>{
+        api.product_store(token, storeId, requestBody, categoryId , image).enqueue(object : Callback<WrappedResponse<Product>>{
                 override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
                     println(t.message)
                     completion(false, Error(t.message))
@@ -55,7 +85,6 @@ class ProductRepository (private val api: ApiService){
                     body?.let {
                         if (it.status){
                             completion(it.data, null)
-//                            hasFetched.value = true
                         }else{
                             completion(null, Error())
                         }
@@ -68,11 +97,11 @@ class ProductRepository (private val api: ApiService){
     }
 
     fun updateProductWithImage(token: String, storeId: String, product : Product, categoryId: Int, completion: (Boolean, Error?) -> Unit){
+        val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
         val file = File(product.image.toString())
         val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
         val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
-        api.product_update(token, storeId, product.id.toString(), product.name.toString(), product.description.toString(),
-            product.code, product.price!!, categoryId, product.availableOnline, product.weight, true, product.qty, image)
+        api.product_update(token, storeId, product.id.toString(), requestBody, categoryId, image)
             .enqueue(object : Callback<WrappedResponse<Product>>{
                 override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
                     println(t.message)
@@ -97,7 +126,8 @@ class ProductRepository (private val api: ApiService){
     }
 
     fun updateProductOnly(token: String, storeId: String, product : Product, categoryId: Int, completion: (Boolean, Error?) -> Unit){
-        api.product_update(token, storeId, product.id.toString(), product.name.toString(), product.description.toString(), product.code, product.price!!, categoryId, product.availableOnline, product.weight, true, product.qty).enqueue(object : Callback<WrappedResponse<Product>>{
+        val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
+        api.product_update(token, storeId, product.id.toString(), requestBody, categoryId).enqueue(object : Callback<WrappedResponse<Product>>{
             override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
                 println(t.message)
                 completion(false, Error(t.message.toString()))
