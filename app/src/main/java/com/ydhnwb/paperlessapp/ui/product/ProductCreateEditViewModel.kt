@@ -12,7 +12,6 @@ class ProductCreateEditViewModel (private val productRepository: ProductReposito
     private val state: SingleLiveEvent<ProductCreateEditState> = SingleLiveEvent()
     private val currentProduct = MutableLiveData<Product>()
     private val categories = MutableLiveData<List<Category>>()
-    private val discountValueInPercent = MutableLiveData<Float>()
 
     private fun setLoading(){ state.value = ProductCreateEditState.IsLoading(true) }
     private fun hideLoading(){ state.value = ProductCreateEditState.IsLoading(false) }
@@ -21,15 +20,12 @@ class ProductCreateEditViewModel (private val productRepository: ProductReposito
     private fun resetState(){ state.value = ProductCreateEditState.Reset }
     private fun success(isCreate: Boolean){ state.value = ProductCreateEditState.Success(isCreate) }
 
-
     fun createProduct(token: String, storeId : String, product: Product, categoryId : Int){
         setLoading()
         productRepository.createProduct(token, storeId, product, categoryId){ resultBool, error ->
             hideLoading()
             error?.let { it.message?.let { message -> toast(message) } }
-            if(resultBool){
-                success(true)
-            }
+            if(resultBool){ success(true) }
         }
     }
 
@@ -44,9 +40,6 @@ class ProductCreateEditViewModel (private val productRepository: ProductReposito
 
     fun updateProduct(token: String, storeId: String, product : Product, categoryId: Int, withImage: Boolean){
         setLoading()
-        discountValueInPercent.value?.let { discount ->
-            applyPromo(token, product.id.toString(), discount)
-        }
         if(withImage){
             productRepository.updateProductWithImage(token, storeId, product, categoryId){ resultBool, error ->
                 hideLoading()
@@ -64,21 +57,8 @@ class ProductCreateEditViewModel (private val productRepository: ProductReposito
                 }
             }
         }
+
     }
-
-
-    fun applyPromo(token: String, productId: String, discountValueInPercent: Float){
-        setLoading()
-        productRepository.applyPromo(token, productId, discountValueInPercent){ bool, err ->
-            hideLoading()
-            err?.let { it.message?.let { m -> toast(m) } }
-            if(bool){
-                //next applied
-            }
-        }
-    }
-
-    fun setDiscountValueInPercent(discountValue: Float) = discountValueInPercent.postValue(discountValue)
 
     fun deleteProduct(token: String, storeId: String, productId: String){
         setLoading()

@@ -67,7 +67,14 @@ class ProductActivity : AppCompatActivity() {
     private fun observeState() = productCreateEditViewModel.listenToUIState().observer(this, Observer { handleUIState(it) })
     private fun observeCategories() = productCreateEditViewModel.listenToCategories().observe(this, Observer { attachToSpinner(it) })
 
+    private fun handleDiscountValue(discountValue: Float?){
+        if(discountValue != null){
+            et_product_promo.setText(discountValue.toString())
+        }else{
+            et_product_promo.text?.clear()
+        }
 
+    }
 
     private fun isLoading(b: Boolean){
         btn_submit.isEnabled = !b
@@ -126,8 +133,6 @@ class ProductActivity : AppCompatActivity() {
                         if(it > 100 || it <= 0){
                             setErrorPromo(resources.getString(R.string.error_discount_not_valid))
                             et_product_promo.text?.clear()
-                        }else{
-                            productCreateEditViewModel.setDiscountValueInPercent(discountValue)
                         }
                     } ?:run {
                         setErrorPromo(resources.getString(R.string.error_discount_exception))
@@ -153,8 +158,8 @@ class ProductActivity : AppCompatActivity() {
                 et_product_quantity.setText(it.qty.toString())
             }
             product_image.load(it.image)
-            product.discountByPercent?.let { discount ->
-                fillDiscountByPercent(discount)
+            if(it.discountByPercent != null && it.discountByPercent != 0F){
+                fillDiscountByPercent(it.discountByPercent!!)
             }
             it.code?.let { code ->
                 et_prodouct_code.setText(code)
@@ -193,7 +198,11 @@ class ProductActivity : AppCompatActivity() {
 
     private fun saveChanges(){
         btn_submit.setOnClickListener {
+            showToast("is checked ${cb_product_promo.isChecked} and ${cb_product_have_stock.isChecked}")
             product.apply {
+                this.discountByPercent = if (cb_product_promo.isChecked) {
+                    et_product_promo.text.toString().trim().toFloatOrNull()
+                } else null
                 this.name = et_product_name.text.toString().trim()
                 this.code = if (et_prodouct_code.text.toString().trim().isNotEmpty()) et_prodouct_code.text.toString().trim() else null
                 this.description = et_prodouct_desc.text.toString().trim()
@@ -201,7 +210,8 @@ class ProductActivity : AppCompatActivity() {
                 this.category = sp_product_category.selectedItem as Category?
                 this.qty = if(cb_product_have_stock.isChecked) et_product_quantity.text.toString().trim().toIntOrNull() else null
             }
-            product.category?.let {cat ->
+
+            product.category?.let { cat ->
                 if(productCreateEditViewModel.validate(product.name.toString(), product.description.toString(), product.price, product.qty, cat.id, cb_product_have_stock.isChecked)){
                     getPassedProduct()?.let { passedProduct ->
                         val isUpdateImage = !passedProduct.image.equals(product.image)
@@ -226,7 +236,12 @@ class ProductActivity : AppCompatActivity() {
 
     private fun checkBoxIsPromo(){
         cb_product_promo.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked)in_product_promo.visible() else in_product_promo.gone()
+            if(isChecked){
+                in_product_promo.visible()
+            } else {
+                et_product_promo.text?.clear()
+                in_product_promo.gone()
+            }
         }
     }
 

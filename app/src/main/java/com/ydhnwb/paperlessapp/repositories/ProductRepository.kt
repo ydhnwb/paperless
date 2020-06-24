@@ -1,6 +1,7 @@
 package com.ydhnwb.paperlessapp.repositories
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
@@ -98,6 +99,7 @@ class ProductRepository (private val api: ApiService){
 
     fun updateProductWithImage(token: String, storeId: String, product : Product, categoryId: Int, completion: (Boolean, Error?) -> Unit){
         val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
+        println(requestBody)
         val file = File(product.image.toString())
         val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
         val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
@@ -125,16 +127,19 @@ class ProductRepository (private val api: ApiService){
             })
     }
 
-    fun updateProductOnly(token: String, storeId: String, product : Product, categoryId: Int, completion: (Boolean, Error?) -> Unit){
-        val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
-        api.product_update(token, storeId, product.id.toString(), requestBody, categoryId).enqueue(object : Callback<WrappedResponse<Product>>{
+    fun updateProductOnly(token: String, storeId: String, product : Product,categoryId: Int, completion: (Boolean, Error?) -> Unit){
+        product.categoryId = categoryId
+        val gsonBuilder = GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create()
+        val requestBody = gsonBuilder.toJson(product)
+        println(gsonBuilder.toJson(product))
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestBody)
+        api.product_update(token, storeId, product.id.toString(), body).enqueue(object : Callback<WrappedResponse<Product>>{
             override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
                 println(t.message)
                 completion(false, Error(t.message.toString()))
             }
 
             override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
-                println(response)
                 if(response.isSuccessful){
                     val b = response.body()
                     b?.let {
@@ -144,9 +149,10 @@ class ProductRepository (private val api: ApiService){
                             completion(false, Error("Cannot update product. Try again later"))
                         }
                     }
-                    }else{
-                        completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
-                    }
+                }else{
+                    println(response.message())
+                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
+                }
             }
         })
     }

@@ -92,13 +92,13 @@ interface ApiService {
                        @Part image : MultipartBody.Part
     ) : Call<WrappedResponse<Product>>
 
-    @Multipart
+
+
     @POST("v1/own/store/{id}/product/{productId}")
     fun product_update(@Header("Authorization") token: String,
                        @Path("id") storeId : String,
                        @Path("productId") productId : String,
-                       @PartMap partMap : HashMap<String, RequestBody>,
-                       @Part("category_id") categoryId : Int
+                       @Body body : RequestBody
     ) : Call<WrappedResponse<Product>>
 
     @FormUrlEncoded

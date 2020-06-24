@@ -24,20 +24,16 @@ class ProductFragment : Fragment(R.layout.fragment_product) {
         super.onViewCreated(view, savedInstanceState)
         view.rv_manage_product.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter =
-                DetailedProductAdapter(
-                    mutableListOf(),
-                    activity!!,
-                    parentStoreViewModel.listenToCurrentStore().value!!
-                )
+            adapter = DetailedProductAdapter(mutableListOf(), activity!!, parentStoreViewModel.listenToCurrentStore().value!!)
         }
         view.fab_add.setOnClickListener {
             startActivity(Intent(activity, ProductActivity::class.java).apply {
-                putExtra("STORE", parentStoreViewModel.listenToCurrentStore().value)
+                putExtra("STORE",
+                    parentStoreViewModel.listenToCurrentStore().value)
             })
         }
         productViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
-        productViewModel.listenToProducts().observe(viewLifecycleOwner, Observer {handleData(it) })
+        productViewModel.listenToProducts().observe(viewLifecycleOwner, Observer { handleData(it) })
     }
 
     override fun onResume() {
