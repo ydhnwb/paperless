@@ -131,7 +131,6 @@ class ProductRepository (private val api: ApiService){
         product.categoryId = categoryId
         val gsonBuilder = GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create()
         val requestBody = gsonBuilder.toJson(product)
-        println(gsonBuilder.toJson(product))
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestBody)
         api.product_update(token, storeId, product.id.toString(), body).enqueue(object : Callback<WrappedResponse<Product>>{
             override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {

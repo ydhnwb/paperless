@@ -128,7 +128,7 @@ class ProductActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 val value = s.toString()
                 if(value.isNotEmpty()){
-                    val discountValue = value.substring(0,1).toFloatOrNull()
+                    val discountValue = value.toFloatOrNull()
                     discountValue?.let {
                         if(it > 100 || it <= 0){
                             setErrorPromo(resources.getString(R.string.error_discount_not_valid))
