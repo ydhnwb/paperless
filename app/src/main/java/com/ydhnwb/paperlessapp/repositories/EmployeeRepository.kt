@@ -3,58 +3,69 @@ package com.ydhnwb.paperlessapp.repositories
 import com.ydhnwb.paperlessapp.models.EmployeeResponse
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
+import com.ydhnwb.paperlessapp.utilities.ArrayResponse
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class EmployeeRepository (private val api: ApiService){
-    fun getEmployees(token: String, storeId : String, completion: (EmployeeResponse?, Error?) -> Unit){
+interface EmployeeContract {
+    fun getEmployees(token: String, storeId: String, listener: SingleResponse<EmployeeResponse>)
+    fun removeEmployee(token: String, storeId: String, employeeId: String, listener: SingleResponse<Store>)
+}
+
+class EmployeeRepository (private val api: ApiService) : EmployeeContract{
+
+    override fun getEmployees(token: String, storeId: String, listener: SingleResponse<EmployeeResponse>) {
         api.store_employee(token, storeId).enqueue(object:
             Callback<WrappedResponse<EmployeeResponse>> {
             override fun onFailure(call: Call<WrappedResponse<EmployeeResponse>>, t: Throwable) {
                 println(t.message)
-                completion(null, Error(t.message.toString()))
+                listener.onFailure(Error(t.message))
             }
 
             override fun onResponse(call: Call<WrappedResponse<EmployeeResponse>>, response: Response<WrappedResponse<EmployeeResponse>>) {
-                if(response.isSuccessful){
-                    val b = response.body()
-                    b?.let {
-                        if(it.status){
-                            completion(it.data!!, null)
-                        }else{
-                            completion(null, Error())
+                when{
+                    response.isSuccessful -> {
+                        val b = response.body()
+                        b?.let {
+                            if(it.status){
+                                listener.onSuccess(b.data)
+                            }else{
+                                listener.onFailure(Error())
+                            }
                         }
                     }
-                }else{
-                    completion(null, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    else -> {
+                        println("Error ${response.message()} [${response.code()}]")
+                        listener.onFailure(Error(response.message()))
+                    }
                 }
             }
         })
     }
 
-    fun removeEmployee(token: String, storeId: String, employeeId: String, completion: (Boolean, Error?) -> Unit){
+    override fun removeEmployee(token: String, storeId: String, employeeId: String, listener: SingleResponse<Store>) {
         api.employee_remove(token, storeId, employeeId).enqueue(object: Callback<WrappedResponse<Store>>{
             override fun onFailure(call: Call<WrappedResponse<Store>>, t: Throwable) {
                 println(t.message)
-                completion(false, Error(t.message.toString()))
+                listener.onFailure(Error(t.message))
             }
 
             override fun onResponse(call: Call<WrappedResponse<Store>>, response: Response<WrappedResponse<Store>>) {
                 if(response.isSuccessful){
                     val b = response.body()
                     if(b!!.status){
-                        completion(true, null)
+                        listener.onSuccess(b.data)
                     }else{
-                        completion(false, Error("Tidak dapat menghapus karyawan"))
+                        listener.onFailure(Error(b.message))
                     }
                 }else{
-                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
+                    listener.onFailure(Error(response.message()))
                 }
             }
-
         })
     }
 }

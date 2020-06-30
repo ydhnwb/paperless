@@ -1,6 +1,7 @@
 package com.ydhnwb.paperlessapp.models
 
 import android.os.Parcelable
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -8,10 +9,15 @@ import kotlinx.android.parcel.Parcelize
 data class Store(
     @SerializedName("id") var id : Int?,
     @SerializedName("owner_id") var owner_id : Int?,
+    @Expose
     @SerializedName("name") var name : String?,
+    @Expose
     @SerializedName("description") var description : String?,
+    @Expose
     @SerializedName("email") var email : String?,
+    @Expose
     @SerializedName("phone") var phone : String?,
+    @Expose
     @SerializedName("address") var address : String?,
     @SerializedName("rating") var rating : Float?,
     @SerializedName("store_logo") var store_logo : String?,

@@ -2,12 +2,14 @@ package com.ydhnwb.paperlessapp.ui.analytic.selling
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ydhnwb.paperlessapp.models.History
 import com.ydhnwb.paperlessapp.models.OrderHistory
 import com.ydhnwb.paperlessapp.models.OrderHistoryDetail
 import com.ydhnwb.paperlessapp.models.ProfitByMonth
 import com.ydhnwb.paperlessapp.repositories.HistoryRepository
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,20 +32,22 @@ class SellingAnalyticViewModel (private val historyRepository: HistoryRepository
 
     fun fetchStoreInfo(token: String, storeId: String){
         setLoading()
-        historyRepository.fetchHistory(token, storeId.toInt()){ s, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> toast(m) } }
-            s?.let {
+        historyRepository.fetchHistory(token, storeId.toInt(), object: SingleResponse<History>{
+            override fun onSuccess(data: History?) {
                 hideLoading()
-                val orders = it.store?.orderIn
-                sellingHistory.postValue(orders)
-                fetchSellingProducts()
-                transformTransactionByHour()
-                transformTransactionByMonth()
-                transformTransactionByMonth()
-                transformProfitByMonth()
+                data?.let {
+                    sellingHistory.postValue(it.store?.orderIn)
+                    fetchSellingProducts()
+                    transformTransactionByHour()
+                    transformTransactionByMonth()
+                    transformProfitByMonth()
+                }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     private fun fetchSellingProducts() {
@@ -161,7 +165,6 @@ class SellingAnalyticViewModel (private val historyRepository: HistoryRepository
 
 
     fun listenToUIState() = state
-    fun listenToHistory() = sellingHistory
     fun listenToSellingProductCluster() = sellingProductCluster
     fun listenToSellingByHour() = sellingByHour
     fun listenToSellingByMonth() = sellingByMonth

@@ -8,7 +8,9 @@ import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.repositories.ProductRepository
 import com.ydhnwb.paperlessapp.repositories.StoreRepository
 import com.ydhnwb.paperlessapp.repositories.UserRepository
+import com.ydhnwb.paperlessapp.utilities.ArrayResponse
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class ManageStoreViewModel (private val storeRepository: StoreRepository,private val userRepository: UserRepository,private val productRepository: ProductRepository) : ViewModel(){
     private val state : SingleLiveEvent<ManageStoreState> = SingleLiveEvent()
@@ -29,36 +31,39 @@ class ManageStoreViewModel (private val storeRepository: StoreRepository,private
 
     fun downloadReport(token: String, storeId: String){
         setLoading()
-        storeRepository.downloadReport(token, storeId){ url, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> toast(m) } }
-            url?.let {
-                downloadedUrl(it)
+        storeRepository.downloadReport(token, storeId, object : SingleResponse<String>{
+            override fun onSuccess(data: String?) {
+                hideLoading()
+                data?.let { url -> downloadedUrl(url) }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun setCurrentManagedStore(store: Store) = currentStore.postValue(store)
 
     fun fetchCurrentUser(token: String){
-        userRepository.getCurrentProfile(token){ resultUser, error ->
-            error?.let { it.message?.let { m -> toast(m) } }
-            resultUser?.let {
-                currentUser.postValue(it)
-            }
-        }
+        userRepository.getCurrentProfile(token, object: SingleResponse<User>{
+            override fun onSuccess(data: User?) { data?.let { currentUser.postValue(it) } }
+            override fun onFailure(err: Error) { err.message?.let { toast(it) } }
+        })
     }
 
     fun fetchAllProduct(token: String, storeId : String){
         setLoading()
-        productRepository.fetchAllProducts(token, storeId){ resultProducts, error ->
-            hideLoading()
-            error?.let { it.message?.let { m -> toast(m) } }
-            resultProducts?.let {
-                allProducts.postValue(it)
-                hasFetched.value = true
+        productRepository.fetchAllProducts(token, storeId, object :ArrayResponse<Product>{
+            override fun onSuccess(datas: List<Product>?) {
+                hideLoading()
+                datas?.let { allProducts.postValue(it).also { hasFetched.value = true } }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun addSelectedProduct(product: Product){

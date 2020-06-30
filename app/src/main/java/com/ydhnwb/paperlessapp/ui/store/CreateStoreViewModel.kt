@@ -5,6 +5,7 @@ import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.repositories.StoreRepository
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class CreateStoreViewModel (private val storeRepository: StoreRepository) : ViewModel(){
     private val state : SingleLiveEvent<CreateStoreState> = SingleLiveEvent()
@@ -45,43 +46,57 @@ class CreateStoreViewModel (private val storeRepository: StoreRepository) : View
 
     fun createStore(token : String, store: Store){
         setLoading()
-        storeRepository.storeCreate(token, store){ resultBool, e ->
-            hideLoading()
-            e?.let { it.message?.let { x -> toast(x) } }
-            if(resultBool){
-                success(true)
+        storeRepository.storeCreate(token, store, object: SingleResponse<Store>{
+            override fun onSuccess(data: Store?) {
+                hideLoading()
+                data?.let { success(true) }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun updateStore(token: String, store: Store){
         setLoading()
         if(store.store_logo != null){
-            storeRepository.storeUpdateWithImage(token, store){ resultBool, e ->
-                hideLoading()
-                e?.let { it.message?.let { m -> toast(m) } }
-                if(resultBool){
-                    success(false)
+            storeRepository.storeUpdateWithImage(token, store, object: SingleResponse<Store>{
+                override fun onSuccess(data: Store?) {
+                    hideLoading()
+                    data?.let { success(false) }
                 }
-            }
+                override fun onFailure(err: Error) {
+                    hideLoading()
+                    err.message?.let { toast(it) }
+                }
+            })
         }else{
-            storeRepository.storeUpdateWithoutImage(token, store){ resultBool, e ->
-                hideLoading()
-                e?.let { it.message?.let { m -> toast(m) } }
-                if(resultBool){
-                    success(false)
+            storeRepository.storeUpdateWithoutImage(token, store, object: SingleResponse<Store>{
+                override fun onSuccess(data: Store?) {
+                    hideLoading()
+                    data?.let { success(false) }
                 }
-            }
+                override fun onFailure(err: Error) {
+                    hideLoading()
+                    err.message?.let { toast(it) }
+                }
+            })
         }
     }
 
     fun deleteStore(token: String, storeId: String){
         setLoading()
-        storeRepository.deleteStore(token, storeId){ resultBool, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> toast(m) } }
-            if(resultBool){ successDelete() }
-        }
+        storeRepository.deleteStore(token, storeId, object: SingleResponse<Store>{
+            override fun onSuccess(data: Store?) {
+                hideLoading()
+                data?.let { successDelete() }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun listenToUIState() = state

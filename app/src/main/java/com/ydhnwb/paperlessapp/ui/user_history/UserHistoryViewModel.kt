@@ -2,9 +2,11 @@ package com.ydhnwb.paperlessapp.ui.user_history
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ydhnwb.paperlessapp.models.History
 import com.ydhnwb.paperlessapp.models.OrderHistory
 import com.ydhnwb.paperlessapp.repositories.HistoryRepository
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class UserHistoryViewModel (private val historyRepo: HistoryRepository) : ViewModel(){
     private val state : SingleLiveEvent<UserHistoryState> = SingleLiveEvent()
@@ -16,15 +18,16 @@ class UserHistoryViewModel (private val historyRepo: HistoryRepository) : ViewMo
 
     fun fetchHistory(token: String){
         setLoading()
-        historyRepo.fetchHistory(token, null){ s, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> toast(m) } }
-            s?.let {
+        historyRepo.fetchHistory(token, null, object : SingleResponse<History>{
+            override fun onSuccess(data: History?) {
                 hideLoading()
-                val orders = it.user?.orders
-                histories.postValue(orders)
+                data?.let { histories.postValue(it.user?.orders) }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
 

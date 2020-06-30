@@ -1,9 +1,11 @@
 package com.ydhnwb.paperlessapp.ui.login
 
 import androidx.lifecycle.ViewModel
+import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.repositories.UserRepository
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class LoginViewModel (private val userRepository: UserRepository) : ViewModel() {
     private val state : SingleLiveEvent<LoginState> = SingleLiveEvent()
@@ -29,11 +31,16 @@ class LoginViewModel (private val userRepository: UserRepository) : ViewModel() 
 
     fun login(email: String, password: String){
         setLoading()
-        userRepository.login(email, password){ resultString, error ->
-            hideLoading()
-            error?.let { e -> toast(e.message.toString()) }
-            resultString?.let { token -> success(token) }
-        }
+        userRepository.login(email, password, object: SingleResponse<User>{
+            override fun onSuccess(data: User?) {
+                hideLoading()
+                data?.let { success(it.api_token.toString()) }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun listenToUIState() = state

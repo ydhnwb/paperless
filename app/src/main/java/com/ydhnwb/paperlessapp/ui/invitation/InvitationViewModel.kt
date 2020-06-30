@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Invitation
 import com.ydhnwb.paperlessapp.repositories.InvitationRepository
+import com.ydhnwb.paperlessapp.utilities.ArrayResponse
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class InvitationViewModel (private val invitationRepository: InvitationRepository) : ViewModel(){
     private val state : SingleLiveEvent<InvitationState> = SingleLiveEvent()
@@ -20,45 +22,59 @@ class InvitationViewModel (private val invitationRepository: InvitationRepositor
 
     fun fetchInvitationSent(token: String, storeId: Int){
         setLoading()
-        invitationRepository.invitationSent(token, storeId){ resultInvitations, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> toast(m) } }
-            resultInvitations?.let { invitationsSent.postValue(it) }
-        }
+        invitationRepository.invitationSent(token, storeId, object: ArrayResponse<Invitation>{
+            override fun onSuccess(datas: List<Invitation>?) {
+                hideLoading()
+                datas?.let { invitationsSent.postValue(it) }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
-
-
-
 
     fun fetchInvitationIn(token: String){
         setLoading()
-        invitationRepository.invitationIn(token){ resultInvitations, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> toast(m) } }
-            resultInvitations?.let {
-                invitationsIn.postValue(it)
+        invitationRepository.invitationIn(token, object: ArrayResponse<Invitation>{
+            override fun onSuccess(datas: List<Invitation>?) {
+                hideLoading()
+                datas?.let { invitationsIn.postValue(it) }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun acceptInvitation(token: String, invitationId: String){
         setLoading()
-        invitationRepository.acceptInvitation(token, invitationId){ b, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> alert(m) } }
-            if(b){ success() }
-        }
+        invitationRepository.acceptInvitation(token, invitationId, object: SingleResponse<Invitation>{
+            override fun onSuccess(data: Invitation?) {
+                hideLoading()
+                data?.let { success() }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { alert(it) }
+            }
+        })
     }
 
     fun rejectInvitation(token: String, invitationId: String){
         setLoading()
-        invitationRepository.rejectInvitation(token, invitationId){ b, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> alert(m) } }
-            if(b){ success() }
-        }
+        invitationRepository.rejectInvitation(token, invitationId, object: SingleResponse<Invitation>{
+            override fun onSuccess(data: Invitation?) {
+                hideLoading()
+                data?.let { success() }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { alert(it) }
+            }
+        })
     }
-
 
     fun listenToUIState() = state
     fun listenToInvitationIn() = invitationsIn

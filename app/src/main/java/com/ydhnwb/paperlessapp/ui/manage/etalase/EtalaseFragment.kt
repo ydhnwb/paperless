@@ -123,7 +123,14 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
             rv_detail_order.adapter?.let { a->
                 if(a is SelectedProductAdapter){ a.updateList(it) }
                 val totalQuantity = it.sumBy { product -> product.selectedQuantity!! }
-                val totalPrice = if(it.isEmpty()){ 0 }else{ it.sumBy { product -> product.price!! * product.selectedQuantity!! } }
+                val totalPrice = if(it.isEmpty()){ 0 }else{ it.sumBy { product ->
+                    val temp = product.price!! * product.selectedQuantity!!
+                    if(product.discountByPercent != null){
+                        temp - (temp * product.discountByPercent!! / 100).toInt()
+                    }else{
+                        temp
+                    }
+                } }
                 tv_item_indicator.text = "Tagih ($totalQuantity items)"
                 tv_total_price.text = PaperlessUtil.setToIDR(totalPrice)
             }

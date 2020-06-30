@@ -1,8 +1,10 @@
 package com.ydhnwb.paperlessapp.fragments.dialog
 
 import androidx.lifecycle.ViewModel
+import com.ydhnwb.paperlessapp.models.Invitation
 import com.ydhnwb.paperlessapp.repositories.InvitationRepository
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class InvitationDialogViewModel (private val invitationRepository: InvitationRepository) : ViewModel(){
     private val state : SingleLiveEvent<InvitationDialogState> = SingleLiveEvent()
@@ -14,11 +16,16 @@ class InvitationDialogViewModel (private val invitationRepository: InvitationRep
 
     fun invite(token: String, storeId: Int, role: Boolean, to: Int){
         setLoading()
-        invitationRepository.invite(token, storeId, role, to){ bool, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> alert(m) } }
-            if(bool){ success() }
-        }
+        invitationRepository.invite(token, storeId, role, to, object : SingleResponse<Invitation>{
+            override fun onSuccess(data: Invitation?) {
+                hideLoading()
+                data?.let { success() }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { alert(it) }
+            }
+        })
     }
     fun listenToUIState() = state
 }

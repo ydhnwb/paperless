@@ -3,7 +3,6 @@ package com.ydhnwb.paperlessapp.ui.manage.employee
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +12,7 @@ import com.ydhnwb.paperlessapp.ui.search_user.SearchUserActivity
 import com.ydhnwb.paperlessapp.models.Employee
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.showToast
 import kotlinx.android.synthetic.main.fragment_employee.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,12 +24,18 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        employeeViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
-        employeeViewModel.listenToEmployees().observe(viewLifecycleOwner, Observer {handleEmployee(it) })
+        observe()
         initEmptyView()
         addEmployee()
-
     }
+
+    private fun observe(){
+        observeState()
+        observeEmployees()
+    }
+
+    private fun observeState() = employeeViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
+    private fun observeEmployees() = employeeViewModel.listenToEmployees().observe(viewLifecycleOwner, Observer {handleEmployee(it) })
 
     private fun initEmptyView(){
         if(employeeViewModel.listenToEmployees().value == null || employeeViewModel.listenToEmployees().value!!.isEmpty()){
@@ -42,10 +48,10 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
     private fun handleUIState(it: EmployeeState){
         when(it){
             is EmployeeState.IsLoading -> { if(it.state){ view!!.loading.visibility = View.VISIBLE }else{ view!!.loading.visibility = View.GONE } }
-            is EmployeeState.ShowToast -> toast(it.message)
+            is EmployeeState.ShowToast -> requireActivity().showToast(it.message)
             is EmployeeState.SuccessDelete -> {
-                toast(resources.getString(R.string.info_success_delete_employee))
                 employeeViewModel.fetchEmployees(PaperlessUtil.getToken(activity!!), parentStoreViewModel.listenToCurrentStore().value?.id.toString())
+                requireActivity().showToast(resources.getString(R.string.info_success_delete_employee))
             }
         }
     }
@@ -79,8 +85,6 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
             })
         }
     }
-
-    private fun toast(message: String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
 
     override fun onResume() {
         super.onResume()

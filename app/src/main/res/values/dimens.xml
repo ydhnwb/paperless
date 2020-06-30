@@ -11,4 +11,5 @@
     <dimen name="general_size_64">64dp</dimen>
     <dimen name="margin_size_16">16dp</dimen>
     <dimen name="margin_size_4">4dp</dimen>
+    <dimen name="margin_size_8">8dp</dimen>
 </resources>

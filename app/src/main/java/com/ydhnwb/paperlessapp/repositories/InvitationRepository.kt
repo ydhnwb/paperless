@@ -1,6 +1,8 @@
 package com.ydhnwb.paperlessapp.repositories
 
 import com.ydhnwb.paperlessapp.models.Invitation
+import com.ydhnwb.paperlessapp.utilities.ArrayResponse
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiService
@@ -8,124 +10,92 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class InvitationRepository (private val api: ApiService){
+interface InvitationContract {
+    fun invitationSent(token: String, storeId: Int, listener: ArrayResponse<Invitation>)
+    fun invite(token : String, storeId: Int, role: Boolean, to : Int, listener: SingleResponse<Invitation>)
+    fun invitationIn(token: String, listener: ArrayResponse<Invitation>)
+    fun acceptInvitation(token: String, invitationId: String, listener: SingleResponse<Invitation>)
+    fun rejectInvitation(token: String, invitationId: String, listener: SingleResponse<Invitation>)
+}
 
-    fun invitationSent(token: String, storeId: Int, completion: (List<Invitation>?, Error?) -> Unit){
+class InvitationRepository (private val api: ApiService) : InvitationContract {
+
+    override fun invitationSent(token: String, storeId: Int, listener: ArrayResponse<Invitation>) {
         api.invitation_sent(token, storeId).enqueue(object : Callback<WrappedListResponse<Invitation>>{
-            override fun onFailure(call: Call<WrappedListResponse<Invitation>>, t: Throwable) {
-                println(t.message)
-                completion(null, Error(t.message.toString()))
-            }
+            override fun onFailure(call: Call<WrappedListResponse<Invitation>>, t: Throwable) = listener.onFailure(Error(t.message))
 
             override fun onResponse(call: Call<WrappedListResponse<Invitation>>, response: Response<WrappedListResponse<Invitation>>) {
-                if (response.isSuccessful){
-                    val b = response.body()
-                    b?.let {
-                        if (it.status){
-                            completion(it.data, null)
-                        }else{
-                            completion(null, Error(b.message))
-                        }
-                    }
-                }else{
-                    completion(null, Error("Error ${response.message()} with status code ${response.code()}"))
+                when {
+                    response.isSuccessful -> listener.onSuccess(response.body()!!.data)
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })
     }
 
-    fun invite(token : String, storeId: Int, role: Boolean, to : Int, completion: (Boolean, Error?) -> Unit){
+    override fun invite(token: String, storeId: Int, role: Boolean, to: Int, listener: SingleResponse<Invitation>) {
         val r = if(role) 1 else 0
         api.invite(token, storeId, r, to).enqueue(object : Callback<WrappedResponse<Invitation>>{
-            override fun onFailure(call: Call<WrappedResponse<Invitation>>, t: Throwable) {
-                println(t.message)
-                completion(false, Error(t.message.toString()))
-            }
+            override fun onFailure(call: Call<WrappedResponse<Invitation>>, t: Throwable) = listener.onFailure(Error(t.message))
 
             override fun onResponse(call: Call<WrappedResponse<Invitation>>, response: Response<WrappedResponse<Invitation>>) {
-                if(response.isSuccessful){
-                    val b = response.body()
-                    b?.let {
-                        if(it.status){
-                            completion(true, null)
-                        }else{
-                            completion(false, Error(it.message))
+                when{
+                    response.isSuccessful -> {
+                        val b = response.body()
+                        b?.let {
+                            if(it.status) listener.onSuccess(it.data) else listener.onFailure(Error(it.message))
                         }
                     }
-                }else{
-                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })
     }
 
-
-
-    fun invitationIn(token: String, completion: (List<Invitation>?, Error?) -> Unit){
+    override fun invitationIn(token: String, listener: ArrayResponse<Invitation>) {
         api.invitation_in(token).enqueue(object : Callback<WrappedListResponse<Invitation>> {
-            override fun onFailure(call: Call<WrappedListResponse<Invitation>>, t: Throwable) {
-                println(t.message)
-                completion(null, Error(t.message.toString()))
-            }
+            override fun onFailure(call: Call<WrappedListResponse<Invitation>>, t: Throwable) = listener.onFailure(Error(t.message))
 
             override fun onResponse(call: Call<WrappedListResponse<Invitation>>, response: Response<WrappedListResponse<Invitation>>) {
-                if (response.isSuccessful){
-                    val b = response.body()
-                    b?.let {
-                        if (it.status){
-                            completion(it.data, null)
-                        }
-                        completion(it.data, Error())
-                    }
-                }else{
-                    completion(null, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                when{
+                    response.isSuccessful -> listener.onSuccess(response.body()!!.data)
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })
     }
 
-    fun acceptInvitation(token: String, invitationId : String, completion: (Boolean, Error?) -> Unit){
+    override fun acceptInvitation(token: String, invitationId: String, listener: SingleResponse<Invitation>) {
         api.invitation_acc(token, invitationId).enqueue(object :
             Callback<WrappedResponse<Invitation>> {
-            override fun onFailure(call: Call<WrappedResponse<Invitation>>, t: Throwable) {
-                println(t.message)
-                completion(false, Error(t.message.toString()))
-            }
+            override fun onFailure(call: Call<WrappedResponse<Invitation>>, t: Throwable) = listener.onFailure(Error(t.message))
 
             override fun onResponse(call: Call<WrappedResponse<Invitation>>, response: Response<WrappedResponse<Invitation>>) {
-                if(response.isSuccessful){
-                    if(response.body()!!.status){
-                        completion(true, null)
-                    }else{
-                        completion(false, Error("Cannot accept invitation. Try again later"))
+                when{
+                    response.isSuccessful -> {
+                        val b = response.body()
+                        if(b!!.status) listener.onSuccess(b.data) else listener.onFailure(Error("Cannot accept invitation"))
                     }
-                }else{
-                    completion(false, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })
     }
 
-    fun rejectInvitation(token: String, invitationId : String, completion: (Boolean, Error?) -> Unit){
+    override fun rejectInvitation(token: String, invitationId: String, listener: SingleResponse<Invitation>) {
         api.invitation_reject(token, invitationId).enqueue(object :
             Callback<WrappedResponse<Invitation>> {
-            override fun onFailure(call: Call<WrappedResponse<Invitation>>, t: Throwable) {
-                println(t.message)
-                completion(false, Error(t.message.toString()))
-            }
+            override fun onFailure(call: Call<WrappedResponse<Invitation>>, t: Throwable) = listener.onFailure(Error(t.message))
 
             override fun onResponse(call: Call<WrappedResponse<Invitation>>, response: Response<WrappedResponse<Invitation>>) {
-                if(response.isSuccessful){
-                    if(response.body()!!.status){
-                        completion(true, null)
-                    }else{
-                        completion(false, Error("Cannot accept invitation. Try again later"))
+                when{
+                    response.isSuccessful -> {
+                        val b = response.body()
+                        if(b!!.status) listener.onSuccess(b.data) else listener.onFailure(Error(b.message))
                     }
-                }else{
-                    completion(false, Error("Error ${response.errorBody()} with status code ${response.code()}"))
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })
     }
-
 }

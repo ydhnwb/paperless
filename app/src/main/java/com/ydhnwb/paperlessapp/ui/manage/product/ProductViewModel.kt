@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.repositories.ProductRepository
+import com.ydhnwb.paperlessapp.utilities.ArrayResponse
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 
 class ProductViewModel (private val productRepository: ProductRepository) : ViewModel(){
@@ -16,11 +17,16 @@ class ProductViewModel (private val productRepository: ProductRepository) : View
 
     fun fetchProducts(token: String, storeId: String){
         setLoading()
-        productRepository.fetchAllProducts(token, storeId){ resultProducts, error ->
-            hideLoading()
-            error?.let { it.message?.let { m -> toast(m) } }
-            resultProducts?.let { products.postValue(it) }
-        }
+        productRepository.fetchAllProducts(token, storeId, object : ArrayResponse<Product>{
+            override fun onSuccess(datas: List<Product>?) {
+                hideLoading()
+                datas?.let { products.postValue(it) }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun listenToUIState() = state

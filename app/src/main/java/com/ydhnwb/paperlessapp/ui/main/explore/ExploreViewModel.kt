@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Category
 import com.ydhnwb.paperlessapp.repositories.CategoryRepository
+import com.ydhnwb.paperlessapp.utilities.ArrayResponse
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 
 class ExploreViewModel (private val categoryRepository: CategoryRepository) : ViewModel(){
@@ -16,13 +17,16 @@ class ExploreViewModel (private val categoryRepository: CategoryRepository) : Vi
 
     fun fetchCategories(){
         setLoading()
-        categoryRepository.getCategories { resultCategories, error ->
-            hideLoading()
-            error?.let { it.message?.let { message -> toast(message) } }
-            resultCategories?.let {
-                categories.postValue(it)
+        categoryRepository.getCategories(object: ArrayResponse<Category>{
+            override fun onSuccess(datas: List<Category>?) {
+                hideLoading()
+                datas?.let { categories.postValue(it) }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun listenToUIState() = state

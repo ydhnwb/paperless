@@ -2,11 +2,13 @@ package com.ydhnwb.paperlessapp.ui.analytic.purchasement
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ydhnwb.paperlessapp.models.History
 import com.ydhnwb.paperlessapp.models.OrderHistory
 import com.ydhnwb.paperlessapp.models.ProfitByMonth
 import com.ydhnwb.paperlessapp.repositories.HistoryRepository
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -18,7 +20,6 @@ import kotlin.collections.HashMap
 class PurchasementFragmentViewModel (private val historyRepository: HistoryRepository) : ViewModel(){
     private val state : SingleLiveEvent<PurchasementFragmentState> = SingleLiveEvent()
     private val history = MutableLiveData<List<OrderHistory>>()
-
     private val spentByMonth = MutableLiveData<HashMap<String, Int>>()
 
     private fun setLoading() { state.value = PurchasementFragmentState.IsLoading(true) }
@@ -27,16 +28,19 @@ class PurchasementFragmentViewModel (private val historyRepository: HistoryRepos
 
     fun fetchStoreInfo(token: String, storeId: String){
         setLoading()
-        historyRepository.fetchHistory(token, storeId.toInt()){ s, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> toast(m) } }
-            s?.let {
+        historyRepository.fetchHistory(token, storeId.toInt(), object : SingleResponse<History>{
+            override fun onSuccess(data: History?) {
                 hideLoading()
-                val orders = it.store?.orderOut
-                history.postValue(orders)
-                transformSpentByMonth()
+                data?.let {
+                    history.postValue(it.store?.orderOut)
+                    transformSpentByMonth()
+                }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun transformSpentByMonth(){

@@ -3,8 +3,11 @@ package com.ydhnwb.paperlessapp.ui.manage.employee
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Employee
+import com.ydhnwb.paperlessapp.models.EmployeeResponse
+import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.repositories.EmployeeRepository
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class EmployeeViewModel (private val employeeRepository: EmployeeRepository) : ViewModel(){
     private var state : SingleLiveEvent<EmployeeState> = SingleLiveEvent()
@@ -17,24 +20,30 @@ class EmployeeViewModel (private val employeeRepository: EmployeeRepository) : V
 
     fun fetchEmployees(token: String, storeId: String){
         setLoading()
-        employeeRepository.getEmployees(token, storeId){ employeeResponse, error ->
-            hideLoading()
-            error?.let { it.message?.let { m -> toast(m) } }
-            employeeResponse?.let {
-                employees.postValue(it.employees)
+        employeeRepository.getEmployees(token, storeId, object: SingleResponse<EmployeeResponse>{
+            override fun onSuccess(data: EmployeeResponse?) {
+                hideLoading()
+                data?.let { employees.postValue(it.employees) }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun removeEmployee(token: String, storeId: String, employeeId: String){
         setLoading()
-        employeeRepository.removeEmployee(token, storeId, employeeId){ b, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> toast(m) } }
-            if(b){
-                successDelete()
+        employeeRepository.removeEmployee(token, storeId, employeeId, object: SingleResponse<Store>{
+            override fun onSuccess(data: Store?) {
+                hideLoading()
+                data?.let { successDelete() }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun listenToUIState() = state

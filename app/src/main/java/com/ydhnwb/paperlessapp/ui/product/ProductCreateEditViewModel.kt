@@ -6,7 +6,9 @@ import com.ydhnwb.paperlessapp.models.Category
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.repositories.CategoryRepository
 import com.ydhnwb.paperlessapp.repositories.ProductRepository
+import com.ydhnwb.paperlessapp.utilities.ArrayResponse
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class ProductCreateEditViewModel (private val productRepository: ProductRepository, private val categoryRepository: CategoryRepository) : ViewModel(){
     private val state: SingleLiveEvent<ProductCreateEditState> = SingleLiveEvent()
@@ -22,53 +24,72 @@ class ProductCreateEditViewModel (private val productRepository: ProductReposito
 
     fun createProduct(token: String, storeId : String, product: Product, categoryId : Int){
         setLoading()
-        productRepository.createProduct(token, storeId, product, categoryId){ resultBool, error ->
-            hideLoading()
-            error?.let { it.message?.let { message -> toast(message) } }
-            if(resultBool){ success(true) }
-        }
+        productRepository.createProduct(token, storeId, product, categoryId, object: SingleResponse<Product>{
+            override fun onSuccess(data: Product?) {
+                hideLoading()
+                data?.let { success(true) }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun fetchCategories(){
         setLoading()
-        categoryRepository.getCategories { resultList, error ->
-            hideLoading()
-            error?.let { it.message?.let { message -> toast(message) } }
-            resultList?.let { categories.postValue(it) }
-        }
+        categoryRepository.getCategories(object: ArrayResponse<Category>{
+            override fun onSuccess(datas: List<Category>?) {
+                hideLoading()
+                datas?.let { categories.postValue(it) }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun updateProduct(token: String, storeId: String, product : Product, categoryId: Int, withImage: Boolean){
         setLoading()
         if(withImage){
-            productRepository.updateProductWithImage(token, storeId, product, categoryId){ resultBool, error ->
-                hideLoading()
-                error?.let { it.message?.let { message -> toast(message) } }
-                if(resultBool){
-                    success(false)
+            productRepository.updateProductWithImage(token, storeId, product, categoryId, object : SingleResponse<Product>{
+                override fun onSuccess(data: Product?) {
+                    hideLoading()
+                    data?.let { success(false) }
                 }
-            }
+                override fun onFailure(err: Error) {
+                    hideLoading()
+                    err.message?.let { toast(it) }
+                }
+            })
         }else{
-            productRepository.updateProductOnly(token, storeId, product, categoryId){ resultBool, error ->
-                hideLoading()
-                error?.let { it.message?.let { message -> toast(message) } }
-                if(resultBool){
-                    success(false)
+            productRepository.updateProductOnly(token, storeId, product, categoryId, object : SingleResponse<Product>{
+                override fun onSuccess(data: Product?) {
+                    hideLoading()
+                    data?.let { success(false) }
                 }
-            }
+                override fun onFailure(err: Error) {
+                    hideLoading()
+                    err.message?.let { toast(it) }
+                }
+            })
         }
 
     }
 
     fun deleteProduct(token: String, storeId: String, productId: String){
         setLoading()
-        productRepository.deleteProduct(token, storeId, productId){ resultBool, error ->
-            hideLoading()
-            error?.let { it.message?.let { m -> toast(m) } }
-            if(resultBool){
-                successDelete()
+        productRepository.deleteProduct(token, storeId, productId, object: SingleResponse<Product>{
+            override fun onSuccess(data: Product?) {
+                hideLoading()
+                data?.let { successDelete() }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
 

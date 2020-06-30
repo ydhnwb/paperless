@@ -1,9 +1,11 @@
 package com.ydhnwb.paperlessapp.ui.register
 
 import androidx.lifecycle.ViewModel
+import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.repositories.UserRepository
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class RegisterViewModel (private val userRepository: UserRepository) : ViewModel(){
     private val state: SingleLiveEvent<RegisterState> = SingleLiveEvent()
@@ -42,13 +44,16 @@ class RegisterViewModel (private val userRepository: UserRepository) : ViewModel
 
     fun register(name: String, email: String, password: String){
         setLoading()
-        userRepository.register(name, email, password){ b, error ->
-            hideLoading()
-            error?.let { failed(it.message) }
-            if(b){
-                success(email)
+        userRepository.register(name, email, password, object : SingleResponse<User>{
+            override fun onSuccess(data: User?) {
+                hideLoading()
+                data?.let { success(it.email) }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { failed(it) }
+            }
+        })
     }
 
     fun listenToUIState() = state

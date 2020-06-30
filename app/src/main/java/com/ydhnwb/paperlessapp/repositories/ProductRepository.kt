@@ -2,10 +2,9 @@ package com.ydhnwb.paperlessapp.repositories
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.ydhnwb.paperlessapp.models.GeneralProductSearch
 import com.ydhnwb.paperlessapp.models.Product
-import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
-import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
-import com.ydhnwb.paperlessapp.utilities.WrappedResponse
+import com.ydhnwb.paperlessapp.utilities.*
 import com.ydhnwb.paperlessapp.webservices.ApiService
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -15,7 +14,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
-class ProductRepository (private val api: ApiService){
+interface ProductContract {
+    fun searchProductCatalog(token: String, q: String, listener: SingleResponse<GeneralProductSearch>)
+    fun deleteProduct(token: String, storeId: String, productId : String, listener: SingleResponse<Product>)
+    fun updateProductOnly(token: String, storeId: String, product : Product,categoryId: Int, listener: SingleResponse<Product>)
+    fun updateProductWithImage(token: String, storeId: String, product : Product, categoryId: Int, listener: SingleResponse<Product>)
+    fun fetchAllProducts(token: String, storeId: String, listener: ArrayResponse<Product>)
+    fun createProduct(token: String, storeId : String, product: Product, categoryId : Int, listener: SingleResponse<Product>)
+}
+
+class ProductRepository (private val api: ApiService) : ProductContract {
 
     fun applyPromo(token: String, productId: String, discountValueByPercent : Float, completion: (Boolean, Error?) -> Unit){
         api.promo_apply(token, productId, discountValueByPercent).enqueue(object : Callback<WrappedResponse<Product>>{
@@ -43,166 +51,105 @@ class ProductRepository (private val api: ApiService){
         })
     }
 
+    override fun searchProductCatalog(token: String, q: String, listener: SingleResponse<GeneralProductSearch>) {
+        api.catalog_search(token, q).enqueue(object : Callback<WrappedResponse<GeneralProductSearch>>{
+            override fun onFailure(call: Call<WrappedResponse<GeneralProductSearch>>, t: Throwable) = listener.onFailure(Error((t.message)))
 
-    fun createProduct(token: String, storeId : String, product: Product, categoryId : Int, completion: (Boolean, Error?) -> Unit){
-        val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
-        val file = File(product.image.toString())
-        val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
-        val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
-        api.product_store(token, storeId, requestBody, categoryId , image).enqueue(object : Callback<WrappedResponse<Product>>{
-                override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
-                    println(t.message)
-                    completion(false, Error(t.message))
-                }
-
-                override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
-                    if(response.isSuccessful){
-                        val body = response.body()
-                        body?.let {
-                            if(it.status){
-                                completion(true, null)
-                            }else{
-                                completion(false, Error("Cannot create product. Try again later"))
-                            }
-                        }
-                    }else{
-                        completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
-                    }
-                }
-            })
-    }
-
-
-    fun fetchAllProducts(token: String, storeId: String, completion: (List<Product>?, Error?) -> Unit){
-        api.product_get(token, storeId).enqueue(object : Callback<WrappedListResponse<Product>> {
-            override fun onFailure(call: Call<WrappedListResponse<Product>>, t: Throwable) {
-                println(t.message)
-                completion(null, Error(t.message.toString()))
-            }
-
-            override fun onResponse(call: Call<WrappedListResponse<Product>>, response: Response<WrappedListResponse<Product>>) {
-                if (response.isSuccessful){
-                    val body = response.body()
-                    body?.let {
-                        if (it.status){
-                            completion(it.data, null)
-                        }else{
-                            completion(null, Error())
-                        }
-                    }
-                }else{
-                    completion(null, Error("Error ${response.message()} with status code ${response.code()}"))
+            override fun onResponse(call: Call<WrappedResponse<GeneralProductSearch>>, response: Response<WrappedResponse<GeneralProductSearch>>) {
+                when{
+                    response.isSuccessful -> listener.onSuccess(response.body()!!.data)
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })
     }
 
-    fun updateProductWithImage(token: String, storeId: String, product : Product, categoryId: Int, completion: (Boolean, Error?) -> Unit){
-        val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
-        println(requestBody)
-        val file = File(product.image.toString())
-        val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
-        val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
-        api.product_update(token, storeId, product.id.toString(), requestBody, categoryId, image)
-            .enqueue(object : Callback<WrappedResponse<Product>>{
-                override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
-                    println(t.message)
-                    completion(false, Error(t.message.toString()))
-                }
+    override fun deleteProduct(token: String, storeId: String, productId: String, listener: SingleResponse<Product>) {
+        api.product_delete(token, storeId, productId).enqueue(object : Callback<WrappedResponse<Product>>{
+            override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) = listener.onFailure(Error(t.message))
 
-                override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
-                    if(response.isSuccessful){
+            override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
+                when{
+                    response.isSuccessful -> {
                         val b = response.body()
-                        b?.let {
-                            if(it.status){
-                                completion(true, null)
-                            }else{
-                                completion(false, Error("Cannot update product. Try again later"))
-                            }
-                        }
-                    }else{
-                        completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
+                        if(b!!.status) listener.onSuccess(b.data) else listener.onFailure(Error(b.message))
                     }
+                    else -> listener.onFailure(Error(response.message()))
                 }
-            })
+            }
+        })
     }
 
-    fun updateProductOnly(token: String, storeId: String, product : Product,categoryId: Int, completion: (Boolean, Error?) -> Unit){
+    override fun updateProductOnly(token: String, storeId: String, product: Product, categoryId: Int, listener: SingleResponse<Product>) {
         product.categoryId = categoryId
         val gsonBuilder = GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create()
         val requestBody = gsonBuilder.toJson(product)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestBody)
         api.product_update(token, storeId, product.id.toString(), body).enqueue(object : Callback<WrappedResponse<Product>>{
-            override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
-                println(t.message)
-                completion(false, Error(t.message.toString()))
-            }
+            override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) = listener.onFailure(Error(t.message))
 
             override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
-                if(response.isSuccessful){
-                    val b = response.body()
-                    b?.let {
-                        if(it.status){
-                            completion(true, null)
-                        } else {
-                            completion(false, Error("Cannot update product. Try again later"))
-                        }
+                when{
+                    response.isSuccessful -> {
+                        val b = response.body()
+                        if(b!!.status) listener.onSuccess(b.data) else listener.onFailure(Error(b.message))
                     }
-                }else{
-                    println(response.message())
-                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })
     }
 
-    fun deleteProduct(token: String, storeId: String, productId : String, completion: (Boolean, Error?) -> Unit){
-        api.product_delete(token, storeId, productId).enqueue(object : Callback<WrappedResponse<Product>>{
-            override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
-                println(t.message)
-                completion(false, Error(t.message.toString()))
-            }
+    override fun updateProductWithImage(token: String, storeId: String, product: Product, categoryId: Int, listener: SingleResponse<Product>) {
+        val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
+        val file = File(product.image.toString())
+        val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
+        val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
+        api.product_update(token, storeId, product.id.toString(), requestBody, categoryId, image).enqueue(object : Callback<WrappedResponse<Product>>{
+            override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) = listener.onFailure(Error(t.message))
 
             override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
-                if(response.isSuccessful){
-                    val b = response.body()
-                    b?.let {
-                        if (it.status){
-                            completion(true, null)
-                        }else{
-                            completion(false, Error("Cannot delete product."))
-                        }
+                when{
+                    response.isSuccessful -> {
+                        val b = response.body()
+                        if(b!!.status) listener.onSuccess(b.data) else listener.onFailure(Error(b.message))
                     }
-                }else{
-                    completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })
     }
 
-    fun searchProductCatalog(token: String, q: String, completion: (List<Product>?, Error?) -> Unit){
-        api.catalog_search(token, q).enqueue(object : Callback<WrappedListResponse<Product>>{
-            override fun onFailure(call: Call<WrappedListResponse<Product>>, t: Throwable) {
-                println(t.message)
-                completion(null, Error(t.message.toString()))
-            }
+    override fun fetchAllProducts(token: String, storeId: String, listener: ArrayResponse<Product>) {
+        api.product_get(token, storeId).enqueue(object : Callback<WrappedListResponse<Product>> {
+            override fun onFailure(call: Call<WrappedListResponse<Product>>, t: Throwable) = listener.onFailure(Error(t.message))
 
             override fun onResponse(call: Call<WrappedListResponse<Product>>, response: Response<WrappedListResponse<Product>>) {
-                if(response.isSuccessful){
-                    val body = response.body()
-                    body?.let {
-                        if(it.status){
-                            completion(it.data, null)
-                        }else{
-                            completion(null, Error())
-                        }
-                    }
-                }else{
-                    completion(null, Error("Error ${response.message()} with status code ${response.code()}"))
+                when{
+                    response.isSuccessful -> listener.onSuccess(response.body()!!.data)
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })
     }
 
+    override fun createProduct(token: String, storeId: String, product: Product, categoryId: Int, listener: SingleResponse<Product>) {
+        val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
+        val file = File(product.image.toString())
+        val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
+        val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
+        api.product_store(token, storeId, requestBody, categoryId , image).enqueue(object : Callback<WrappedResponse<Product>>{
+            override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) = listener.onFailure(Error(t.message))
 
+            override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
+                when{
+                    response.isSuccessful -> {
+                        val b = response.body()
+                        if(b!!.status) listener.onSuccess(b.data) else listener.onFailure(Error(b.message))
+                    }
+                    else -> listener.onFailure(Error(response.message()))
+                }
+            }
+        })
+    }
 }

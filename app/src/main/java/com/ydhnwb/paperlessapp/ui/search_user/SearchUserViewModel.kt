@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.repositories.UserRepository
+import com.ydhnwb.paperlessapp.utilities.ArrayResponse
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 
 class SearchUserViewModel (private val userRepository: UserRepository) : ViewModel(){
@@ -16,11 +17,16 @@ class SearchUserViewModel (private val userRepository: UserRepository) : ViewMod
 
     fun fetchSearchUser(token: String, query: String){
         setLoading()
-        userRepository.search(token, query){ resultUsers, error ->
-            hideLoading()
-            error?.let { it.message?.let { m-> toast(m) } }
-            resultUsers?.let { users.postValue(it) }
-        }
+        userRepository.search(token, query, object: ArrayResponse<User>{
+            override fun onSuccess(datas: List<User>?) {
+                hideLoading()
+                datas?.let { users.postValue(it) }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun listenToUIState() = state

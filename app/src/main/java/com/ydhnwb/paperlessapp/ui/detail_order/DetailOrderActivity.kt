@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +16,6 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.OrderHistory
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
-import com.ydhnwb.paperlessapp.utilities.extensions.showToast
 import kotlinx.android.synthetic.main.activity_detail_order.*
 import kotlinx.android.synthetic.main.content_detail_order.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -73,7 +73,6 @@ class DetailOrderActivity : AppCompatActivity() {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             if (downloadID == id) {
                 showInfoAlert(resources.getString(R.string.info_success_download))
-                showToast(resources.getString(R.string.info_success_download))
             }
         }
     }
@@ -85,9 +84,7 @@ class DetailOrderActivity : AppCompatActivity() {
 
     private fun handleState(it: DetailOrderActivityState){
         when(it){
-            is DetailOrderActivityState.Downloaded -> {
-                getReport(it.url)
-            }
+            is DetailOrderActivityState.Downloaded -> getReport(it.url)
         }
     }
 

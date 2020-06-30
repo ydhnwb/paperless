@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.repositories.StoreRepository
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class StorePageViewModel (private val storeRepository: StoreRepository) : ViewModel(){
     private val state : SingleLiveEvent<StorePageState> = SingleLiveEvent()
@@ -16,11 +17,16 @@ class StorePageViewModel (private val storeRepository: StoreRepository) : ViewMo
 
     fun fetchStorePage(token: String, storeId: String){
         setLoading()
-        storeRepository.fetchStorePage(token, storeId){ resultStore, e ->
-            hideLoading()
-            e?.let { it.message?.let { m ->toast(m) } }
-            resultStore?.let { store.postValue(it) }
-        }
+        storeRepository.fetchStorePage(token, storeId, object : SingleResponse<Store>{
+            override fun onSuccess(data: Store?) {
+                hideLoading()
+                data?.let { store.postValue(it) }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun listenToUIState() = state

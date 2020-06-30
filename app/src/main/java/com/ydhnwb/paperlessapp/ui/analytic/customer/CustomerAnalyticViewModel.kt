@@ -2,11 +2,13 @@ package com.ydhnwb.paperlessapp.ui.analytic.customer
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ydhnwb.paperlessapp.models.History
 import com.ydhnwb.paperlessapp.models.OrderHistory
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.repositories.HistoryRepository
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -24,17 +26,20 @@ class CustomerAnalyticViewModel(private val historyRepo: HistoryRepository) : Vi
 
     fun fetchStoreInfo(token: String, storeId: String){
         setLoading()
-        historyRepo.fetchHistory(token, storeId.toInt()){ s, e ->
-            hideLoading()
-            e?.let { it.message?.let { m -> toast(m) } }
-            s?.let {
+        historyRepo.fetchHistory(token, storeId.toInt(), object : SingleResponse<History>{
+            override fun onSuccess(data: History?) {
                 hideLoading()
-                val orders = it.store?.orderIn
-                histories.postValue(orders)
-                transformBuyerData()
-                transformUser()
+                data?.let {
+                    histories.postValue(it.store?.orderIn)
+                    transformBuyerData()
+                    transformUser()
+                }
             }
-        }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     private fun transformBuyerData(){

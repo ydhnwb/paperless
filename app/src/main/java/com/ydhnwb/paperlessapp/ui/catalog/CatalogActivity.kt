@@ -24,10 +24,17 @@ class CatalogActivity : AppCompatActivity() {
         setContentView(R.layout.activity_catalog)
         setSupportActionBar(toolbar)
         setupSearchBar()
-        catalogViewModel.listenToUIState().observer(this, Observer { handleUIState(it) })
-        catalogViewModel.listenToCatalogs().observe(this, Observer { handleCatalogProduct(it) })
+        observe()
         fetchFirst()
     }
+
+    private fun observe(){
+        observeState()
+        observeCatalogs()
+    }
+
+    private fun observeCatalogs() = catalogViewModel.listenToCatalogs().observe(this, Observer { handleCatalogProduct(it) })
+    private fun observeState() = catalogViewModel.listenToUIState().observer(this, Observer { handleUIState(it) })
 
     private fun setupSearchBar(){
         search_bar.setOnSearchActionListener(object : MaterialSearchBar.OnSearchActionListener{
