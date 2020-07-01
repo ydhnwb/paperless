@@ -11,7 +11,7 @@ import retrofit2.http.*
 interface ApiService {
     @FormUrlEncoded
     @POST("v1/login")
-    fun login(@Field("email") email : String, @Field("password") password : String) : Call<WrappedResponse<User>>
+    fun login(@Field("email") email : String, @Field("password") password : String, @Field("fcm_token") fcmToken: String) : Call<WrappedResponse<User>>
 
     @FormUrlEncoded
     @POST("v1/register")

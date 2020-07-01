@@ -2,12 +2,13 @@ package com.ydhnwb.paperlessapp.ui.login
 
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.User
+import com.ydhnwb.paperlessapp.repositories.FirebaseRepository
 import com.ydhnwb.paperlessapp.repositories.UserRepository
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
-class LoginViewModel (private val userRepository: UserRepository) : ViewModel() {
+class LoginViewModel (private val userRepository: UserRepository, private val firebaseRepo: FirebaseRepository) : ViewModel() {
     private val state : SingleLiveEvent<LoginState> = SingleLiveEvent()
 
     private fun setLoading(){ state.value = LoginState.IsLoading(true) }
@@ -29,18 +30,34 @@ class LoginViewModel (private val userRepository: UserRepository) : ViewModel() 
         return true
     }
 
-    fun login(email: String, password: String){
-        setLoading()
-        userRepository.login(email, password, object: SingleResponse<User>{
-            override fun onSuccess(data: User?) {
-                hideLoading()
-                data?.let { success(it.api_token.toString()) }
+
+    fun getFirebaseToken(email: String, password: String){
+        firebaseRepo.getToken(object : SingleResponse<String>{
+            override fun onSuccess(data: String?) {
+                data?.let { token ->
+                    userRepository.login(email, password, token, object: SingleResponse<User>{
+                        override fun onSuccess(data: User?) {
+                            hideLoading()
+                            data?.let { success(it.api_token.toString()) }
+                        }
+                        override fun onFailure(err: Error) {
+                            hideLoading()
+                            err.message?.let { toast(it) }
+                        }
+                    })
+                }
             }
             override fun onFailure(err: Error) {
                 hideLoading()
                 err.message?.let { toast(it) }
             }
+
         })
+    }
+
+    fun login(email: String, password: String){
+        setLoading()
+        getFirebaseToken(email, password)
     }
 
     fun listenToUIState() = state

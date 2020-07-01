@@ -87,6 +87,7 @@ class OrderRepository(private val api: ApiService) : OrderContract {
     override fun confirmOrder(token: String, orderSend: OrderSend, listener: SingleResponse<Order>) {
         val g = GsonBuilder().create()
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), g.toJson(orderSend))
+        println(g.toJson(orderSend))
         api.order_confirm(token, body).enqueue(object : Callback<WrappedResponse<Order>> {
             override fun onFailure(call: Call<WrappedResponse<Order>>, t: Throwable) = listener.onFailure(Error(t.message))
 
