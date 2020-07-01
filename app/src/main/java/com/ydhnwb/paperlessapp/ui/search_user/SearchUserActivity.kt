@@ -45,7 +45,10 @@ class SearchUserActivity : AppCompatActivity() {
             override fun onSearchConfirmed(text: CharSequence?) {
                 text?.let {
                     it.isNotEmpty().let { _ ->
-                        searchUserViewModel.fetchSearchUser(PaperlessUtil.getToken(this@SearchUserActivity),it.toString())
+                        PaperlessUtil.getToken(this@SearchUserActivity)?.let { it1 ->
+                            searchUserViewModel.fetchSearchUser(
+                                it1,it.toString())
+                        }
                     }
                 }
             }

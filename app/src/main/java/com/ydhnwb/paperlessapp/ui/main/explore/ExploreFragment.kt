@@ -26,7 +26,11 @@ class ExploreFragment : Fragment(R.layout.fragment_explore){
         fetchPromotedProducts()
     }
 
-    private fun fetchPromotedProducts() = exploreViewModel.fetchPromotedProducts(PaperlessUtil.getToken(requireActivity()))
+    private fun fetchPromotedProducts() = PaperlessUtil.getToken(requireActivity())?.let {
+        exploreViewModel.fetchPromotedProducts(
+            it
+        )
+    }
 
     private fun observe(){
         observeState()

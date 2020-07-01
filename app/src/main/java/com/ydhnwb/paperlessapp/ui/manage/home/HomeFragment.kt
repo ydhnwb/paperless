@@ -113,7 +113,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeClickInterface {
         }
     }
 
-    override fun report() = parentStoreViewModel.downloadReport(PaperlessUtil.getToken(requireActivity()), parentStoreViewModel.listenToCurrentStore().value!!.id.toString())
+    override fun report() {
+        PaperlessUtil.getToken(requireActivity())?.let {
+            parentStoreViewModel.downloadReport(
+                it, parentStoreViewModel.listenToCurrentStore().value!!.id.toString())
+        }
+    }
 
 }
 

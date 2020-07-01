@@ -216,10 +216,16 @@ class ProductActivity : AppCompatActivity() {
                     getPassedProduct()?.let { passedProduct ->
                         val isUpdateImage = !passedProduct.image.equals(product.image)
                         product.qty = if (cb_product_have_stock.isChecked) product.qty else null
-                        productCreateEditViewModel.updateProduct(PaperlessUtil.getToken(this@ProductActivity), getPassedStore()?.id.toString(), product, cat.id!!, isUpdateImage)
+                        PaperlessUtil.getToken(this@ProductActivity)?.let { it1 ->
+                            productCreateEditViewModel.updateProduct(
+                                it1, getPassedStore()?.id.toString(), product, cat.id!!, isUpdateImage)
+                        }
                     } ?: kotlin.run {
                         product.image?.let { _ ->
-                            productCreateEditViewModel.createProduct(PaperlessUtil.getToken(this@ProductActivity), getPassedStore()?.id.toString(), product, cat.id!!)
+                            PaperlessUtil.getToken(this@ProductActivity)?.let { it1 ->
+                                productCreateEditViewModel.createProduct(
+                                    it1, getPassedStore()?.id.toString(), product, cat.id!!)
+                            }
                         } ?: kotlin.run {
                             showInfoAlert(resources.getString(R.string.info_please_select_image))
                         }
@@ -292,7 +298,10 @@ class ProductActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.menu_delete -> {
-                productCreateEditViewModel.deleteProduct(PaperlessUtil.getToken(this@ProductActivity), getPassedStore()?.id.toString(), getPassedProduct()?.id.toString())
+                PaperlessUtil.getToken(this@ProductActivity)?.let {
+                    productCreateEditViewModel.deleteProduct(
+                        it, getPassedStore()?.id.toString(), getPassedProduct()?.id.toString())
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

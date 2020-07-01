@@ -46,10 +46,10 @@ class InviteDialog : DialogFragment(){
     private fun fill(user : User){ view!!.user_name.text = user.name }
     private fun sendInvitationBehavior(user: User, store: Store){
         requireView().btn_add_cashier.setOnClickListener {
-            invitationViewModel.invite(PaperlessUtil.getToken(activity!!), store.id!!, false, user.id!!)
+            PaperlessUtil.getToken(requireActivity())?.let { it1 -> invitationViewModel.invite(it1, store.id!!, false, user.id!!) }
         }
         requireView().btn_add_staff.setOnClickListener {
-            invitationViewModel.invite(PaperlessUtil.getToken(activity!!), store.id!!, true, user.id!!)
+            PaperlessUtil.getToken(activity!!)?.let { it1 -> invitationViewModel.invite(it1, store.id!!, true, user.id!!) }
         }
     }
     private fun alert(m : String) = AlertDialog.Builder(requireActivity()).apply {

@@ -59,7 +59,7 @@ class DetailOrderActivity : AppCompatActivity(), DetailOrderAdapterInterface {
 
     private fun downloadInvoice(){
         detail_order_invoice.setOnClickListener {
-            detailOrderViewModel.downloadInvoice(PaperlessUtil.getToken(this), getOrder()?.id.toString())
+            PaperlessUtil.getToken(this)?.let { it1 -> detailOrderViewModel.downloadInvoice(it1, getOrder()?.id.toString()) }
         }
     }
 

@@ -31,7 +31,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
 
     private fun handleUIState(it : DashboardState){
         when(it){
-            is DashboardState.SuccessDeleted -> dashboardViewModel.fetchMyStores(PaperlessUtil.getToken(activity!!))
+            is DashboardState.SuccessDeleted -> PaperlessUtil.getToken(activity!!)?.let { it1 ->
+                dashboardViewModel.fetchMyStores(
+                    it1
+                )
+            }
             is DashboardState.ShowToast -> toast(it.message)
             is DashboardState.IsLoading -> {
                 if(it.isOther){
@@ -85,8 +89,8 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
 
     override fun onResume() {
         super.onResume()
-        dashboardViewModel.fetchMyStores(PaperlessUtil.getToken(requireActivity()))
-        dashboardViewModel.fetchMyWorkplace(PaperlessUtil.getToken(requireActivity()))
+        PaperlessUtil.getToken(requireActivity())?.let { dashboardViewModel.fetchMyStores(it) }
+        PaperlessUtil.getToken(requireActivity())?.let { dashboardViewModel.fetchMyWorkplace(it) }
     }
 
     private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()

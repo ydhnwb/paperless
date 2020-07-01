@@ -46,7 +46,10 @@ class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
                 sellingViewModel.listenToSellingByMonth().observe(viewLifecycleOwner, Observer { d -> handleSellingByMonth(d) })
                 sellingViewModel.listenToSellingByHour().observe(viewLifecycleOwner, Observer { d -> handleSellingByHour(d) })
                 sellingViewModel.listenToSellingProductCluster().observe(viewLifecycleOwner, Observer { data -> handlePie(data) })
-                sellingViewModel.fetchStoreInfo(PaperlessUtil.getToken(requireActivity()), s.id.toString())
+                PaperlessUtil.getToken(requireActivity())?.let { it1 ->
+                    sellingViewModel.fetchStoreInfo(
+                        it1, s.id.toString())
+                }
             }
         }
     }

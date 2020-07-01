@@ -3,6 +3,7 @@ package com.ydhnwb.paperlessapp.ui.manage.employee
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,12 +13,13 @@ import com.ydhnwb.paperlessapp.ui.search_user.SearchUserActivity
 import com.ydhnwb.paperlessapp.models.Employee
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
 import com.ydhnwb.paperlessapp.utilities.extensions.showToast
 import kotlinx.android.synthetic.main.fragment_employee.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class EmployeeFragment : Fragment(R.layout.fragment_employee) {
+class EmployeeFragment : Fragment(R.layout.fragment_employee), EmployeeInterface {
     private val employeeViewModel: EmployeeViewModel by viewModel()
     private val parentStoreViewModel : ManageStoreViewModel by sharedViewModel()
 
@@ -50,7 +52,10 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
             is EmployeeState.IsLoading -> { if(it.state){ view!!.loading.visibility = View.VISIBLE }else{ view!!.loading.visibility = View.GONE } }
             is EmployeeState.ShowToast -> requireActivity().showToast(it.message)
             is EmployeeState.SuccessDelete -> {
-                employeeViewModel.fetchEmployees(PaperlessUtil.getToken(activity!!), parentStoreViewModel.listenToCurrentStore().value?.id.toString())
+                PaperlessUtil.getToken(activity!!)?.let { it1 ->
+                    employeeViewModel.fetchEmployees(
+                        it1, parentStoreViewModel.listenToCurrentStore().value?.id.toString())
+                }
                 requireActivity().showToast(resources.getString(R.string.info_success_delete_employee))
             }
         }
@@ -59,12 +64,7 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
     private fun setupUI(){
         view!!.rv_employee.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = EmployeeAdapter(
-                mutableListOf(),
-                activity!!,
-                employeeViewModel,
-                parentStoreViewModel.listenToCurrentStore().value?.id.toString()
-            )
+            adapter = EmployeeAdapter(mutableListOf(), this@EmployeeFragment)
         }
     }
 
@@ -78,16 +78,50 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee) {
     }
 
     private fun addEmployee(){
-        view!!.fab.setOnClickListener {
-            val store : Store = parentStoreViewModel.listenToCurrentStore().value!!
-            startActivity(Intent(activity, SearchUserActivity::class.java).apply {
-                putExtra("store", store)
-            })
+        if(getRole() == 0){
+            requireView().fab.hide()
+        }else{
+            requireView().fab.show()
+            requireView().fab.setOnClickListener {
+                val store : Store = parentStoreViewModel.listenToCurrentStore().value!!
+                startActivity(Intent(activity, SearchUserActivity::class.java).apply {
+                    putExtra("store", store)
+                })
+            }
         }
     }
 
+    private fun getRole() = requireActivity().intent.getIntExtra("ROLE", -1)
+
     override fun onResume() {
         super.onResume()
-        employeeViewModel.fetchEmployees(PaperlessUtil.getToken(activity!!), parentStoreViewModel.listenToCurrentStore().value?.id.toString())
+        PaperlessUtil.getToken(activity!!)?.let { employeeViewModel.fetchEmployees(it, parentStoreViewModel.listenToCurrentStore().value?.id.toString()) }
+    }
+
+    override fun click(employee: Employee) {
+        println()
+    }
+
+    override fun moreClick(employee: Employee, v: View) {
+        val storeId = parentStoreViewModel.listenToCurrentStore().value?.id.toString()
+        PopupMenu(requireActivity(), v).apply {
+            menuInflater.inflate(R.menu.menu_employee_adapter, menu)
+            setOnMenuItemClickListener { menuItems ->
+                when(menuItems.itemId){
+                    R.id.menu_delete -> {
+                        if(getRole() != 0){
+                            PaperlessUtil.getToken(requireActivity())?.let {
+                                employeeViewModel.removeEmployee(
+                                    it, storeId, employee.id.toString())
+                            }
+                        }else{
+                            requireActivity().showInfoAlert(resources.getString(R.string.permission_not_allowed))
+                        }
+                        true
+                    }
+                    else -> true
+                }
+            }
+        }.show()
     }
 }

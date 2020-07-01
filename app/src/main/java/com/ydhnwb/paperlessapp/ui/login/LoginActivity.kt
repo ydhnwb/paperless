@@ -97,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(!PaperlessUtil.getToken(this@LoginActivity).equals("UNDEFINED")){
+        PaperlessUtil.getToken(this)?.let {
             startActivity(Intent(this@LoginActivity, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP

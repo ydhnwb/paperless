@@ -88,7 +88,7 @@ class InvitationActivity : AppCompatActivity() {
             }else{
                 empty_view.visibility = View.GONE
             }
-            invitationViewModel.fetchInvitationIn(PaperlessUtil.getToken(this))
+            PaperlessUtil.getToken(this)?.let { invitationViewModel.fetchInvitationIn(it) }
         }else{
             invitationViewModel.listenToInvitationSent().observe(this, Observer {
                 updateListInvitationSent(it.reversed())
@@ -101,7 +101,7 @@ class InvitationActivity : AppCompatActivity() {
             }else{
                 empty_view.visibility = View.GONE
             }
-            invitationViewModel.fetchInvitationSent(PaperlessUtil.getToken(this), getPassedStore()?.id!!)
+            PaperlessUtil.getToken(this)?.let { invitationViewModel.fetchInvitationSent(it, getPassedStore()?.id!!) }
         }
     }
     private fun handleUIState(it : InvitationState){
@@ -117,7 +117,11 @@ class InvitationActivity : AppCompatActivity() {
             }
             is InvitationState.ShowAlert -> showAlert(it.message)
             is InvitationState.ShowToast -> showToast(it.message)
-            is InvitationState.Success -> invitationViewModel.fetchInvitationIn(PaperlessUtil.getToken(this))
+            is InvitationState.Success -> PaperlessUtil.getToken(this)?.let { it1 ->
+                invitationViewModel.fetchInvitationIn(
+                    it1
+                )
+            }
         }
     }
 

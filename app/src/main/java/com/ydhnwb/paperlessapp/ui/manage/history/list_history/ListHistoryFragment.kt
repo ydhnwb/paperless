@@ -35,7 +35,7 @@ class ListHistoryFragment : Fragment(R.layout.fragment_content_history), ListHis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        listHistoryViewModel.fetchHistory(PaperlessUtil.getToken(activity!!), parentStoreViewModel.listenToCurrentStore().value?.id!!)
+        PaperlessUtil.getToken(activity!!)?.let { listHistoryViewModel.fetchHistory(it, parentStoreViewModel.listenToCurrentStore().value?.id!!) }
         listHistoryViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
         listHistoryViewModel.listenToHistory().observe(viewLifecycleOwner, Observer { handle(it) })
     }

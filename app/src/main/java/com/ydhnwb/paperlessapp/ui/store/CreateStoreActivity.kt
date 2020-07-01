@@ -53,9 +53,15 @@ class CreateStoreActivity : AppCompatActivity() {
             }
             if(storeViewModel.validate(store, isUpdate)){
                 if(getPassedStore() != null){
-                    storeViewModel.updateStore(PaperlessUtil.getToken(this@CreateStoreActivity), store)
+                    PaperlessUtil.getToken(this@CreateStoreActivity)?.let { it1 ->
+                        storeViewModel.updateStore(
+                            it1, store)
+                    }
                 }else{
-                    storeViewModel.createStore(PaperlessUtil.getToken(this@CreateStoreActivity), store)
+                    PaperlessUtil.getToken(this@CreateStoreActivity)?.let { it1 ->
+                        storeViewModel.createStore(
+                            it1, store)
+                    }
                 }
             }
         }

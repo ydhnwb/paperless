@@ -84,7 +84,7 @@ class StoreAdapter(private var stores : MutableList<Store>, private var context:
                                 }
                                 R.id.menu_delete -> {
                                     val token = PaperlessUtil.getToken(context)
-                                    dashboardViewModel.deleteStore(token, store.id.toString())
+                                    token?.let { it1 -> dashboardViewModel.deleteStore(it1, store.id.toString()) }
                                     true
                                 }
                                 else -> true

@@ -12,33 +12,51 @@ import com.ydhnwb.paperlessapp.ui.manage.ManageStoreViewModel
 import com.ydhnwb.paperlessapp.ui.product.ProductActivity
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
 import kotlinx.android.synthetic.main.fragment_product.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ProductFragment : Fragment(R.layout.fragment_product) {
+class ProductFragment : Fragment(R.layout.fragment_product), ProductAdapterClick {
     private val productViewModel: ProductViewModel by viewModel()
     private val parentStoreViewModel: ManageStoreViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.rv_manage_product.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = DetailedProductAdapter(mutableListOf(), activity!!, parentStoreViewModel.listenToCurrentStore().value!!)
-        }
-        view.fab_add.setOnClickListener {
-            startActivity(Intent(activity, ProductActivity::class.java).apply {
-                putExtra("STORE",
-                    parentStoreViewModel.listenToCurrentStore().value)
-            })
-        }
-        productViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
-        productViewModel.listenToProducts().observe(viewLifecycleOwner, Observer { handleData(it) })
+        setupRecyclerView()
+        checkRole()
+        observe()
     }
+
+    private fun setupRecyclerView(){
+        requireView().rv_manage_product.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = DetailedProductAdapter(mutableListOf(), this@ProductFragment)
+        }
+    }
+
+    private fun checkRole(){
+        if(getRole() == 0){
+            requireView().fab_add.hide()
+        }else{
+            requireView().fab_add.show()
+            requireView().fab_add.setOnClickListener {
+                startActivity(Intent(activity, ProductActivity::class.java))
+            }
+        }
+    }
+
+    private fun observe(){
+        observeState()
+        observeProducts()
+    }
+
+    private fun observeState() = productViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
+    private fun observeProducts() = productViewModel.listenToProducts().observe(viewLifecycleOwner, Observer { handleData(it) })
 
     override fun onResume() {
         super.onResume()
-        productViewModel.fetchProducts(PaperlessUtil.getToken(activity!!), parentStoreViewModel.listenToCurrentStore().value!!.id.toString())
+        PaperlessUtil.getToken(activity!!)?.let { productViewModel.fetchProducts(it, parentStoreViewModel.listenToCurrentStore().value!!.id.toString()) }
     }
 
     private fun handleData(it: List<Product>){
@@ -69,6 +87,19 @@ class ProductFragment : Fragment(R.layout.fragment_product) {
             is ProductState.IsLoading -> {
                 if(it.state){ view?.loading?.visibility = View.VISIBLE }else{ view?.loading?.visibility = View.GONE }
             }
+        }
+    }
+
+    private fun getRole() = requireActivity().intent.getIntExtra("ROLE", -1)
+
+    override fun click(product: Product) {
+        if (getRole() != 0){
+            requireActivity().startActivity(Intent(context, ProductActivity::class.java).apply {
+                putExtra("PRODUCT", product)
+                putExtra("STORE",parentStoreViewModel.listenToCurrentStore().value)
+            })
+        }else{
+            requireActivity().showInfoAlert(resources.getString(R.string.permission_not_allowed))
         }
     }
 }

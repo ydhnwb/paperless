@@ -62,14 +62,10 @@ class ProfileFragment : Fragment() {
                 }
             })
             profileViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleUIState(it) })
-            profileViewModel.fetchProfile(PaperlessUtil.getToken(activity!!))
+            PaperlessUtil.getToken(activity!!)?.let { profileViewModel.fetchProfile(it) }
             view.rv_pref.apply {
                 layoutManager = LinearLayoutManager(activity).apply { orientation = LinearLayoutManager.HORIZONTAL }
-                adapter =
-                    PreferenceAdapter(
-                        activity!!,
-                        prefs
-                    )
+                adapter = PreferenceAdapter(activity!!, prefs)
             }
         }
     }

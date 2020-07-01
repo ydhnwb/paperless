@@ -44,11 +44,17 @@ class InvitationAdapter (private var invitations : MutableList<Invitation>, priv
                         AlertDialog.Builder(ContextThemeWrapper(context, R.style.AlertDialogTheme)).apply {
                             setMessage(context.resources.getString(R.string.info_are_you_sure_accept_invite))
                             setPositiveButton(resources.getString(R.string.btn_accept)){d, _ ->
-                                ivm.acceptInvitation(PaperlessUtil.getToken(context), i.id.toString())
+                                PaperlessUtil.getToken(context)?.let { it1 ->
+                                    ivm.acceptInvitation(
+                                        it1, i.id.toString())
+                                }
                                 d.dismiss()
                             }
                             setNegativeButton(resources.getString(R.string.info_reject)){d, _ ->
-                                ivm.rejectInvitation(PaperlessUtil.getToken(context), i.id.toString())
+                                PaperlessUtil.getToken(context)?.let { it1 ->
+                                    ivm.rejectInvitation(
+                                        it1, i.id.toString())
+                                }
                                 d.dismiss()
                             }
                             setNeutralButton(resources.getString(R.string.info_cancel)){

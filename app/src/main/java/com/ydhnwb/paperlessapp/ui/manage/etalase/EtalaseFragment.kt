@@ -37,7 +37,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
         setupUIComponent()
         parentViewModel.listenToAllProducts().observe(viewLifecycleOwner, Observer { handleProducts(it) })
         if(!parentViewModel.listenToHasFetched().value!!){
-            parentViewModel.fetchAllProduct(PaperlessUtil.getToken(requireActivity()), parentViewModel.listenToCurrentStore().value?.id.toString())
+            PaperlessUtil.getToken(requireActivity())?.let { parentViewModel.fetchAllProduct(it, parentViewModel.listenToCurrentStore().value?.id.toString()) }
         }
         if(parentViewModel.listenToAllProducts().value == null || parentViewModel.listenToAllProducts().value!!.isEmpty()){
             view.empty_view.visibility = View.VISIBLE
@@ -88,7 +88,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
             checkProductByCode(data.getStringExtra("CODE"))
         }else if(requestCode == REQ_CHECKOUT && resultCode == Activity.RESULT_OK){
             parentViewModel.clearAllSelectedProduct()
-            parentViewModel.fetchAllProduct(PaperlessUtil.getToken(requireActivity()), parentViewModel.listenToCurrentStore().value?.id.toString())
+            PaperlessUtil.getToken(requireActivity())?.let { parentViewModel.fetchAllProduct(it, parentViewModel.listenToCurrentStore().value?.id.toString()) }
         }
     }
 

@@ -30,7 +30,7 @@ class StorePageActivity : AppCompatActivity() {
         setupUI()
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         toolbar.setNavigationOnClickListener{finish()}
-        storePageViewModel.fetchStorePage(PaperlessUtil.getToken(this), getStoreId().toString())
+        PaperlessUtil.getToken(this)?.let { storePageViewModel.fetchStorePage(it, getStoreId().toString()) }
         storePageViewModel.listenToStore().observe(this, Observer { handleStore(it) })
         storePageViewModel.listenToUIState().observer(this, Observer { handleUIState(it) })
     }

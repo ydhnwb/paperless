@@ -49,7 +49,10 @@ class PurchasementFragment : Fragment(R.layout.fragment_purchasement_analytic){
             store?.let { s ->
                 purchasementViewModel.listenToState().observer(viewLifecycleOwner, Observer { state -> handleState(state) })
                 purchasementViewModel.listenToSpentByMonth().observe(viewLifecycleOwner, Observer { d -> handleSpentByMonth(d) })
-                purchasementViewModel.fetchStoreInfo(PaperlessUtil.getToken(requireActivity()), s.id.toString())
+                PaperlessUtil.getToken(requireActivity())?.let { it1 ->
+                    purchasementViewModel.fetchStoreInfo(
+                        it1, s.id.toString())
+                }
             }
         }
     }

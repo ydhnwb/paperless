@@ -81,7 +81,7 @@ class CheckoutActivity : AppCompatActivity() {
             val productsToSend : List<ProductSend> = getSelectedProducts()!!.map{ p -> ProductSend(id = p.id!!, price = p.price!!, quantity = p.selectedQuantity!!) }.toList()
             val orderSend = OrderSend(sellByStore = getParentStore().id, products = productsToSend)
             if(checkoutViewModel.listenToCurrentCustomer().value == null){
-                checkoutViewModel.createOrder(PaperlessUtil.getToken(this), orderSend)
+                PaperlessUtil.getToken(this)?.let { it1 -> checkoutViewModel.createOrder(it1, orderSend) }
             }else{
                 val customer = checkoutViewModel.listenToCurrentCustomer().value!!
                 if(customer.isStore){
@@ -92,7 +92,10 @@ class CheckoutActivity : AppCompatActivity() {
                             orderSend.boughtByUser = null
                             orderSend.boughtByStore = getAbsoluteId(customer.idCustomer)
                             toast("Id store is ${getAbsoluteId(customer.idCustomer)}")
-                            checkoutViewModel.createOrder(PaperlessUtil.getToken(this@CheckoutActivity), orderSend)
+                            PaperlessUtil.getToken(this@CheckoutActivity)?.let { it1 ->
+                                checkoutViewModel.createOrder(
+                                    it1, orderSend)
+                            }
                             dialog.dismiss()
                         }
                     }.show()
@@ -103,7 +106,10 @@ class CheckoutActivity : AppCompatActivity() {
                          setPositiveButton(resources.getString(R.string.info_create_order)){ dialog, _ ->
                              orderSend.boughtByStore = null
                              orderSend.boughtByUser = getAbsoluteId(customer.idCustomer)
-                             checkoutViewModel.createOrder(PaperlessUtil.getToken(this@CheckoutActivity), orderSend)
+                             PaperlessUtil.getToken(this@CheckoutActivity)?.let { it1 ->
+                                 checkoutViewModel.createOrder(
+                                     it1, orderSend)
+                             }
                              dialog.dismiss()
                          }
                     }.show()
@@ -176,7 +182,7 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun checkCustomerTarget(code : String, isStore: Boolean){
-        checkoutViewModel.setCustomerTarget(PaperlessUtil.getToken(this@CheckoutActivity), Customer(code, isStore))
+        PaperlessUtil.getToken(this@CheckoutActivity)?.let { checkoutViewModel.setCustomerTarget(it, Customer(code, isStore)) }
     }
 
     private fun customerViewBehavior(){

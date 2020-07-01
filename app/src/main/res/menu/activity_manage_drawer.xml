@@ -28,13 +28,13 @@
             android:title="@string/menu_transaction"/>
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_setting"
-                android:icon="@drawable/ic_settings_black_24dp"
-                android:title="@string/menu_share" />
-        </menu>
-    </item>
+<!--    <item android:title="Communicate">-->
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/nav_setting"-->
+<!--                android:icon="@drawable/ic_settings_black_24dp"-->
+<!--                android:title="@string/menu_share" />-->
+<!--        </menu>-->
+<!--    </item>-->
 
 </menu>

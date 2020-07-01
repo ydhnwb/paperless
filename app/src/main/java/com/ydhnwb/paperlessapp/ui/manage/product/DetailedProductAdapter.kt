@@ -16,9 +16,9 @@ import com.ydhnwb.paperlessapp.utilities.extensions.gone
 import com.ydhnwb.paperlessapp.utilities.extensions.visible
 import kotlinx.android.synthetic.main.list_item_product_alt.view.*
 
-class DetailedProductAdapter (private var products : MutableList<Product>, private var context: Context, private var parentStore : Store) : RecyclerView.Adapter<DetailedProductAdapter.ViewHolder>(){
-    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        fun bind(product: Product, context: Context, store: Store){
+class DetailedProductAdapter (private val products : MutableList<Product>, private val productInterface: ProductAdapterClick) : RecyclerView.Adapter<DetailedProductAdapter.ViewHolder>(){
+    inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
+        fun bind(product: Product){
             with(itemView){
                 product_image.load(product.image)
                 product_name.text = product.name
@@ -36,10 +36,8 @@ class DetailedProductAdapter (private var products : MutableList<Product>, priva
                     product_isPromo.text = resources.getString(R.string.in_promo)
                 }
                 setOnClickListener {
-                    context.startActivity(Intent(context, ProductActivity::class.java).apply {
-                        putExtra("PRODUCT", product)
-                        putExtra("STORE", store)
-                    })
+                    productInterface.click(product)
+
                 }
             }
         }
@@ -56,5 +54,5 @@ class DetailedProductAdapter (private var products : MutableList<Product>, priva
 
     override fun getItemCount() = products.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(products[position], context, parentStore)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(products[position])
 }

@@ -65,6 +65,6 @@ class UserHistoryActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        userHistoryViewModel.fetchHistory(PaperlessUtil.getToken(this))
+        PaperlessUtil.getToken(this)?.let { userHistoryViewModel.fetchHistory(it) }
     }
 }

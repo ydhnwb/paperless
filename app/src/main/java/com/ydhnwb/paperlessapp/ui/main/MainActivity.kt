@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                     finish()
                 })}
             }else{
-                if(PaperlessUtil.getToken(this).equals("UNDEFINED")){
+                if(PaperlessUtil.getToken(this) == null){
                     runOnUiThread { startActivity(Intent(this, LoginActivity::class.java)).also {
                         finish()
                     } }
@@ -90,5 +90,4 @@ class MainActivity : AppCompatActivity() {
         true
     }
 
-    private fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }

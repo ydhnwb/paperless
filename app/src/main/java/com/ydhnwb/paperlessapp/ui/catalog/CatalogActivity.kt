@@ -42,7 +42,10 @@ class CatalogActivity : AppCompatActivity() {
             override fun onSearchStateChanged(enabled: Boolean) {}
             override fun onSearchConfirmed(text: CharSequence?) {
                 if(text != null && text.isNotEmpty()){
-                    catalogViewModel.searchCatalog(PaperlessUtil.getToken(this@CatalogActivity), text.toString())
+                    PaperlessUtil.getToken(this@CatalogActivity)?.let {
+                        catalogViewModel.searchCatalog(
+                            it, text.toString())
+                    }
                 }
             }
         })
@@ -78,7 +81,7 @@ class CatalogActivity : AppCompatActivity() {
 //        if(!catalogViewModel.listenToHasFetched().value!!){
 //
 //        }
-        catalogViewModel.searchCatalog(PaperlessUtil.getToken(this), getPassedQuery()!!)
+        PaperlessUtil.getToken(this)?.let { catalogViewModel.searchCatalog(it, getPassedQuery()!!) }
     }
 
     private fun getPassedQuery() = intent.getStringExtra("q")

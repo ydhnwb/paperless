@@ -17,16 +17,16 @@ class PaperlessUtil {
         private const val WHITE = -0x1
         private const val BLACK = -0x1000000
 
-        fun getToken(c : Context) : String {
+        fun getToken(c : Context) : String? {
             val s = c.getSharedPreferences("USER", MODE_PRIVATE)
-            val token = s?.getString("TOKEN", "UNDEFINED")
-            return token!!
+            val token = s?.getString("TOKEN", null)
+            return token
         }
 
         fun setToken(context: Context, token : String){
             val pref = context.getSharedPreferences("USER", MODE_PRIVATE)
             pref.edit().apply {
-                putString("TOKEN", token)
+                putString("TOKEN", "Bearer $token")
                 apply()
             }
         }

@@ -30,7 +30,8 @@ class QuickUpdateActivity : AppCompatActivity(), QuickUpdateInterface {
         observe()
     }
 
-    private fun fetchProducts() = quickUpdateViewModel.fetchProducts(PaperlessUtil.getToken(this), getPassedStore()?.id.toString())
+    private fun fetchProducts() =
+        PaperlessUtil.getToken(this)?.let { quickUpdateViewModel.fetchProducts(it, getPassedStore()?.id.toString()) }
 
     private fun observe(){
         observeState()
@@ -86,7 +87,7 @@ class QuickUpdateActivity : AppCompatActivity(), QuickUpdateInterface {
     }
 
     private fun updateStock(product: Product){
-        quickUpdateViewModel.updateProduct(PaperlessUtil.getToken(this), getPassedStore()?.id.toString(), product)
+        PaperlessUtil.getToken(this)?.let { quickUpdateViewModel.updateProduct(it, getPassedStore()?.id.toString(), product) }
     }
 
     private fun getPassedStore() = intent.getParcelableExtra<Store>("store")

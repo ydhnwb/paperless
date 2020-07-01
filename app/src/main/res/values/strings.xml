@@ -235,8 +235,8 @@
     <string name="title_activity_catalog">CatalogActivity</string>
     <string name="info_empty_query">Ketikkan nama produk untuk mulai mencari</string>
     <string name="common_all">SEMUA</string>
-    <string name="history_in">IN</string>
-    <string name="history_out">OUT</string>
+    <string name="history_in">PENJUALAN</string>
+    <string name="history_out">PEMBELIAN</string>
     <string name="title_activity_detail_product"> </string>
     <string name="title_activity_store_profile"> </string>
     <string name="title_activity_store_page"> </string>
@@ -289,5 +289,6 @@
     <string name="empty_stock">Stok habis</string>
     <string name="empty_stock_info">Stok barang ini sudah habis</string>
     <string name="in_promo_alt">Sedang promo</string>
+    <string name="permission_not_allowed">Anda tidak memiliki akses untuk membuka ini</string>
 
 </resources>

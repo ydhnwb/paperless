@@ -40,7 +40,10 @@ class CustomerAnalyticFragment : Fragment(R.layout.fragment_customer_analytic){
                 customerAnalyticViewModel.listenToState().observer(viewLifecycleOwner, Observer { state -> handleState(state) })
                 customerAnalyticViewModel.listenStoreWhoBuy().observe(viewLifecycleOwner, Observer { x -> handleStoreWhoBuy(x) })
                 customerAnalyticViewModel.listenToUserWhoBuy().observe(viewLifecycleOwner, Observer { x -> handleUserWhoBuy(x) })
-                customerAnalyticViewModel.fetchStoreInfo(PaperlessUtil.getToken(requireActivity()), s.id.toString())
+                PaperlessUtil.getToken(requireActivity())?.let { it1 ->
+                    customerAnalyticViewModel.fetchStoreInfo(
+                        it1, s.id.toString())
+                }
             }
         }
     }

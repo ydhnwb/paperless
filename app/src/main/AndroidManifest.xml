@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ydhnwb.paperlessapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,18 +11,21 @@
 
     <application
         android:name=".MyApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.quickupdate.QuickUpdateActivity"
             android:label="@string/title_activity_quick_update"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".ui.user_history.UserHistoryActivity"
             android:label="@string/title_activity_user_history"
