@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "735127145465",
+    "firebase_url": "https://paperless-android.firebaseio.com",
+    "project_id": "paperless-android",
+    "storage_bucket": "paperless-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735127145465:android:7fb3c1d10e14aef73a0b28",
+        "android_client_info": {
+          "package_name": "com.ydhnwb.paperlessapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735127145465-i3cr1t1gq4fjb2om9hu3vf3ar5c389oo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxPpYDZ-7ME43o0p7qZjinncm3ABsCVSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735127145465-i3cr1t1gq4fjb2om9hu3vf3ar5c389oo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

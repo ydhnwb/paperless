@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'com.google.gms.google-services'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -58,15 +60,15 @@ dependencies {
 
     //web request
     implementation "com.squareup.retrofit2:retrofit:2.8.1"
-    implementation "com.squareup.retrofit2:converter-gson:2.6.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.7.1"
     implementation "com.squareup.okhttp3:okhttp:3.14.7"
     implementation "com.squareup.okhttp3:okhttp-urlconnection:3.10.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:3.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.12.7"
 
     //ui ux
     implementation 'com.github.AppIntro:AppIntro:6.0.0-alpha3'
-    implementation "io.coil-kt:coil:0.9.5"
-    implementation 'com.fxn769:pix:1.4.4'
+    implementation "io.coil-kt:coil:0.11.0"
+    implementation 'com.fxn769:pix:1.5.3'
 
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
@@ -82,5 +84,9 @@ dependencies {
 
     //sectioned
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:3.2.0'
+
+    //firebase
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+    implementation 'com.google.firebase:firebase-messaging:20.1.7'
 
 }

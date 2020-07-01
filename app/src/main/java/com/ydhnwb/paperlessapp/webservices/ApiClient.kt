@@ -40,8 +40,6 @@ class ApiClient {
     }
 }
 
-
-
 data class UrlRes(
     @SerializedName("url") var url : String
 )

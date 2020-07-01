@@ -1,5 +1,7 @@
 package com.ydhnwb.paperlessapp.ui.main
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +10,7 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.ui.main.dashboard.DashboardFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
+import android.os.Build
 import android.widget.Toast
 import com.ydhnwb.paperlessapp.ui.login.LoginActivity
 import com.ydhnwb.paperlessapp.ui.main.explore.ExploreFragment
@@ -18,7 +21,12 @@ import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 
 
 class MainActivity : AppCompatActivity() {
-    companion object{ var navStatus = -1 }
+    companion object{
+        var navStatus = -1
+        const val CHANNEL_ID = "paperless_app"
+        private const val CHANNEL_NAME= "Paperless"
+        private const val CHANNEL_DESC = "Android Push Notification Test"
+    }
     private var fragment : Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +48,16 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }).start()
+        setupNotificationManager()
+    }
+
+    private fun setupNotificationManager(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+            channel.description = CHANNEL_DESC
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
+        }
     }
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->

@@ -15,7 +15,8 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("v1/register")
-    fun register(@Field("name") name : String, @Field("email") email : String, @Field("password") password : String) : Call<WrappedResponse<User>>
+    fun register(@Field("name") name : String, @Field("email") email : String, @Field("password") password : String, @Field("fcm_token") fcmToken : String)
+            : Call<WrappedResponse<User>>
 
     @Multipart
     @POST("v1/own/store")

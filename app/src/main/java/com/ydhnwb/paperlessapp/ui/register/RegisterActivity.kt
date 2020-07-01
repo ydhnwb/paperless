@@ -7,7 +7,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.repositories.FirebaseRepository
 import kotlinx.android.synthetic.main.activity_register.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterActivity : AppCompatActivity(){

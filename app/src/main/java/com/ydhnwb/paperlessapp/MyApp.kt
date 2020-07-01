@@ -47,6 +47,7 @@ class MyApp : Application(){
 
 val retrofitModules = module {
     single { ApiClient.instance() }
+    single { FirebaseRepository() }
 }
 
 val repositoryModules = module {
@@ -62,7 +63,7 @@ val repositoryModules = module {
 
 val viewModelModules = module {
     viewModel { LoginViewModel(get()) }
-    viewModel { RegisterViewModel(get()) }
+    viewModel { RegisterViewModel(get(), get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { SearchUserViewModel(get()) }
     viewModel { ExploreViewModel(get()) }
