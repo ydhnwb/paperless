@@ -49,6 +49,15 @@
                 android:textSize="18sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_gravity="end"
+                android:visibility="gone"
+                android:id="@+id/order_detail_update"
+                android:textAllCaps="false"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:text="@string/update_product"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 

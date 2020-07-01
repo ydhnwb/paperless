@@ -44,6 +44,13 @@
                 android:textColor="@color/colorBlackSteel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginBottom="@dimen/margin_size_8"
+                android:id="@+id/product_stock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <TextView
                 android:textStyle="bold"
                 android:textColor="@color/colorPrimaryDark"
@@ -51,6 +58,14 @@
                 android:text="@string/lorem"
                 android:maxLines="1"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/product_isPromo"
+                android:textColor="@color/colorRed"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView

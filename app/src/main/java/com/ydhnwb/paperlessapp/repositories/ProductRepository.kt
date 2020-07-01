@@ -15,6 +15,7 @@ import retrofit2.Response
 import java.io.File
 
 interface ProductContract {
+    fun getPromotedProducts(token: String, listener: ArrayResponse<Product>)
     fun searchProductCatalog(token: String, q: String, listener: SingleResponse<GeneralProductSearch>)
     fun deleteProduct(token: String, storeId: String, productId : String, listener: SingleResponse<Product>)
     fun updateProductOnly(token: String, storeId: String, product : Product,categoryId: Int, listener: SingleResponse<Product>)
@@ -48,6 +49,20 @@ class ProductRepository (private val api: ApiService) : ProductContract {
                     }
                 }
             }
+        })
+    }
+
+    override fun getPromotedProducts(token: String, listener: ArrayResponse<Product>) {
+        api.get_promoted_product(token).enqueue(object: Callback<WrappedListResponse<Product>>{
+            override fun onFailure(call: Call<WrappedListResponse<Product>>, t: Throwable) = listener.onFailure(Error(t.message))
+
+            override fun onResponse(call: Call<WrappedListResponse<Product>>, response: Response<WrappedListResponse<Product>>) {
+                when{
+                    response.isSuccessful -> listener.onSuccess(response.body()!!.data)
+                    else -> listener.onFailure(Error(response.message()))
+                }
+            }
+
         })
     }
 

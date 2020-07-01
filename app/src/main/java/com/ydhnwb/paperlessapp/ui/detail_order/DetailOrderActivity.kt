@@ -14,6 +14,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.OrderHistory
+import com.ydhnwb.paperlessapp.models.OrderHistoryDetail
+import com.ydhnwb.paperlessapp.models.Product
+import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.ui.quickupdate.QuickUpdateActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
 import kotlinx.android.synthetic.main.activity_detail_order.*
@@ -21,7 +25,7 @@ import kotlinx.android.synthetic.main.content_detail_order.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
-class DetailOrderActivity : AppCompatActivity() {
+class DetailOrderActivity : AppCompatActivity(), DetailOrderAdapterInterface {
     private val detailOrderViewModel: DetailOrderViewModel by viewModel()
     private var downloadID : Long? = null
 
@@ -62,7 +66,7 @@ class DetailOrderActivity : AppCompatActivity() {
     private fun setupRecyclerView(){
         detail_order_recyclerView.apply {
             layoutManager = LinearLayoutManager(this@DetailOrderActivity)
-            adapter = DetailOrderAdapter(getOrder()?.orderDetails!!, this@DetailOrderActivity)
+            adapter = DetailOrderAdapter(getOrder()?.orderDetails!!, this@DetailOrderActivity, getIsPurchasement())
         }
     }
 
@@ -104,4 +108,14 @@ class DetailOrderActivity : AppCompatActivity() {
         downloadID = downloadManager!!.enqueue(request)
 //        downloadManager.enqueue(request)
     }
+
+    override fun goToStockActivity(orderDetail: OrderHistoryDetail) {
+        startActivity(Intent(this@DetailOrderActivity, QuickUpdateActivity::class.java).apply {
+            putExtra("order_detail", orderDetail)
+            putExtra("store", getPassedProduct())
+        })
+    }
+
+    private fun getPassedProduct() = intent.getParcelableExtra<Store>("store")
+    private fun getIsPurchasement() = !intent.getBooleanExtra("is_in", false)
 }

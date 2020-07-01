@@ -6,12 +6,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.ui.catalog.CatalogActivity
-import com.ydhnwb.paperlessapp.shared_adapter.CategoryAdapter
-import com.ydhnwb.paperlessapp.models.Category
+import com.ydhnwb.paperlessapp.models.Product
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_explore.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,25 +21,33 @@ class ExploreFragment : Fragment(R.layout.fragment_explore){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupUI()
         setupSearchBar()
-        exploreViewModel.fetchCategories()
-        exploreViewModel.listenToCategories().observe(viewLifecycleOwner, Observer { handleCategory(it) })
-        exploreViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleCategoryState(it) })
+        observe()
+        fetchPromotedProducts()
     }
 
-    private fun setupUI(){
-        view!!.rv_category.apply {
-            layoutManager = GridLayoutManager(activity, 2)
-            adapter = CategoryAdapter(mutableListOf<Category>(), activity!!)
+    private fun fetchPromotedProducts() = exploreViewModel.fetchPromotedProducts(PaperlessUtil.getToken(requireActivity()))
+
+    private fun observe(){
+        observeState()
+        observeProducts()
+    }
+
+    private fun observeProducts() = exploreViewModel.listenToPromotedProducts().observe(viewLifecycleOwner, Observer { handlePromotedProducts(it) })
+    private fun observeState() = exploreViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleCategoryState(it) })
+
+    private fun setupRecyclerView(products : HashMap<String, List<Product>>){
+        val sectionedAdapter = SectionedRecyclerViewAdapter()
+        products.forEach { (key, value) -> sectionedAdapter.addSection(PromoSectionAdapter(key, value, requireActivity())) }
+        requireView().rv_promoted_product.apply {
+            layoutManager = LinearLayoutManager(requireActivity())
+            adapter = sectionedAdapter
         }
     }
 
-    private fun handleCategory(it : List<Category>){
-        view!!.rv_category.adapter?.let { adapter ->
-            if(adapter is CategoryAdapter){
-                adapter.updateList(it)
-            }
+    private fun handlePromotedProducts(it: HashMap<String, List<Product>>?){
+        it?.let {
+            setupRecyclerView(it)
         }
     }
 

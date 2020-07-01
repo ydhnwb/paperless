@@ -19,6 +19,7 @@ import com.ydhnwb.paperlessapp.ui.manage.bookmenu.BookmenuFragment
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.CustomFragmentPagerAdapter
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
 import kotlinx.android.synthetic.main.bottomsheet_detail.view.*
 import kotlinx.android.synthetic.main.fragment_etalase.view.*
 import kotlinx.android.synthetic.main.fragment_etalase.view.btn_details
@@ -87,6 +88,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
             checkProductByCode(data.getStringExtra("CODE"))
         }else if(requestCode == REQ_CHECKOUT && resultCode == Activity.RESULT_OK){
             parentViewModel.clearAllSelectedProduct()
+            parentViewModel.fetchAllProduct(PaperlessUtil.getToken(requireActivity()), parentViewModel.listenToCurrentStore().value?.id.toString())
         }
     }
 
@@ -114,6 +116,7 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
                     view!!.loading!!.visibility = View.GONE
                 }
             }
+            is ManageStoreState.Alert -> requireActivity().showInfoAlert(it.message)
         }
     }
 
@@ -154,6 +157,5 @@ class EtalaseFragment : Fragment(R.layout.fragment_etalase) {
     }
 
     private fun toast(message : String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
-
 
 }

@@ -3,24 +3,31 @@ package com.ydhnwb.paperlessapp.ui.main.explore
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Category
+import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.repositories.CategoryRepository
+import com.ydhnwb.paperlessapp.repositories.ProductRepository
 import com.ydhnwb.paperlessapp.utilities.ArrayResponse
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 
-class ExploreViewModel (private val categoryRepository: CategoryRepository) : ViewModel(){
+class ExploreViewModel (private val productRepo: ProductRepository) : ViewModel(){
     private var state : SingleLiveEvent<ExploreState> = SingleLiveEvent()
-    private var categories = MutableLiveData<List<Category>>()
+    private val promotedProducts = MutableLiveData<HashMap<String, List<Product>>>()
 
     private fun setLoading(){ state.value = ExploreState.IsLoading(true) }
     private fun hideLoading(){ state.value = ExploreState.IsLoading(false) }
     private fun toast(message: String){ state.value = ExploreState.ShowToast(message) }
 
-    fun fetchCategories(){
+
+    fun fetchPromotedProducts(token: String){
         setLoading()
-        categoryRepository.getCategories(object: ArrayResponse<Category>{
-            override fun onSuccess(datas: List<Category>?) {
+        productRepo.getPromotedProducts(token, object: ArrayResponse<Product>{
+            override fun onSuccess(datas: List<Product>?) {
                 hideLoading()
-                datas?.let { categories.postValue(it) }
+                datas?.let {
+                    promotedProducts.postValue(it.groupBy { p->
+                        p.category?.name.toString()
+                    } as HashMap<String, List<Product>>?)
+                }
             }
             override fun onFailure(err: Error) {
                 hideLoading()
@@ -29,8 +36,9 @@ class ExploreViewModel (private val categoryRepository: CategoryRepository) : Vi
         })
     }
 
+
     fun listenToUIState() = state
-    fun listenToCategories() = categories
+    fun listenToPromotedProducts() = promotedProducts
 }
 
 sealed class ExploreState {

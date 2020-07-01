@@ -12,12 +12,11 @@ import com.ydhnwb.paperlessapp.ui.manage.ManageStoreViewModel
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.extensions.gone
+import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
 import com.ydhnwb.paperlessapp.utilities.extensions.visible
-import kotlinx.android.synthetic.main.list_item_catalog.view.*
 import kotlinx.android.synthetic.main.list_item_product.view.*
 
 class EtalaseAdapter (private var products : MutableList<Product>, private var context: Context, private var pvm: ManageStoreViewModel) : RecyclerView.Adapter<EtalaseAdapter.ViewHolder>(){
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.list_item_product, parent, false)
@@ -52,12 +51,30 @@ class EtalaseAdapter (private var products : MutableList<Product>, private var c
                     product_price.text = PaperlessUtil.setToIDR(product.price!! - p.toInt())
                 }
 
-                product_image.load(product.image)
-                setOnClickListener {
-                    val p = product.copy()
-                    p.selectedQuantity = 1
-                    pvm.addSelectedProduct(p)
+                if(product.qty == null){
+                    product_stock.text = resources.getString(R.string.infinity)
+                    setOnClickListener {
+                        val p = product.copy()
+                        p.selectedQuantity = 1
+                        pvm.addSelectedProduct(p)
+                    }
+                }else{
+                    if(product.qty!! <= 0){
+                        product_stock.text = resources.getString(R.string.empty_stock)
+                        setOnClickListener {
+                            context.showInfoAlert(resources.getString(R.string.empty_stock_info))
+                        }
+                    }else{
+                        setOnClickListener {
+                            val p = product.copy()
+                            p.selectedQuantity = 1
+                            pvm.addSelectedProduct(p)
+                        }
+                        product_stock.text = "Stok ${product.qty}"
+                    }
                 }
+                product_image.load(product.image)
+
             }
         }
     }

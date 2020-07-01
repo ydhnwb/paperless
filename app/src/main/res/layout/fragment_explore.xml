@@ -72,7 +72,7 @@
                 android:layout_marginTop="16dp"
                 android:textColor="@color/colorBlackSteel"
                 android:textStyle="bold"
-                android:text="@string/title_by_category"
+                android:text="@string/in_promo_alt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <ProgressBar
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_category"
+                android:id="@+id/rv_promoted_product"
                 android:layout_marginTop="4dp"
                 android:nestedScrollingEnabled="false"
                 android:layout_width="match_parent"

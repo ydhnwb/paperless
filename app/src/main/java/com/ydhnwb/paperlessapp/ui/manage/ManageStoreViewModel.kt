@@ -27,6 +27,7 @@ class ManageStoreViewModel (private val storeRepository: StoreRepository,private
     private fun setLoading(){ state.value = ManageStoreState.IsLoading(true) }
     private fun hideLoading(){ state.value = ManageStoreState.IsLoading(false) }
     private fun toast(message: String){ state.value = ManageStoreState.ShowToast(message) }
+    private fun alert(message: String){ state.value = ManageStoreState.Alert(message) }
     private fun downloadedUrl(url : String){ state.value = ManageStoreState.DownloadedUrl(url) }
 
     fun downloadReport(token: String, storeId: String){
@@ -66,6 +67,29 @@ class ManageStoreViewModel (private val storeRepository: StoreRepository,private
         })
     }
 
+    fun isAcceptedByStock(product: Product): Boolean {
+        var result = false
+        val temp = if (allProducts.value == null){
+            mutableListOf()
+        }else{
+            allProducts.value as MutableList<Product>
+        }
+        val tempSelectedProducts = if(selectedProducts.value == null) mutableListOf() else selectedProducts.value as MutableList<Product>
+        val sameProduct = temp.find { it.id == product.id }
+        val sameSelectedProduct = tempSelectedProducts.find { it.id == product.id }
+        sameProduct?.let {
+            result = if (sameSelectedProduct != null && it.qty != null){
+                it.qty?.minus(sameSelectedProduct.selectedQuantity!!)!! >= 1
+            }else{
+                true
+            }
+        } ?: kotlin.run {
+            result = true
+        }
+        return result
+    }
+
+
     fun addSelectedProduct(product: Product){
         val tempSelectedProducts = if(selectedProducts.value == null){
             mutableListOf()
@@ -73,8 +97,13 @@ class ManageStoreViewModel (private val storeRepository: StoreRepository,private
             selectedProducts.value as MutableList<Product>
         }
         val sameProduct = tempSelectedProducts.find { p -> p.id == product.id }
-        sameProduct?.let {p ->
-            p.selectedQuantity = p.selectedQuantity?.plus(1)
+        sameProduct?.let { p ->
+            if(isAcceptedByStock(product)){
+                p.selectedQuantity = p.selectedQuantity?.plus(1)
+            }else{
+                alert("Tidak dapat menambahkan produk karena stok tidak tersedia")
+                return
+            }
         } ?: kotlin.run {
             tempSelectedProducts.add(product)
         }
@@ -106,7 +135,13 @@ class ManageStoreViewModel (private val storeRepository: StoreRepository,private
         }
         val p = tempSelectedProducts.find { it.id == product.id }
         p?.let {
-            it.selectedQuantity = it.selectedQuantity!!.plus(1)
+            if(isAcceptedByStock(product)){
+                it.selectedQuantity = it.selectedQuantity!!.plus(1)
+            }else{
+                alert("Tidak dapat menambahkan produk karena stok tidak tersedia")
+                return
+            }
+
         }
         selectedProducts.postValue(tempSelectedProducts)
     }
@@ -152,6 +187,7 @@ class ManageStoreViewModel (private val storeRepository: StoreRepository,private
 }
 
 sealed class ManageStoreState{
+    data class Alert(val message: String) : ManageStoreState()
     data class IsLoading(var state : Boolean) : ManageStoreState()
     data class ShowToast(var message : String) : ManageStoreState()
     data class DownloadedUrl(var url : String) : ManageStoreState()

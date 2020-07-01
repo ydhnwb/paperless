@@ -49,6 +49,9 @@ data class OrderHistory(
     @SerializedName("buy_by_user") var boughtByUser : User? = null,
     @SerializedName("datetime") var datetime : String? = null,
     @SerializedName("order_details") var orderDetails : List<OrderHistoryDetail> = mutableListOf(),
+    @SerializedName("total_price") var totalPrice :  Int? = null,
+    @SerializedName("total_price_with_discount") var totalPriceWithDiscount : Int? = null,
+    @SerializedName("total_discount_by_percent") var totalDiscountByPercentInCurrency : Int? = null,
     var date : Date? = null
 ) : Parcelable
 
@@ -60,5 +63,7 @@ data class OrderHistoryDetail (
     @SerializedName("image") var productImage :  String? = null,
     @SerializedName("price") var productPrice :  Int? = null,
     @SerializedName("quantity") var quantity: Int? = null,
-    @SerializedName("sold_at") var soldAt :  String? = null
+    @SerializedName("sold_at") var soldAt :  String? = null,
+    @SerializedName("discount_by_percent") var discountByPercent: Float? = null
+
 ): Parcelable

@@ -1,30 +1,32 @@
 package com.ydhnwb.paperlessapp.shared_adapter
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
-import com.ydhnwb.paperlessapp.ui.detail_order.DetailOrderActivity
 import com.ydhnwb.paperlessapp.models.OrderHistory
+import com.ydhnwb.paperlessapp.ui.manage.history.list_history.ListHistoryAdapterInterface
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.list_item_history.view.*
 
-class HistoryAdapter(private val histories : MutableList<OrderHistory>, private val context: Context, private var isIn : Boolean) :
+class HistoryAdapter(private val histories : MutableList<OrderHistory>,
+                     private val context: Context,
+                     private var isIn : Boolean,
+                     private val historyAdapterInterface: ListHistoryAdapterInterface) :
         RecyclerView.Adapter<HistoryAdapter.ViewHolder>(){
 
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(order : OrderHistory, context: Context, isIn : Boolean){
             with(itemView){
                 if(order.orderDetails.isNotEmpty()){
                     history_date.text = order.orderDetails[0].soldAt
                     history_image.load(order.orderDetails[0].productImage)
                 }
-                history_total_price.text = PaperlessUtil.setToIDR(order.orderDetails.sumBy { detail -> detail.quantity!! * detail.productPrice!! })
+                history_total_price.text = PaperlessUtil.setToIDR(order.totalPriceWithDiscount!!)
                 history_title.text = order.orderDetails.joinToString { d -> d.productName!! }
                 if(isIn){
                     if(order.boughtByStore?.id == null && order.boughtByUser?.id == null){
@@ -48,9 +50,7 @@ class HistoryAdapter(private val histories : MutableList<OrderHistory>, private 
                     history_pov_image.load(order.sellByStore?.store_logo)
                 }
                 setOnClickListener {
-                    context.startActivity(Intent(context, DetailOrderActivity::class.java).apply {
-                        putExtra("ORDER", order)
-                    })
+                    historyAdapterInterface.click(order)
                 }
             }
         }

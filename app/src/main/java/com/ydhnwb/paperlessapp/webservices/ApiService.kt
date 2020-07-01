@@ -65,6 +65,9 @@ interface ApiService {
     ) : Call<WrappedResponse<Product>>
 
 
+    @GET("v1/promo")
+    fun get_promoted_product(@Header("Authorization") token : String) : Call<WrappedListResponse<Product>>
+
 
     @POST("v1/own/store/{id}/product/{productId}")
     fun product_update(@Header("Authorization") token: String,

@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.ui.manage.history.list_history
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,12 +11,14 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.ui.manage.ManageStoreViewModel
 import com.ydhnwb.paperlessapp.shared_adapter.HistoryAdapter
 import com.ydhnwb.paperlessapp.models.History
+import com.ydhnwb.paperlessapp.models.OrderHistory
+import com.ydhnwb.paperlessapp.ui.detail_order.DetailOrderActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.fragment_content_history.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ListHistoryFragment : Fragment(R.layout.fragment_content_history){
+class ListHistoryFragment : Fragment(R.layout.fragment_content_history), ListHistoryAdapterInterface{
     companion object {
         fun instance(isIn : Boolean) : ListHistoryFragment {
             val a = Bundle()
@@ -40,7 +43,7 @@ class ListHistoryFragment : Fragment(R.layout.fragment_content_history){
     private fun setupUI(){
         view!!.rv_history.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = HistoryAdapter(mutableListOf(), activity!!, false)
+            adapter = HistoryAdapter(mutableListOf(), activity!!, false, this@ListHistoryFragment)
         }
     }
 
@@ -68,4 +71,14 @@ class ListHistoryFragment : Fragment(R.layout.fragment_content_history){
     }
 
     private fun toast(m : String) = Toast.makeText(activity, m, Toast.LENGTH_LONG).show()
+    override fun click(orderHistory: OrderHistory) {
+        val isIn = arguments?.getBoolean("isin", false)!!
+        startActivity(Intent(requireActivity(), DetailOrderActivity::class.java).apply {
+            putExtra("ORDER", orderHistory)
+            putExtra("store", parentStoreViewModel.listenToCurrentStore().value)
+            putExtra("is_in", isIn)
+        })
+    }
+
+
 }

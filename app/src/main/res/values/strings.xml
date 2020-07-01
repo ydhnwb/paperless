@@ -279,5 +279,15 @@
     <string name="hint_product_promo_percent">Promo dalam persen</string>
     <string name="error_discount_not_valid">Diskon tidak valid</string>
     <string name="error_discount_exception">Masukkan diskon yang benar</string>
+    <string name="in_promo">Produk dalam promo</string>
+    <string name="infinity">Stok ∞</string>
+    <string name="update_product">Update terkait</string>
+    <string name="title_activity_quick_update">QuickUpdateActivity</string>
+    <string name="stock_updated">Stok berhasil diupdate</string>
+    <string name="update_stock_of_this_product">Apakah anda yakin ingin mengupdate stok produk ini?</string>
+    <string name="update_stock">Update stock</string>
+    <string name="empty_stock">Stok habis</string>
+    <string name="empty_stock_info">Stok barang ini sudah habis</string>
+    <string name="in_promo_alt">Sedang promo</string>
 
 </resources>

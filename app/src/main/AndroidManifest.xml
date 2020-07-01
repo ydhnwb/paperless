@@ -19,9 +19,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.quickupdate.QuickUpdateActivity"
+            android:label="@string/title_activity_quick_update"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".ui.user_history.UserHistoryActivity"
             android:label="@string/title_activity_user_history"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.detail_order.DetailOrderActivity"
             android:label="@string/title_activity_detail_order"
