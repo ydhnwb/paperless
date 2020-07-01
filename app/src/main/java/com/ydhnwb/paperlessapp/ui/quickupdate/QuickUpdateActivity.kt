@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.models.OrderDetail
+import com.ydhnwb.paperlessapp.models.OrderHistoryDetail
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
@@ -80,7 +82,11 @@ class QuickUpdateActivity : AppCompatActivity(), QuickUpdateInterface {
         AlertDialog.Builder(this).apply {
             setMessage(resources.getString(R.string.update_stock_of_this_product))
             setPositiveButton(resources.getString(R.string.update_stock)){ d, _ ->
-                updateStock(product)
+                getPassedOrderDetail()?.quantity?.let {
+                    product.qty = product.qty?.plus(it)
+                    updateStock(product)
+                }
+
                 d.dismiss()
             }
         }.show()
@@ -89,6 +95,7 @@ class QuickUpdateActivity : AppCompatActivity(), QuickUpdateInterface {
     private fun updateStock(product: Product){
         PaperlessUtil.getToken(this)?.let { quickUpdateViewModel.updateProduct(it, getPassedStore()?.id.toString(), product) }
     }
-
     private fun getPassedStore() = intent.getParcelableExtra<Store>("store")
+
+    private fun getPassedOrderDetail() = intent.getParcelableExtra<OrderHistoryDetail>("order_detail")
 }

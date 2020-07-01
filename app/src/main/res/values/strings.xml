@@ -282,7 +282,7 @@
     <string name="in_promo">Produk dalam promo</string>
     <string name="infinity">Stok ∞</string>
     <string name="update_product">Update terkait</string>
-    <string name="title_activity_quick_update">QuickUpdateActivity</string>
+    <string name="title_activity_quick_update">Quick update</string>
     <string name="stock_updated">Stok berhasil diupdate</string>
     <string name="update_stock_of_this_product">Apakah anda yakin ingin mengupdate stok produk ini?</string>
     <string name="update_stock">Update stock</string>
