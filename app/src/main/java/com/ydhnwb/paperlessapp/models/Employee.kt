@@ -11,5 +11,5 @@ data class Employee(
     @SerializedName("id") var id : Int? = null,
     @SerializedName("user") var user : User? = null,
     @SerializedName("role") var role : Int? = null,
-    @SerializedName("joined)at") var joined : String? = null
+    @SerializedName("joined_at") var joined : String? = null
 )

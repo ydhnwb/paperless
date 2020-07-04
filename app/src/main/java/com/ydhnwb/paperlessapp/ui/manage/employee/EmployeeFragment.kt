@@ -13,8 +13,10 @@ import com.ydhnwb.paperlessapp.ui.search_user.SearchUserActivity
 import com.ydhnwb.paperlessapp.models.Employee
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.gone
 import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
 import com.ydhnwb.paperlessapp.utilities.extensions.showToast
+import com.ydhnwb.paperlessapp.utilities.extensions.visible
 import kotlinx.android.synthetic.main.fragment_employee.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -52,10 +54,7 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee), EmployeeInterface
             is EmployeeState.IsLoading -> { if(it.state){ view!!.loading.visibility = View.VISIBLE }else{ view!!.loading.visibility = View.GONE } }
             is EmployeeState.ShowToast -> requireActivity().showToast(it.message)
             is EmployeeState.SuccessDelete -> {
-                PaperlessUtil.getToken(activity!!)?.let { it1 ->
-                    employeeViewModel.fetchEmployees(
-                        it1, parentStoreViewModel.listenToCurrentStore().value?.id.toString())
-                }
+                fetchEmployees()
                 requireActivity().showToast(resources.getString(R.string.info_success_delete_employee))
             }
         }
@@ -69,7 +68,7 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee), EmployeeInterface
     }
 
     private fun handleEmployee(it : List<Employee>){
-        if(it.isNullOrEmpty()){ view!!.empty_view.visibility = View.VISIBLE }else{ view!!.empty_view.visibility = View.GONE }
+        if(it.isNullOrEmpty()) view!!.empty_view.visible() else view!!.empty_view.gone()
         view!!.rv_employee.adapter?.let { adapter ->
             if(adapter is EmployeeAdapter){
                 adapter.updateList(it)
@@ -95,7 +94,7 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee), EmployeeInterface
 
     override fun onResume() {
         super.onResume()
-        PaperlessUtil.getToken(activity!!)?.let { employeeViewModel.fetchEmployees(it, parentStoreViewModel.listenToCurrentStore().value?.id.toString()) }
+        fetchEmployees()
     }
 
     override fun click(employee: Employee) {
@@ -109,11 +108,8 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee), EmployeeInterface
             setOnMenuItemClickListener { menuItems ->
                 when(menuItems.itemId){
                     R.id.menu_delete -> {
-                        if(getRole() != 0){
-                            PaperlessUtil.getToken(requireActivity())?.let {
-                                employeeViewModel.removeEmployee(
-                                    it, storeId, employee.id.toString())
-                            }
+                        if(getRole() != -1){
+                            removeEmployee(storeId, employee.id.toString())
                         }else{
                             requireActivity().showInfoAlert(resources.getString(R.string.permission_not_allowed))
                         }
@@ -123,5 +119,18 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee), EmployeeInterface
                 }
             }
         }.show()
+    }
+
+
+    private fun removeEmployee(storeId: String, employeeId: String){
+        PaperlessUtil.getToken(requireActivity())?.let {
+            employeeViewModel.removeEmployee(it, storeId, employeeId)
+        }
+    }
+
+    private fun fetchEmployees(){
+        PaperlessUtil.getToken(requireActivity())?.let { it1 ->
+            employeeViewModel.fetchEmployees(it1, parentStoreViewModel.listenToCurrentStore().value?.id.toString())
+        }
     }
 }

@@ -21,27 +21,12 @@ class EmployeeRepository (private val api: ApiService) : EmployeeContract{
     override fun getEmployees(token: String, storeId: String, listener: SingleResponse<EmployeeResponse>) {
         api.store_employee(token, storeId).enqueue(object:
             Callback<WrappedResponse<EmployeeResponse>> {
-            override fun onFailure(call: Call<WrappedResponse<EmployeeResponse>>, t: Throwable) {
-                println(t.message)
-                listener.onFailure(Error(t.message))
-            }
+            override fun onFailure(call: Call<WrappedResponse<EmployeeResponse>>, t: Throwable) = listener.onFailure(Error(t.message))
 
             override fun onResponse(call: Call<WrappedResponse<EmployeeResponse>>, response: Response<WrappedResponse<EmployeeResponse>>) {
                 when{
-                    response.isSuccessful -> {
-                        val b = response.body()
-                        b?.let {
-                            if(it.status){
-                                listener.onSuccess(b.data)
-                            }else{
-                                listener.onFailure(Error())
-                            }
-                        }
-                    }
-                    else -> {
-                        println("Error ${response.message()} [${response.code()}]")
-                        listener.onFailure(Error(response.message()))
-                    }
+                    response.isSuccessful -> listener.onSuccess(response.body()!!.data)
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })

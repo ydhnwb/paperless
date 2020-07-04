@@ -22,11 +22,12 @@ interface ApiService {
     @POST("v1/own/store")
     fun store_create(@Header("Authorization") token: String, @PartMap kwargs : HashMap<String, RequestBody>, @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
 
-    @Multipart
-    @POST("v1/own/store")
-    fun store_create(@Header("Authorization") token : String, @Part("name") name : RequestBody, @Part("description") description : RequestBody,
-                     @Part("email") email : RequestBody, @Part("phone") phone : RequestBody, @Part("address") address : RequestBody,
-                     @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
+//    @Multipart
+//    @POST("v1/own/store")
+//    fun store_create(@Header("Authorization") token : String, @Part("name") name : RequestBody, @Part("description") description : RequestBody,
+//                     @Part("email") email : RequestBody, @Part("phone") phone : RequestBody, @Part("address") address : RequestBody,
+//                     @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
+
     @GET("v1/own/store")
     fun store_get(@Header("Authorization") token : String) : Call<WrappedListResponse<Store>>
 
@@ -143,6 +144,6 @@ interface ApiService {
     @POST("v1/invoice")
     fun download_invoice(@Header("Authorization") token : String, @Field("order_id") orderId : String) : Call<WrappedResponse<UrlRes>>
 
-    @GET("v1/notification")
+    @GET("v1/notifications")
     fun notification_get(@Header("Authorization") token: String) : Call<WrappedListResponse<Notification>>
 }

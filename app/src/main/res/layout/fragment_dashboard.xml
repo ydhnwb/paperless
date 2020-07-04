@@ -105,9 +105,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <ProgressBar
+                        android:indeterminateTint="@color/colorBlackSteel"
                         android:visibility="gone"
-                        android:progressTint="@color/colorAccent"
-                        android:progressBackgroundTint="@color/colorPrimaryDark"
                         android:id="@+id/loading_other_store"
                         android:layout_alignParentEnd="true"
                         android:layout_width="wrap_content"

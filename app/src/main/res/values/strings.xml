@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PaperlessApp</string>
+    <string name="app_name">Paperless</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -259,7 +259,7 @@
     <string name="product_cluster">Sebaran produk yang terjual</string>
     <string name="transaction_by_hour">Jumlah transaksi tiap jam</string>
     <string name="validate_price_not_valid">Harga tidak valid</string>
-    <string name="transaction_by_month">Performa penjualan perbulan</string>
+    <string name="transaction_by_month">Transaksi perbulan</string>
     <string name="transaction_by_month_profit">Penjualan tiap bulan</string>
     <string name="spent_by_month">Pengeluaran tiap bulan</string>
     <string name="store_who_buy">Toko yang sering berbelanja</string>
@@ -280,7 +280,7 @@
     <string name="error_discount_not_valid">Diskon tidak valid</string>
     <string name="error_discount_exception">Masukkan diskon yang benar</string>
     <string name="in_promo">Produk dalam promo</string>
-    <string name="infinity">Stok ∞</string>
+    <string name="infinity">∞</string>
     <string name="update_product">Update terkait</string>
     <string name="title_activity_quick_update">Quick update</string>
     <string name="stock_updated">Stok berhasil diupdate</string>

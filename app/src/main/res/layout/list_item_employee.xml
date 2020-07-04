@@ -44,7 +44,6 @@
                     android:textColor="@color/colorBlackSteel"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:text="@string/lorem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <TextView
@@ -52,7 +51,6 @@
                     android:layout_marginTop="4dp"
                     android:maxLines="1"
                     android:textStyle="bold"
-                    android:text="@string/lorem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>

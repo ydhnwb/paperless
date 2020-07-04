@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.ui.main.notification
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -7,7 +8,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Notification
-import com.ydhnwb.paperlessapp.ui.invitation.NotificationAdapter
+import com.ydhnwb.paperlessapp.ui.invitation.InvitationActivity
+import com.ydhnwb.paperlessapp.ui.user_history.UserHistoryActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.extensions.gone
 import com.ydhnwb.paperlessapp.utilities.extensions.showToast
@@ -50,7 +52,11 @@ class NotificationFragment : Fragment(R.layout.fragment_notifications), Notifica
     private fun setupRecyclerView(){
         requireView().rv_notification.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = NotificationAdapter(mutableListOf(), this@NotificationFragment)
+            adapter =
+                NotificationAdapter(
+                    mutableListOf(),
+                    this@NotificationFragment
+                )
         }
     }
 
@@ -65,8 +71,8 @@ class NotificationFragment : Fragment(R.layout.fragment_notifications), Notifica
 
     override fun click(notification: Notification) {
         when(notification.type){
-            "invitation" -> println()
-            "sss" -> println()
+            1 -> startActivity(Intent(requireActivity(), InvitationActivity::class.java))
+            2 -> startActivity(Intent(requireActivity(), UserHistoryActivity::class.java))
             else -> println()
         }
     }

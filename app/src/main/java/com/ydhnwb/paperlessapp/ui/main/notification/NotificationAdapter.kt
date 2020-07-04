@@ -1,4 +1,4 @@
-package com.ydhnwb.paperlessapp.ui.invitation
+package com.ydhnwb.paperlessapp.ui.main.notification
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,6 @@ import coil.api.load
 import coil.transform.CircleCropTransformation
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Notification
-import com.ydhnwb.paperlessapp.ui.main.notification.NotificationAdapterInterface
 import kotlinx.android.synthetic.main.list_item_notification.view.*
 
 class NotificationAdapter(private val notifications : MutableList<Notification>, private val notifInterface: NotificationAdapterInterface) : RecyclerView.Adapter<NotificationAdapter.ViewHolder>(){

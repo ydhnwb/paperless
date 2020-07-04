@@ -8,6 +8,6 @@ data class Notification(
     @SerializedName("subtitle") var subtitle: String? = null,
     @SerializedName("sender") var storeSender: Store? = null,
     @SerializedName("receiver") var userReceiver: User? = null,
-    @SerializedName("type") var type: String? = null,
-    @SerializedName("date") var date : String? = null
+    @SerializedName("type") var type: Int? = null,
+    @SerializedName("created_at") var date : String? = null
 )

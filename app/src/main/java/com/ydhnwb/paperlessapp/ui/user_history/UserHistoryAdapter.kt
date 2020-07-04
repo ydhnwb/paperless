@@ -36,7 +36,7 @@ class UserHistoryAdapter (private val orders : MutableList<OrderHistory>, privat
                 history_image.load(order.orderDetails[0].productImage)
                 history_title.text = order.orderDetails.joinToString { d -> d.productName!! }
                 history_total_price.text = PaperlessUtil.setToIDR(order.orderDetails.sumBy { detail -> detail.quantity!! * detail.productPrice!! })
-                history_date.text = order.date.toString()
+                history_date.text = order.datetime.toString()
                 setOnClickListener {
                     context.startActivity(Intent(context, DetailOrderActivity::class.java).apply {
                         putExtra("ORDER", order)

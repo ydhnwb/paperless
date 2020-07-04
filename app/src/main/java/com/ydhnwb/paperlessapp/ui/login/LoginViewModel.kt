@@ -35,6 +35,7 @@ class LoginViewModel (private val userRepository: UserRepository, private val fi
         firebaseRepo.getToken(object : SingleResponse<String>{
             override fun onSuccess(data: String?) {
                 data?.let { token ->
+                    println("fcm token $token")
                     userRepository.login(email, password, token, object: SingleResponse<User>{
                         override fun onSuccess(data: User?) {
                             hideLoading()

@@ -53,7 +53,7 @@ class OrderRepository(private val api: ApiService) : OrderContract {
                             val b = response.body()
                             if(b!!.status){
                                 customer.name = b.data?.name.toString()
-                                customer.desc = b.data?.address.toString()
+                                customer.desc = b.data?.email.toString()
                                 listener.onSuccess(customer)
                             }else{ listener.onFailure(Error(b.message)) }
                         }

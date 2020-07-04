@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Employee
 import kotlinx.android.synthetic.main.list_item_employee.view.*
@@ -26,6 +27,7 @@ class EmployeeAdapter (private val employees: MutableList<Employee>, private val
         fun bind(employee: Employee){
             with(itemView){
                 employee_name.text = employee.user!!.name
+                employee_role.text = if(employee.role == 0) resources.getString(R.string.cashier) else resources.getString(R.string.staff)
                 employee_more.setOnClickListener {
                     employeeInterface.moreClick(employee, it)
                 }
