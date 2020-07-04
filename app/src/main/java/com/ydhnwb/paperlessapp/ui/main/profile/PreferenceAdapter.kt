@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
@@ -37,10 +38,19 @@ class PreferenceAdapter (private var context: Context, private var prefs : List<
                     1 -> context.startActivity(Intent(context, InvitationActivity::class.java))
                     2 -> context.startActivity(Intent(context, UserHistoryActivity::class.java))
                     3 -> {
-                        PaperlessUtil.clearToken(context)
-                        context.startActivity(Intent(context, LoginActivity::class.java))
-                        context as AppCompatActivity
-                        context.finish()
+                        AlertDialog.Builder(context).apply {
+                            setMessage(context.resources.getString(R.string.ask_logout))
+                            setPositiveButton(context.resources.getString(R.string.logout)){ d, _ ->
+                                PaperlessUtil.clearToken(context)
+                                d.dismiss()
+                                context.startActivity(Intent(context, LoginActivity::class.java))
+                                context as AppCompatActivity
+                                context.finish()
+                            }
+                            setNegativeButton(context.resources.getString(R.string.info_cancel)){ d, _ ->
+                                d.cancel()
+                            }
+                        }.show()
                     }
                     else -> println("Ya")
                 }

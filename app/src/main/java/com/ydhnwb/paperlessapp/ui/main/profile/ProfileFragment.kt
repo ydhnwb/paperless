@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +16,7 @@ import com.ydhnwb.paperlessapp.ui.register.RegisterActivity
 import com.ydhnwb.paperlessapp.ui.scanner.ShowQRActivity
 import com.ydhnwb.paperlessapp.models.Preference
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.showToast
 import kotlinx.android.synthetic.main.fragment_not_logged_in.view.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -49,10 +49,10 @@ class ProfileFragment : Fragment() {
             profileViewModel.listenToCurrentUser().observe(viewLifecycleOwner, Observer {
                 it?.let {
                     with(view){
-                        view.profile_image.load(R.drawable.ydhnwb){ transformations(CircleCropTransformation()) }
-                        view.profile_name.text = it.name
-                        view.profile_email.text = it.email
-                        view.profile_qr.setOnClickListener { _ ->
+                        profile_image.load(R.drawable.ydhnwb){ transformations(CircleCropTransformation()) }
+                        profile_name.text = it.name
+                        profile_email.text = it.email
+                        profile_qr.setOnClickListener { _ ->
                             startActivity(Intent(activity, ShowQRActivity::class.java).apply {
                                 putExtra("ID", it.id.toString())
                                 putExtra("IS_STORE", false)
@@ -72,24 +72,24 @@ class ProfileFragment : Fragment() {
 
     private fun handleUIState(it: ProfileState){
         when(it){
-            is ProfileState.ShowToast -> toast(it.message)
-            is ProfileState.IsLoading -> {
-                with(view!!){
-                    if(it.state){
-                        loading.apply {
-                            visibility = View.VISIBLE
-                            isIndeterminate = true
-                        }
-                    }else{
-                        loading.apply {
-                            visibility = View.GONE
-                            isIndeterminate = false
-                        }
-                    }
+            is ProfileState.ShowToast -> requireContext().showToast(it.message)
+            is ProfileState.IsLoading -> isLoading(it.state)
+        }
+    }
+
+    private fun isLoading(b: Boolean){
+        with(requireView()){
+            if(b){
+                loading.apply {
+                    visibility = View.VISIBLE
+                    isIndeterminate = true
+                }
+            }else{
+                loading.apply {
+                    visibility = View.GONE
+                    isIndeterminate = false
                 }
             }
         }
     }
-
-    private fun toast(message: String) = Toast.makeText(requireActivity(), message, Toast.LENGTH_LONG).show()
 }

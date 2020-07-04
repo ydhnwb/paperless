@@ -2,50 +2,72 @@ package com.ydhnwb.paperlessapp.ui.main.notification
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
+import com.ydhnwb.paperlessapp.models.Notification
 import com.ydhnwb.paperlessapp.ui.invitation.NotificationAdapter
+import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.gone
+import com.ydhnwb.paperlessapp.utilities.extensions.showToast
+import com.ydhnwb.paperlessapp.utilities.extensions.visible
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NotificationFragment : Fragment(R.layout.fragment_notifications) {
+class NotificationFragment : Fragment(R.layout.fragment_notifications), NotificationAdapterInterface {
     private val notificationViewModel: NotificationViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.rv_notification.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = NotificationAdapter(
-                mutableListOf(),
-                activity!!
-            )
+        setupRecyclerView()
+        observe()
+     }
+
+    private fun handleNotif(notifications: List<Notification>){
+        requireView().rv_notification.adapter?.let { adapter ->
+            if(adapter is NotificationAdapter){
+                adapter.updateList(notifications)
+            }
         }
-        notificationViewModel.fetchNotification()
-        notificationViewModel.listenToUIState().observe(viewLifecycleOwner, Observer {
-            when(it){
-                is NotificationState.IsLoading -> isLoading(it.state)
-                is NotificationState.ShowToast -> toast(it.message)
-            }
-        })
-        notificationViewModel.listenToNotifications().observe(viewLifecycleOwner, Observer {
-            view.rv_notification.adapter?.let { adapter ->
-                if(adapter is NotificationAdapter){
-                    adapter.updateList(it)
-                }
-            }
-        })
+    }
+
+    private fun observe(){
+        observeState()
+        observeNotifications()
+    }
+
+    private fun observeState() = notificationViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleState(it) })
+    private fun observeNotifications() = notificationViewModel.listenToNotifications().observe(viewLifecycleOwner, Observer { handleNotif(it) })
+
+    private fun handleState(it: NotificationState){
+        when(it){
+            is NotificationState.ShowToast -> requireActivity().showToast(it.message)
+            is NotificationState.IsLoading -> isLoading(it.state)
+        }
+    }
+
+    private fun setupRecyclerView(){
+        requireView().rv_notification.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = NotificationAdapter(mutableListOf(), this@NotificationFragment)
+        }
     }
 
     private fun isLoading(state: Boolean) {
-        if(state){
-            view!!.loading_bar.visibility = View.VISIBLE
-        }else{
-            view!!.loading_bar.visibility = View.GONE
-        }
+        if(state) requireView().loading_bar.visible() else requireView().loading_bar.gone()
     }
 
-    private fun toast(message: String) = Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    override fun onResume() {
+        super.onResume()
+        PaperlessUtil.getToken(requireActivity())?.let { notificationViewModel.fetchNotification(it) }
+    }
+
+    override fun click(notification: Notification) {
+        when(notification.type){
+            "invitation" -> println()
+            "sss" -> println()
+            else -> println()
+        }
+    }
 }

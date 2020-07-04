@@ -17,9 +17,10 @@ object NotificationHelper {
         val mBuilder = NotificationCompat.Builder(context, MainActivity.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_name)
             .setContentTitle(title)
-            .setContentText(body)
+//            .setContentText(body)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         val mNotificationMgr = NotificationManagerCompat.from(context)

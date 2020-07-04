@@ -290,5 +290,7 @@
     <string name="empty_stock_info">Stok barang ini sudah habis</string>
     <string name="in_promo_alt">Sedang promo</string>
     <string name="permission_not_allowed">Anda tidak memiliki akses untuk membuka ini</string>
+    <string name="ask_logout">Apakah anda yakin ingin keluar sekarang?</string>
+    <string name="logout">Keluar</string>
 
 </resources>

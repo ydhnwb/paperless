@@ -59,6 +59,7 @@ val repositoryModules = module {
     factory { ProductRepository(get()) }
     factory { StoreRepository(get()) }
     factory { InvitationRepository(get()) }
+    factory { NotificationRepository(get()) }
 }
 
 val viewModelModules = module {
@@ -78,7 +79,7 @@ val viewModelModules = module {
     viewModel { CatalogViewModel(get()) }
     viewModel { StorePageViewModel(get()) }
     viewModel { DashboardViewModel(get()) }
-    viewModel { NotificationViewModel() }
+    viewModel { NotificationViewModel(get()) }
     viewModel { InvitationDialogViewModel(get()) }
     viewModel { SellingAnalyticViewModel(get()) }
     viewModel { PurchasementFragmentViewModel(get()) }

@@ -142,4 +142,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("v1/invoice")
     fun download_invoice(@Header("Authorization") token : String, @Field("order_id") orderId : String) : Call<WrappedResponse<UrlRes>>
+
+    @GET("v1/notification")
+    fun notification_get(@Header("Authorization") token: String) : Call<WrappedListResponse<Notification>>
 }
