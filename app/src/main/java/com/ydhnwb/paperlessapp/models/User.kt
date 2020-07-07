@@ -8,10 +8,11 @@ import kotlinx.android.parcel.Parcelize
 data class User(
     @SerializedName("id") var id : Int?,
     @SerializedName("name") var name : String?,
+    @SerializedName("image") var image : String?,
     @SerializedName("email") var email : String?,
     @SerializedName("phone") var phone : String?,
     @SerializedName("api_token") var api_token : String?,
     @SerializedName("orders") var orders : List<OrderHistory> = mutableListOf()
 ) : Parcelable {
-    constructor() : this(null, null, null, null, null)
+    constructor() : this(null, null,null, null, null, null)
 }

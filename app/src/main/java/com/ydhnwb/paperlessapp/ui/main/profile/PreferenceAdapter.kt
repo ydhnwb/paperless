@@ -14,6 +14,7 @@ import com.ydhnwb.paperlessapp.ui.invitation.InvitationActivity
 import com.ydhnwb.paperlessapp.ui.login.LoginActivity
 import com.ydhnwb.paperlessapp.ui.user_history.UserHistoryActivity
 import com.ydhnwb.paperlessapp.models.Preference
+import com.ydhnwb.paperlessapp.ui.update_profile.UpdateProfileActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.list_item_preference.view.*
 
@@ -34,7 +35,7 @@ class PreferenceAdapter (private var context: Context, private var prefs : List<
             itemView.pref_name.text = context.getString(pref.name)
             itemView.setOnClickListener {
                 when(i){
-                    0 -> println()
+                    0 -> context.startActivity(Intent(context, UpdateProfileActivity::class.java))
                     1 -> context.startActivity(Intent(context, InvitationActivity::class.java))
                     2 -> context.startActivity(Intent(context, UserHistoryActivity::class.java))
                     3 -> {

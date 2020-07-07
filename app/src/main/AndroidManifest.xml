@@ -18,14 +18,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:allowBackup"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup">
+        <activity
+            android:name=".ui.update_profile.UpdateProfileActivity"
+            android:label="@string/title_activity_update_profile"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.quickupdate.QuickUpdateActivity"
             android:label="@string/title_activity_quick_update"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.user_history.UserHistoryActivity"
             android:label="@string/title_activity_user_history"
@@ -91,12 +93,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <service android:name=".utilities.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>

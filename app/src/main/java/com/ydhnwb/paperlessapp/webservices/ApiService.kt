@@ -5,6 +5,7 @@ import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.Response
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -21,12 +22,6 @@ interface ApiService {
     @Multipart
     @POST("v1/own/store")
     fun store_create(@Header("Authorization") token: String, @PartMap kwargs : HashMap<String, RequestBody>, @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
-
-//    @Multipart
-//    @POST("v1/own/store")
-//    fun store_create(@Header("Authorization") token : String, @Part("name") name : RequestBody, @Part("description") description : RequestBody,
-//                     @Part("email") email : RequestBody, @Part("phone") phone : RequestBody, @Part("address") address : RequestBody,
-//                     @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
 
     @GET("v1/own/store")
     fun store_get(@Header("Authorization") token : String) : Call<WrappedListResponse<Store>>
@@ -146,4 +141,15 @@ interface ApiService {
 
     @GET("v1/notifications")
     fun notification_get(@Header("Authorization") token: String) : Call<WrappedListResponse<Notification>>
+
+    @FormUrlEncoded
+    @POST("v1/password/email")
+    fun reset_password(@Field("email") email : String) : Call<WrappedResponse<User>>
+
+    @PUT("v1/users/update")
+    fun update_profile(@Header("Authorization") token: String, @Body body : RequestBody) : Call<WrappedResponse<User>>
+
+    @Multipart
+    @POST("v1/users/image/update")
+    fun update_profile_pic(@Header("Authorization") token: String, @Part image : MultipartBody.Part) : Call<WrappedResponse<User>>
 }

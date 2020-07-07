@@ -72,7 +72,7 @@ class NotificationFragment : Fragment(R.layout.fragment_notifications), Notifica
     override fun click(notification: Notification) {
         when(notification.type){
             1 -> startActivity(Intent(requireActivity(), InvitationActivity::class.java))
-            2 -> startActivity(Intent(requireActivity(), UserHistoryActivity::class.java))
+            2 -> println()
             else -> println()
         }
     }

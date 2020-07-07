@@ -41,7 +41,9 @@ class ProductFragment : Fragment(R.layout.fragment_product), ProductAdapterClick
         }else{
             requireView().fab_add.show()
             requireView().fab_add.setOnClickListener {
-                startActivity(Intent(activity, ProductActivity::class.java))
+                startActivity(Intent(activity, ProductActivity::class.java).apply {
+                    putExtra("STORE", parentStoreViewModel.listenToCurrentStore().value!!)
+                })
             }
         }
     }

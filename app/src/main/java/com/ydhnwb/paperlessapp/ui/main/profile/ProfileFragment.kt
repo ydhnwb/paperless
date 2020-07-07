@@ -49,7 +49,7 @@ class ProfileFragment : Fragment() {
             profileViewModel.listenToCurrentUser().observe(viewLifecycleOwner, Observer {
                 it?.let {
                     with(view){
-                        profile_image.load(R.drawable.ydhnwb){ transformations(CircleCropTransformation()) }
+                        it.image?.let { imageUrl -> profile_image.load(imageUrl){ transformations(CircleCropTransformation()) } } ?: profile_image.load(R.drawable.image_placeholder){ transformations(CircleCropTransformation()) }
                         profile_name.text = it.name
                         profile_email.text = it.email
                         profile_qr.setOnClickListener { _ ->

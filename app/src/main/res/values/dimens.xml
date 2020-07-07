@@ -14,4 +14,9 @@
     <dimen name="margin_size_8">8dp</dimen>
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="image_size_64">64dp</dimen>
+    <dimen name="general_size_76">76dp</dimen>
+    <dimen name="padding_size_8">8dp</dimen>
+    <dimen name="general_size_96">96dp</dimen>
+    <dimen name="general_size_18">18dp</dimen>
+    <dimen name="general_size_28">28dp</dimen>
 </resources>

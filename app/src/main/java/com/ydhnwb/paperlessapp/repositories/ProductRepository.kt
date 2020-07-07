@@ -149,8 +149,8 @@ class ProductRepository (private val api: ApiService) : ProductContract {
     }
 
     override fun createProduct(token: String, storeId: String, product: Product, categoryId: Int, listener: SingleResponse<Product>) {
-        val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
         val file = File(product.image.toString())
+        val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
         val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
         val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
         api.product_store(token, storeId, requestBody, categoryId , image).enqueue(object : Callback<WrappedResponse<Product>>{

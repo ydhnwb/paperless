@@ -8,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Product(
     @SerializedName("id") var id : Int? = null,
+
     @Expose
     @SerializedName("name") var name : String? = null,
 

@@ -292,5 +292,11 @@
     <string name="permission_not_allowed">Anda tidak memiliki akses untuk membuka ini</string>
     <string name="ask_logout">Apakah anda yakin ingin keluar sekarang?</string>
     <string name="logout">Keluar</string>
+    <string name="ask_remove_employee">Hapus karyawan ini?</string>
+    <string name="title_activity_update_profile">Update</string>
+    <string name="hint_address">Alamat</string>
+    <string name="phone">Telepon (+628..)</string>
+    <string name="btn_save">Simpan</string>
+    <string name="email_not_valid">Email tidak valid</string>
 
 </resources>

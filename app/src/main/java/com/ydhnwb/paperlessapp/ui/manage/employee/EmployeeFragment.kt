@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -108,12 +109,13 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee), EmployeeInterface
             setOnMenuItemClickListener { menuItems ->
                 when(menuItems.itemId){
                     R.id.menu_delete -> {
-                        if(getRole() != -1){
+                        if(getRole() == -1){
                             removeEmployee(storeId, employee.id.toString())
+                            true
                         }else{
                             requireActivity().showInfoAlert(resources.getString(R.string.permission_not_allowed))
+                            true
                         }
-                        true
                     }
                     else -> true
                 }
@@ -123,9 +125,18 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee), EmployeeInterface
 
 
     private fun removeEmployee(storeId: String, employeeId: String){
-        PaperlessUtil.getToken(requireActivity())?.let {
-            employeeViewModel.removeEmployee(it, storeId, employeeId)
-        }
+        AlertDialog.Builder(requireActivity()).apply {
+            setMessage(resources.getString(R.string.ask_remove_employee))
+            setPositiveButton(resources.getString(R.string.info_delete)){ d, _ ->
+                d.dismiss()
+                PaperlessUtil.getToken(requireActivity())?.let {
+                    employeeViewModel.removeEmployee(it, storeId, employeeId)
+                }
+            }
+            setNegativeButton(resources.getString(R.string.info_cancel)){ d, _ ->
+                d.cancel()
+            }
+        }.show()
     }
 
     private fun fetchEmployees(){

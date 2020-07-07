@@ -26,6 +26,8 @@ import com.ydhnwb.paperlessapp.ui.manage.product.ProductViewModel
 import com.ydhnwb.paperlessapp.ui.manage.history.list_history.ListHistoryViewModel
 import com.ydhnwb.paperlessapp.repositories.*
 import com.ydhnwb.paperlessapp.ui.quickupdate.QuickUpdateViewModel
+import com.ydhnwb.paperlessapp.ui.reset_password.ResetPasswordViewModel
+import com.ydhnwb.paperlessapp.ui.update_profile.UpdateProfileViewModel
 import com.ydhnwb.paperlessapp.webservices.ApiClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -87,4 +89,6 @@ val viewModelModules = module {
     viewModel { DetailOrderViewModel(get()) }
     viewModel { UserHistoryViewModel(get()) }
     viewModel { QuickUpdateViewModel(get()) }
+    viewModel { ResetPasswordViewModel(get()) }
+    viewModel { UpdateProfileViewModel(get()) }
 }

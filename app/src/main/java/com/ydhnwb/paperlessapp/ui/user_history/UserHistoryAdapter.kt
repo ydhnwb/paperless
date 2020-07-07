@@ -40,6 +40,7 @@ class UserHistoryAdapter (private val orders : MutableList<OrderHistory>, privat
                 setOnClickListener {
                     context.startActivity(Intent(context, DetailOrderActivity::class.java).apply {
                         putExtra("ORDER", order)
+                        putExtra("is_in", true)
                     })
                 }
             }

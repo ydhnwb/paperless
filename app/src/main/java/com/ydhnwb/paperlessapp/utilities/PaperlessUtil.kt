@@ -78,10 +78,13 @@ class PaperlessUtil {
             return DateFormatSymbols().months[month-1]
         }
 
-        private fun createPartFromString(s: String) : RequestBody = RequestBody.create(MultipartBody.FORM, s)
+        private fun createPartFromString(s: String) : RequestBody {
+            println(s)
+            return RequestBody.create(MultipartBody.FORM, s)
+        }
 
         fun jsonToMapRequestBody(t: String) : HashMap<String, RequestBody>{
-            val map = HashMap<String, RequestBody>()
+            val map = hashMapOf<String, RequestBody>()
             val jObject = JSONObject(t)
             val keys: Iterator<*> = jObject.keys()
             while (keys.hasNext()) {
@@ -91,6 +94,5 @@ class PaperlessUtil {
             }
             return map
         }
-
     }
 }

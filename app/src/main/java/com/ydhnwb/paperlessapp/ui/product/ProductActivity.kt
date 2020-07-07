@@ -198,7 +198,6 @@ class ProductActivity : AppCompatActivity() {
 
     private fun saveChanges(){
         btn_submit.setOnClickListener {
-            showToast("is checked ${cb_product_promo.isChecked} and ${cb_product_have_stock.isChecked}")
             product.apply {
                 this.discountByPercent = if (cb_product_promo.isChecked) {
                     et_product_promo.text.toString().trim().toFloatOrNull()
@@ -325,6 +324,13 @@ class ProductActivity : AppCompatActivity() {
         if(price.trim().substring(0,1).equals("0")){
             et_prodouct_price.text?.clear()
             showInfoAlert(resources.getString(R.string.validate_price_not_valid))
+        }
+        if(price.isNotEmpty()){
+            val temp = price.toIntOrNull()
+            if(temp == null){
+                et_prodouct_price.text?.clear()
+                showInfoAlert(resources.getString(R.string.validate_price_not_valid))
+            }
         }
     }
 }
