@@ -131,7 +131,7 @@ class StorePageActivity : AppCompatActivity() {
     private fun showStoreInfo(){
         storePageViewModel.listenToStore().value?.let {
             AlertDialog.Builder(this).apply {
-                setMessage(it.name)
+                setMessage("${it.name}\n${it.description}\n${it.email}")
                 setPositiveButton(resources.getString(R.string.info_understand)){ d, _ -> d.dismiss()}
             }.show()
         }

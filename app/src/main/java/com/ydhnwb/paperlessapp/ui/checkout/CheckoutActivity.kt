@@ -91,7 +91,6 @@ class CheckoutActivity : AppCompatActivity() {
                         setPositiveButton(resources.getString(R.string.info_create_order)){ dialog, _ ->
                             orderSend.boughtByUser = null
                             orderSend.boughtByStore = getAbsoluteId(customer.idCustomer)
-                            toast("Id store is ${getAbsoluteId(customer.idCustomer)}")
                             PaperlessUtil.getToken(this@CheckoutActivity)?.let { it1 ->
                                 checkoutViewModel.createOrder(
                                     it1, orderSend)

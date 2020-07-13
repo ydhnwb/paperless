@@ -8,10 +8,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import coil.api.load
+import com.fxn.pix.Options
 import com.fxn.pix.Pix
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
 import kotlinx.android.synthetic.main.activity_create_store.*
 import kotlinx.android.synthetic.main.content_create_store.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -67,9 +69,16 @@ class CreateStoreActivity : AppCompatActivity() {
         }
     }
 
-    private fun choosePhoto(){ btn_add_image.setOnClickListener { Pix.start(this@CreateStoreActivity,
-        IMAGE_REQUEST_CODE
-    ) } }
+    private fun choosePhoto(){
+        btn_add_image.setOnClickListener {
+            val options = Options.init()
+                .setRequestCode(IMAGE_REQUEST_CODE)
+                .setCount(1)
+                .setExcludeVideos(true)
+                .setScreenOrientation(Options.SCREEN_ORIENTATION_PORTRAIT)
+            Pix.start(this@CreateStoreActivity, options)
+        }
+    }
 
     private fun handleUIState(it : CreateStoreState){
         when(it){
@@ -124,7 +133,14 @@ class CreateStoreActivity : AppCompatActivity() {
             val selectedImageUri = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
             selectedImageUri?.let{
                 store.store_logo = it[0]
-                store_image.load(File(it[0]))
+                val file = File(it[0])
+                val sizeInKb = file.length().toDouble() / 1024
+                val sizeInMB = sizeInKb /1024
+                if(sizeInMB >= 1){
+                    showInfoAlert("File yang anda pilih terlalu besar.")
+                    return
+                }
+                store_image.load(file)
                 if(getPassedStore() != null){
                     println("New store logo is same? ${store.store_logo == getPassedStore()!!.store_logo}")
                     println(getPassedStore()!!.store_logo)

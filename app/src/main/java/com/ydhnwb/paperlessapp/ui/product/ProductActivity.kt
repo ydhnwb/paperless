@@ -11,12 +11,14 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import coil.api.load
+import com.fxn.pix.Options
 import com.fxn.pix.Pix
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.ui.scanner.ScannerActivity
 import com.ydhnwb.paperlessapp.models.Category
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.ui.store.CreateStoreActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.extensions.gone
 import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
@@ -234,7 +236,16 @@ class ProductActivity : AppCompatActivity() {
         }
     }
 
-    private fun chooseImage(){ product_image.setOnClickListener { Pix.start(this, IMAGE_REQUEST_CODE) } }
+    private fun chooseImage(){
+        product_image.setOnClickListener {
+            val options = Options.init()
+                .setRequestCode(IMAGE_REQUEST_CODE)
+                .setCount(1)
+                .setExcludeVideos(true)
+                .setScreenOrientation(Options.SCREEN_ORIENTATION_PORTRAIT)
+            Pix.start(this, options)
+        }
+    }
 
     private fun getPassedProduct() : Product? = intent.getParcelableExtra("PRODUCT")
     private fun getPassedStore() : Store? = intent.getParcelableExtra("STORE")
@@ -278,8 +289,15 @@ class ProductActivity : AppCompatActivity() {
         if(requestCode == IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null){
             val selectedImageUri = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
             selectedImageUri?.let{
+                val file = File(it[0])
+                val sizeInKb = file.length().toDouble() / 1024
+                val sizeInMB = sizeInKb /1024
+                if(sizeInMB >= 1){
+                    showInfoAlert("File yang anda pilih terlalu besar.")
+                    return
+                }
                 product.image = it[0]
-                product_image.load(File(it[0]))
+                product_image.load(file)
             }
         }else if(requestCode == 0 && resultCode == Activity.RESULT_OK && data != null ){
             et_prodouct_code.setText(data.getStringExtra("CODE"))

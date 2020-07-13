@@ -98,7 +98,7 @@ class DetailOrderActivity : AppCompatActivity(), DetailOrderAdapterInterface {
         val request = DownloadManager.Request(Uri.parse(url))
             .setTitle("Invoice")
             .setDescription("Downloading")
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setDestinationUri(Uri.fromFile(file))
             .setAllowedOverMetered(true)
             .setAllowedOverRoaming(true)

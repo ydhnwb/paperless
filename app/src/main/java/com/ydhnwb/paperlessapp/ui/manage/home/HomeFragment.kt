@@ -54,13 +54,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeClickInterface {
             store_address.text = it.address
             store_image.load(it.store_logo)
             view!!.rv_store_menu.apply {
-                adapter =
-                    StoreMenuAdapter(
-                        storeMenus,
-                        context,
-                        parentStoreViewModel.listenToCurrentStore().value!!,
-                        this@HomeFragment
-                    )
+                adapter = StoreMenuAdapter(storeMenus, context,parentStoreViewModel.listenToCurrentStore().value!!, this@HomeFragment)
                 layoutManager = GridLayoutManager(activity, 2)
             }
         }
@@ -81,7 +75,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeClickInterface {
         val request = DownloadManager.Request(Uri.parse(url))
                 .setTitle("Report")
                 .setDescription("Downloading")
-                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 .setDestinationUri(Uri.fromFile(file))
                 .setAllowedOverMetered(true)
                 .setAllowedOverRoaming(true)
@@ -118,6 +112,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeClickInterface {
             parentStoreViewModel.downloadReport(
                 it, parentStoreViewModel.listenToCurrentStore().value!!.id.toString())
         }
+        requireActivity().showInfoAlert("Report akan segera diunduh. Periksa report yang akan diunduh via notifikasi")
     }
 
 }

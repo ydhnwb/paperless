@@ -2,6 +2,7 @@ package com.ydhnwb.paperlessapp.ui.store_page
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.repositories.StoreRepository
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
@@ -20,7 +21,9 @@ class StorePageViewModel (private val storeRepository: StoreRepository) : ViewMo
         storeRepository.fetchStorePage(token, storeId, object : SingleResponse<Store>{
             override fun onSuccess(data: Store?) {
                 hideLoading()
-                data?.let { store.postValue(it) }
+                data?.let {
+                    store.postValue(it)
+                }
             }
             override fun onFailure(err: Error) {
                 hideLoading()
