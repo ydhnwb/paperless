@@ -52,11 +52,18 @@ class EtalaseAdapter (private var products : MutableList<Product>, private var c
                 }
 
                 if(product.qty == null){
-                    product_stock.text = resources.getString(R.string.infinity)
-                    setOnClickListener {
-                        val p = product.copy()
-                        p.selectedQuantity = 1
-                        pvm.addSelectedProduct(p)
+                    if(product.status == true){
+                        product_stock.text = resources.getString(R.string.infinity)
+                        setOnClickListener {
+                            val p = product.copy()
+                            p.selectedQuantity = 1
+                            pvm.addSelectedProduct(p)
+                        }
+                    }else{
+                        product_stock.text = resources.getString(R.string.not_available)
+                        setOnClickListener {
+                            context.showInfoAlert("Barang ini sedang tidak tersedia")
+                        }
                     }
                 }else{
                     if(product.qty!! <= 0){
@@ -65,12 +72,19 @@ class EtalaseAdapter (private var products : MutableList<Product>, private var c
                             context.showInfoAlert(resources.getString(R.string.empty_stock_info))
                         }
                     }else{
-                        setOnClickListener {
-                            val p = product.copy()
-                            p.selectedQuantity = 1
-                            pvm.addSelectedProduct(p)
+                        if(product.status == true){
+                            setOnClickListener {
+                                val p = product.copy()
+                                p.selectedQuantity = 1
+                                pvm.addSelectedProduct(p)
+                            }
+                        }else{
+                            setOnClickListener {
+                                context.showInfoAlert("Barang ini sedang tidak tersedia")
+                            }
                         }
-                        product_stock.text = "Stok ${product.qty}"
+                        val s = if(!product.status!!) "(Tidak tersedia)" else ""
+                        product_stock.text = "Stok ${product.qty} $s"
                     }
                 }
                 product_image.load(product.image)

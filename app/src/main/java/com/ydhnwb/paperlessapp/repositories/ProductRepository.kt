@@ -99,6 +99,7 @@ class ProductRepository (private val api: ApiService) : ProductContract {
         product.categoryId = categoryId
         val gsonBuilder = GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create()
         val requestBody = gsonBuilder.toJson(product)
+        println(Gson().toJson(product))
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestBody)
         api.product_update(token, storeId, product.id.toString(), body).enqueue(object : Callback<WrappedResponse<Product>>{
             override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) = listener.onFailure(Error(t.message))
@@ -119,6 +120,7 @@ class ProductRepository (private val api: ApiService) : ProductContract {
         val requestBody = PaperlessUtil.jsonToMapRequestBody(Gson().toJson(product))
         val file = File(product.image.toString())
         val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
+        println(Gson().toJson(product))
         val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
         api.product_update(token, storeId, product.id.toString(), requestBody, categoryId, image).enqueue(object : Callback<WrappedResponse<Product>>{
             override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) = listener.onFailure(Error(t.message))

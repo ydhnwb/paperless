@@ -18,7 +18,6 @@ import com.ydhnwb.paperlessapp.ui.scanner.ScannerActivity
 import com.ydhnwb.paperlessapp.models.Category
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.models.Store
-import com.ydhnwb.paperlessapp.ui.store.CreateStoreActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.extensions.gone
 import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
@@ -31,9 +30,7 @@ import java.io.File
 
 
 class ProductActivity : AppCompatActivity() {
-    companion object {
-        const val IMAGE_REQUEST_CODE = 123
-    }
+    companion object { const val IMAGE_REQUEST_CODE = 123 }
     private val productCreateEditViewModel: ProductCreateEditViewModel by viewModel()
     private var product = Product()
 
@@ -166,8 +163,14 @@ class ProductActivity : AppCompatActivity() {
             it.code?.let { code ->
                 et_prodouct_code.setText(code)
             }
+            showAvailibityLayout()
             copyValueToProduct(it)
+            setAvailibiltyChecked(it.status!!)
         } ?: run{
+            product.status = true
+            showAvailibityLayout()
+            setAvailibiltyChecked(true)
+            product_availability.isEnabled = false
             cb_product_promo.gone()
             in_product_promo.gone()
         }
@@ -186,9 +189,9 @@ class ProductActivity : AppCompatActivity() {
             image = it.image
             price = it.price
             category = it.category
-            status = true
             image = it.image
             code = it.code
+            status = it.status
         }
     }
 
@@ -201,15 +204,14 @@ class ProductActivity : AppCompatActivity() {
     private fun saveChanges(){
         btn_submit.setOnClickListener {
             product.apply {
-                this.discountByPercent = if (cb_product_promo.isChecked) {
-                    et_product_promo.text.toString().trim().toFloatOrNull()
-                } else null
+                this.discountByPercent = if (cb_product_promo.isChecked) { et_product_promo.text.toString().trim().toFloatOrNull() } else null
                 this.name = et_product_name.text.toString().trim()
                 this.code = if (et_prodouct_code.text.toString().trim().isNotEmpty()) et_prodouct_code.text.toString().trim() else null
                 this.description = et_prodouct_desc.text.toString().trim()
                 this.price = et_prodouct_price.text.toString().trim().toIntOrNull()
                 this.category = sp_product_category.selectedItem as Category?
                 this.qty = if(cb_product_have_stock.isChecked) et_product_quantity.text.toString().trim().toIntOrNull() else null
+                this.status = product_availability.isChecked
             }
 
             product.category?.let { cat ->
@@ -350,5 +352,17 @@ class ProductActivity : AppCompatActivity() {
                 showInfoAlert(resources.getString(R.string.validate_price_not_valid))
             }
         }
+    }
+
+
+
+    private fun showAvailibityLayout() {
+        getPassedProduct()?.let {
+            product_availability.visible()
+        } ?: product_availability.gone()
+    }
+
+    private fun setAvailibiltyChecked(b: Boolean){
+        product_availability.isChecked = b
     }
 }

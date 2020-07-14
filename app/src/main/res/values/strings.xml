@@ -298,5 +298,8 @@
     <string name="phone">Telepon (+628..)</string>
     <string name="btn_save">Simpan</string>
     <string name="email_not_valid">Email tidak valid</string>
+    <string name="product_availibility">Tidak tersedia</string>
+    <string name="not_available">Tidak tersedia</string>
+    <string name="available">Tersedia</string>
 
 </resources>

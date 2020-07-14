@@ -123,7 +123,6 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"/>
 
-
         <CheckBox
             android:text="@string/hint_product_have_stock"
             android:id="@+id/cb_product_have_stock"
@@ -167,7 +166,11 @@
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:layout_width="match_parent"
+            android:id="@+id/product_availability"
+            android:text="@string/available"
+            android:layout_height="wrap_content"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"

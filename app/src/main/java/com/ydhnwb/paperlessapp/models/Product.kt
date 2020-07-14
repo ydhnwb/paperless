@@ -23,6 +23,7 @@ data class Product(
     @Expose
     @SerializedName("price") var price : Int? = null,
 
+    @Expose
     @SerializedName("status") var status : Boolean? = null,
 
     @Expose
@@ -40,6 +41,7 @@ data class Product(
 
     @Expose
     @SerializedName("category_id") var categoryId : Int? = null,
+
 
     var selectedQuantity : Int? = null
 ) : Parcelable
