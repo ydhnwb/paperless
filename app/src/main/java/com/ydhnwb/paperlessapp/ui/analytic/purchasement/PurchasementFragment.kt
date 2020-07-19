@@ -71,7 +71,7 @@ class PurchasementFragment : Fragment(R.layout.fragment_purchasement_analytic){
 
             column.tooltip().titleFormat("{%X}").position(Position.CENTER_BOTTOM).anchor(Anchor.CENTER_BOTTOM).offsetX(0.0)
                 .offsetY(5.0)
-                .format("Pengeluaran .{%Value}{groupsSeparator: }")
+                .format("Pengeluaran Rp.{%Value}{groupsSeparator: }")
 
             cartesian.animation(false)
             cartesian.yScale().minimum(0.0)

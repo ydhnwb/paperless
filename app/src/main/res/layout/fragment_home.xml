@@ -63,6 +63,50 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="8dp"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:background="@color/colorOrange"
+                android:id="@+id/store_report"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:background="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@drawable/ic_doodle_mail"
+                        android:id="@+id/store_menu_img"
+                        android:layout_alignParentEnd="true"
+                        android:scaleType="centerCrop"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"/>
+
+                    <TextView
+                        android:textColor="@color/colorBlackSteel"
+                        android:id="@+id/store_menu_title"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="56dp"
+                        android:layout_marginStart="16dp"
+                        android:text="Laporan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
 </ScrollView>

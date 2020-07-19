@@ -36,6 +36,7 @@
 
 
         <TextView
+            android:layout_marginTop="@dimen/margin_size_16"
             android:textSize="18sp"
             android:textStyle="bold"
             android:text="@string/user_who_buy"

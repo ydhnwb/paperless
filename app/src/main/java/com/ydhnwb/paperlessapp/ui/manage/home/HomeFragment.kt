@@ -22,6 +22,7 @@ import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.StoreMenu
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.io.File
@@ -37,6 +38,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeClickInterface {
         requireActivity().registerReceiver(onDownloadComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         observe()
         storeMenu()
+        reportClick()
     }
 
     private fun observe(){
@@ -63,9 +65,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeClickInterface {
     private fun storeMenu(){
         storeMenus = listOf(
             StoreMenu(resources.getString(R.string.store_menu_analytic), R.drawable.ic_doodle_mail, ContextCompat.getColor(activity!!, R.color.colorFlueGreen)),
-            StoreMenu(resources.getString(R.string.store_menu_invitation), R.drawable.ic_doodle_connection, ContextCompat.getColor(activity!!, R.color.colorRed)),
-            StoreMenu(resources.getString(R.string.store_menu_report), R.drawable.ic_doodle_enthusiast, ContextCompat.getColor(activity!!, R.color.colorOrange)),
-            StoreMenu(resources.getString(R.string.store_menu_more), R.drawable.ic_doodle_connection, ContextCompat.getColor(activity!!, R.color.colorGreen))
+            StoreMenu(resources.getString(R.string.store_menu_invitation), R.drawable.ic_doodle_connection, ContextCompat.getColor(activity!!, R.color.colorRed))
+//            StoreMenu(resources.getString(R.string.store_menu_report), R.drawable.ic_doodle_enthusiast, ContextCompat.getColor(activity!!, R.color.colorOrange)),
+//            StoreMenu(resources.getString(R.string.store_menu_more), R.drawable.ic_doodle_connection, ContextCompat.getColor(activity!!, R.color.colorGreen))
         )
     }
 
@@ -113,6 +115,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeClickInterface {
                 it, parentStoreViewModel.listenToCurrentStore().value!!.id.toString())
         }
         requireActivity().showInfoAlert("Report akan segera diunduh. Periksa report yang akan diunduh via notifikasi")
+    }
+
+    private fun reportClick(){
+        store_report.setOnClickListener {
+            report()
+        }
     }
 
 }
