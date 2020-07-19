@@ -13,6 +13,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="64dp"
+            android:visibility="gone"
             android:scaleType="centerCrop"
             android:id="@+id/store_trans_image"
             android:layout_height="64dp"/>

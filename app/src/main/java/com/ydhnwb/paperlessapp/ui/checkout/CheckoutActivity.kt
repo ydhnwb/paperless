@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_checkout.*
 import kotlinx.android.synthetic.main.content_checkout.*
 import kotlinx.android.synthetic.main.content_checkout.customer_desc
 import kotlinx.android.synthetic.main.content_checkout.customer_name
+import kotlinx.android.synthetic.main.list_item_customer.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : AppCompatActivity() {
@@ -199,6 +200,7 @@ class CheckoutActivity : AppCompatActivity() {
     private fun handleCustomerChange(it : Customer?){
         customerViewBehavior()
         it?.let { x ->
+            customer_image
             customer_name.text = x.name
             customer_desc.text = x.desc
         }

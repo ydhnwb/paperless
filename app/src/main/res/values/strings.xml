@@ -301,5 +301,6 @@
     <string name="product_availibility">Tidak tersedia</string>
     <string name="not_available">Tidak tersedia</string>
     <string name="available">Tersedia</string>
+    <string name="title_activity_all_my_store">AllMyStoreActivity</string>
 
 </resources>

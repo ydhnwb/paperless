@@ -9,6 +9,8 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.gone
+import com.ydhnwb.paperlessapp.utilities.extensions.visible
 import kotlinx.android.synthetic.main.fragment_customer_analytic.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -68,6 +70,11 @@ class CustomerAnalyticFragment : Fragment(R.layout.fragment_customer_analytic){
                 a.updateList(temps)
             }
         }
+        if(temps.isNullOrEmpty()){
+            requireView().store_who_buy_emptyView.visible()
+        }else{
+            requireView().store_who_buy_emptyView.gone()
+        }
     }
 
     private fun handleUserWhoBuy(it: HashMap<User, Int>){
@@ -77,6 +84,11 @@ class CustomerAnalyticFragment : Fragment(R.layout.fragment_customer_analytic){
             if(a is UserWhoBuyAdapter){
                 a.updateList(temps)
             }
+        }
+        if(temps.isNullOrEmpty()){
+            requireView().user_who_buy_emptyView.visible()
+        }else{
+            requireView().user_who_buy_emptyView.gone()
         }
     }
 

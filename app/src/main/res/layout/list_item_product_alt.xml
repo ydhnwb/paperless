@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:gravity="center_vertical"
+        android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:padding="16dp"
         android:background="?attr/selectableItemBackground"
@@ -63,7 +63,7 @@
             <TextView
                 android:visibility="gone"
                 android:id="@+id/product_isPromo"
-                android:textColor="@color/colorRed"
+                android:textColor="@color/colorOrange"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -76,6 +76,13 @@
                 android:layout_gravity="end"
                 android:maxLines="1"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:text="@string/available"
+                android:checked="true"
+                android:id="@+id/product_available"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 

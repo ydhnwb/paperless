@@ -16,6 +16,8 @@ import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.ydhnwb.paperlessapp.models.MyWorkplace
+import com.ydhnwb.paperlessapp.utilities.extensions.gone
+import com.ydhnwb.paperlessapp.utilities.extensions.visible
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard){
     private val dashboardViewModel: DashboardViewModel by viewModel()
@@ -60,10 +62,13 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
     private fun handleMyWorkplace(it: MyWorkplace){
         if (dashboardViewModel.listenToMyWorkplace().value == null){
             requireView().workplace_root.visibility = View.GONE
+            requireView().empty_other_store.visible()
         }else{
             if(dashboardViewModel.listenToMyWorkplace().value?.store?.id == null){
+                requireView().empty_other_store.visible()
                 requireView().workplace_root.visibility = View.GONE
             }else{
+                requireView().empty_other_store.gone()
                 requireView().workplace_root.visibility = View.VISIBLE
                 with(requireView()){
                     workplace_name.text = it.store?.name.toString()

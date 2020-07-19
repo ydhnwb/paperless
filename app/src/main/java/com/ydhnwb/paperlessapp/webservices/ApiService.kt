@@ -117,7 +117,7 @@ interface ApiService {
 
 
     @GET("v1/own/store/{storeId}/employee")
-    fun store_employee(@Header("Authorization") token : String, @Path("storeId") storeId : String) : Call<WrappedResponse<EmployeeResponse>>
+    fun store_employee(@Header("Authorization") token : String, @Path("storeId") storeId : String) : Call<WrappedListResponse<Employee>>
 
     @GET("v1/product")
     fun catalog_search(@Header("Authorization") token : String, @Query("query") query : String) : Call<WrappedResponse<GeneralProductSearch>>

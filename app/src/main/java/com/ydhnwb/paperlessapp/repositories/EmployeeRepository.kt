@@ -1,10 +1,12 @@
 package com.ydhnwb.paperlessapp.repositories
 
+import com.ydhnwb.paperlessapp.models.Employee
 import com.ydhnwb.paperlessapp.models.EmployeeResponse
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.ArrayResponse
 import com.ydhnwb.paperlessapp.utilities.SingleResponse
+import com.ydhnwb.paperlessapp.utilities.WrappedListResponse
 import com.ydhnwb.paperlessapp.utilities.WrappedResponse
 import com.ydhnwb.paperlessapp.webservices.ApiService
 import retrofit2.Call
@@ -12,18 +14,18 @@ import retrofit2.Callback
 import retrofit2.Response
 
 interface EmployeeContract {
-    fun getEmployees(token: String, storeId: String, listener: SingleResponse<EmployeeResponse>)
+    fun getEmployees(token: String, storeId: String, listener: ArrayResponse<Employee>)
     fun removeEmployee(token: String, storeId: String, employeeId: String, listener: SingleResponse<Store>)
 }
 
 class EmployeeRepository (private val api: ApiService) : EmployeeContract{
 
-    override fun getEmployees(token: String, storeId: String, listener: SingleResponse<EmployeeResponse>) {
+    override fun getEmployees(token: String, storeId: String, listener: ArrayResponse<Employee>) {
         api.store_employee(token, storeId).enqueue(object:
-            Callback<WrappedResponse<EmployeeResponse>> {
-            override fun onFailure(call: Call<WrappedResponse<EmployeeResponse>>, t: Throwable) = listener.onFailure(Error(t.message))
+            Callback<WrappedListResponse<Employee>> {
+            override fun onFailure(call: Call<WrappedListResponse<Employee>>, t: Throwable) = listener.onFailure(Error(t.message))
 
-            override fun onResponse(call: Call<WrappedResponse<EmployeeResponse>>, response: Response<WrappedResponse<EmployeeResponse>>) {
+            override fun onResponse(call: Call<WrappedListResponse<Employee>>, response: Response<WrappedListResponse<Employee>>) {
                 when{
                     response.isSuccessful -> listener.onSuccess(response.body()!!.data)
                     else -> listener.onFailure(Error(response.message()))

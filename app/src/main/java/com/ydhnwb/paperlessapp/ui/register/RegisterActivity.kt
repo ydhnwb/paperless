@@ -2,6 +2,8 @@ package com.ydhnwb.paperlessapp.ui.register
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.Spanned
 import android.view.ContextThemeWrapper
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -19,7 +21,14 @@ class RegisterActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         supportActionBar?.hide()
-        registerViewModel.listenToUIState().observer(this, Observer { handleState(it) })
+        setupEditTextNameFilter()
+        setupButtonRegister()
+        observeState()
+    }
+
+    private fun observeState() = registerViewModel.listenToUIState().observer(this, Observer { handleState(it) })
+
+    private fun setupButtonRegister(){
         btn_register.setOnClickListener {
             val name = et_name.text.toString().trim()
             val email = et_email.text.toString().trim()
@@ -27,6 +36,23 @@ class RegisterActivity : AppCompatActivity(){
             val confirmPassword = et_password_conf.text.toString().trim()
             if(registerViewModel.validate(name, email, pass, confirmPassword)){ registerViewModel.register(name, email, pass) }
         }
+    }
+
+    private fun setupEditTextNameFilter(){
+        et_name.filters = arrayOf(object : InputFilter{
+            override fun filter(source: CharSequence?, start: Int, end: Int, dest: Spanned?, dstart: Int, dend: Int): CharSequence {
+                source?.let { s ->
+                    if(s == ""){
+                        return s
+                    }
+                    if(s.toString().matches("[a-zA-Z]+".toRegex())){
+                        return s
+                    }
+                    return ""
+                }
+                return ""
+            }
+        })
     }
 
     private fun handleState(it : RegisterState){

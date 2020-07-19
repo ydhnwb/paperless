@@ -25,6 +25,7 @@ import com.ydhnwb.paperlessapp.ui.manage.employee.EmployeeViewModel
 import com.ydhnwb.paperlessapp.ui.manage.product.ProductViewModel
 import com.ydhnwb.paperlessapp.ui.manage.history.list_history.ListHistoryViewModel
 import com.ydhnwb.paperlessapp.repositories.*
+import com.ydhnwb.paperlessapp.ui.all_my_store.AllMyStoreViewModel
 import com.ydhnwb.paperlessapp.ui.quickupdate.QuickUpdateViewModel
 import com.ydhnwb.paperlessapp.ui.reset_password.ResetPasswordViewModel
 import com.ydhnwb.paperlessapp.ui.update_profile.UpdateProfileViewModel
@@ -91,4 +92,5 @@ val viewModelModules = module {
     viewModel { QuickUpdateViewModel(get()) }
     viewModel { ResetPasswordViewModel(get()) }
     viewModel { UpdateProfileViewModel(get()) }
+    viewModel { AllMyStoreViewModel(get()) }
 }

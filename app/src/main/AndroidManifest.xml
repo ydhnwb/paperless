@@ -21,13 +21,17 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".ui.all_my_store.AllMyStoreActivity"
+            android:label="@string/title_activity_all_my_store"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".ui.update_profile.UpdateProfileActivity"
             android:label="@string/title_activity_update_profile"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.quickupdate.QuickUpdateActivity"
             android:label="@string/title_activity_quick_update"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.user_history.UserHistoryActivity"
             android:label="@string/title_activity_user_history"

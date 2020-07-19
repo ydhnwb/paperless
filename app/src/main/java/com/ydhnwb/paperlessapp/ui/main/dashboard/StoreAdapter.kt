@@ -13,6 +13,7 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.ui.store.CreateStoreActivity
 import com.ydhnwb.paperlessapp.ui.manage.ManageActivity
 import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.ui.all_my_store.AllMyStoreActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import kotlinx.android.synthetic.main.list_item_store.view.*
 
@@ -96,7 +97,7 @@ class StoreAdapter(private var stores : MutableList<Store>, private var context:
         }
         fun bindMore(context: Context){
             itemView.setOnClickListener {
-                Toast.makeText(context, "More", Toast.LENGTH_LONG).show()
+                context.startActivity(Intent(context, AllMyStoreActivity::class.java))
             }
         }
     }

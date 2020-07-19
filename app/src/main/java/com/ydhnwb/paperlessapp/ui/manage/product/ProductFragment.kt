@@ -93,6 +93,13 @@ class ProductFragment : Fragment(R.layout.fragment_product), ProductAdapterClick
     }
 
     private fun getRole() = requireActivity().intent.getIntExtra("ROLE", -1)
+    override fun changeAvailibility(currentProduct: Product) {
+        PaperlessUtil.getToken(requireActivity())?.let {
+            productViewModel.changeAvailibilityOfProduct(
+                it, parentStoreViewModel.listenToCurrentStore().value?.id.toString(),
+                currentProduct)
+        }
+    }
 
     override fun click(product: Product) {
         if (getRole() != 0){

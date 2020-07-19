@@ -2,6 +2,8 @@ package com.ydhnwb.paperlessapp.ui.update_profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.Spanned
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import coil.api.load
@@ -32,6 +34,24 @@ class UpdateProfileActivity : AppCompatActivity() {
         saveChanges()
         observe()
         fetchUser()
+        setupEditTextNameFilter()
+    }
+
+    private fun setupEditTextNameFilter(){
+        et_name.filters = arrayOf(object : InputFilter {
+            override fun filter(source: CharSequence?, start: Int, end: Int, dest: Spanned?, dstart: Int, dend: Int): CharSequence {
+                source?.let { s ->
+                    if(s == ""){
+                        return s
+                    }
+                    if(s.toString().matches("[a-zA-Z]+".toRegex())){
+                        return s
+                    }
+                    return ""
+                }
+                return ""
+            }
+        })
     }
 
     private fun observe(){

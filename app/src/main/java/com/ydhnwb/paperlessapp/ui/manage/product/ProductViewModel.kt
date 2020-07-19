@@ -6,6 +6,7 @@ import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.repositories.ProductRepository
 import com.ydhnwb.paperlessapp.utilities.ArrayResponse
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
+import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class ProductViewModel (private val productRepository: ProductRepository) : ViewModel(){
     private val state: SingleLiveEvent<ProductState> = SingleLiveEvent()
@@ -21,6 +22,24 @@ class ProductViewModel (private val productRepository: ProductRepository) : View
             override fun onSuccess(datas: List<Product>?) {
                 hideLoading()
                 datas?.let { products.postValue(it) }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
+    }
+
+    fun changeAvailibilityOfProduct(token: String, storeId: String, product : Product){
+        setLoading()
+        product.status = !product.status!!
+        productRepository.updateProductOnly(token, storeId, product, product.category!!.id!!, object :
+            SingleResponse<Product> {
+            override fun onSuccess(data: Product?) {
+                hideLoading()
+                data?.let {
+                    fetchProducts(token, storeId)
+                }
             }
             override fun onFailure(err: Error) {
                 hideLoading()

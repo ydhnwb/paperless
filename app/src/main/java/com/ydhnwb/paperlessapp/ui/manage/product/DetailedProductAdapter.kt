@@ -29,6 +29,18 @@ class DetailedProductAdapter (private val products : MutableList<Product>, priva
                 }else{
                     "Stok ${product.qty}"
                 }
+
+                if(product.qty != null){
+                    product_available.isChecked = false
+                    product_available.isEnabled = false
+                    product_available.gone()
+                }else if(product.qty == null){
+                    product_available.visible()
+                    product_available.isChecked = product.status!!
+                    product_available.setOnClickListener {
+                        productInterface.changeAvailibility(product)
+                    }
+                }
                 if (product.discountByPercent == null){
                     product_isPromo.gone()
                 }else{

@@ -13,7 +13,7 @@ class StoreWhoBuyAdapter (private val storeAndTrans : MutableList<StoreAndTransa
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(storeAndTran : StoreAndTransaction){
             with(itemView){
-                store_trans_image.load(storeAndTran.store.store_logo)
+//                store_trans_image.load(storeAndTran.store.store_logo)
                 store_trans_name.text = storeAndTran.store.name.toString()
                 store_trans_sum.text = "${storeAndTran.sumOfTransaction} transaksi ke toko anda"
                 setOnClickListener {

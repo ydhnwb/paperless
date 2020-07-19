@@ -16,12 +16,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
-            android:id="@+id/rv_store_who_buy"
-            android:nestedScrollingEnabled="false"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                android:id="@+id/rv_store_who_buy"
+                android:nestedScrollingEnabled="false"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/store_who_buy_emptyView"
+                android:visibility="gone"
+                android:text="Belum ada data di sini"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
 
 
         <TextView
@@ -31,12 +42,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
-            android:id="@+id/rv_user_who_buy"
-            android:nestedScrollingEnabled="false"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                android:id="@+id/rv_user_who_buy"
+                android:nestedScrollingEnabled="false"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/user_who_buy_emptyView"
+                android:text="Belum ada data di sini"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
     </LinearLayout>
 
 

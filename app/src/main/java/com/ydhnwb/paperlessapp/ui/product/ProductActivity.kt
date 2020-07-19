@@ -163,14 +163,9 @@ class ProductActivity : AppCompatActivity() {
             it.code?.let { code ->
                 et_prodouct_code.setText(code)
             }
-            showAvailibityLayout()
             copyValueToProduct(it)
-            setAvailibiltyChecked(it.status!!)
         } ?: run{
             product.status = true
-            showAvailibityLayout()
-            setAvailibiltyChecked(true)
-            product_availability.isEnabled = false
             cb_product_promo.gone()
             in_product_promo.gone()
         }
@@ -211,7 +206,6 @@ class ProductActivity : AppCompatActivity() {
                 this.price = et_prodouct_price.text.toString().trim().toIntOrNull()
                 this.category = sp_product_category.selectedItem as Category?
                 this.qty = if(cb_product_have_stock.isChecked) et_product_quantity.text.toString().trim().toIntOrNull() else null
-                this.status = product_availability.isChecked
             }
 
             product.category?.let { cat ->
@@ -352,17 +346,5 @@ class ProductActivity : AppCompatActivity() {
                 showInfoAlert(resources.getString(R.string.validate_price_not_valid))
             }
         }
-    }
-
-
-
-    private fun showAvailibityLayout() {
-        getPassedProduct()?.let {
-            product_availability.visible()
-        } ?: product_availability.gone()
-    }
-
-    private fun setAvailibiltyChecked(b: Boolean){
-        product_availability.isChecked = b
     }
 }

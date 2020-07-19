@@ -26,8 +26,8 @@ class ProfileFragment : Fragment() {
     private var prefs = mutableListOf<Preference>().apply {
         add(Preference(1, R.string.pref_profile, R.drawable.ic_person_black_24dp))
         add(Preference(2, R.string.pref_invitation, R.drawable.ic_payment_black_24dp))
-        add(Preference(3, R.string.pref_purchasement, R.drawable.ic_security_black_24dp))
-        add(Preference(4, R.string.sign_out, R.drawable.ic_dashboard_black_24dp))
+        add(Preference(3, R.string.pref_purchasement, R.drawable.ic_compare_arrows_black_24dp))
+        add(Preference(4, R.string.sign_out, R.drawable.ic_baseline_power_settings_new_24))
     }
     private val profileViewModel : ProfileViewModel by viewModel()
 

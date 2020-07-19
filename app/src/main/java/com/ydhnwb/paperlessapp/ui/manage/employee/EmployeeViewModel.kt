@@ -3,9 +3,9 @@ package com.ydhnwb.paperlessapp.ui.manage.employee
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.Employee
-import com.ydhnwb.paperlessapp.models.EmployeeResponse
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.repositories.EmployeeRepository
+import com.ydhnwb.paperlessapp.utilities.ArrayResponse
 import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
@@ -20,10 +20,10 @@ class EmployeeViewModel (private val employeeRepository: EmployeeRepository) : V
 
     fun fetchEmployees(token: String, storeId: String){
         setLoading()
-        employeeRepository.getEmployees(token, storeId, object: SingleResponse<EmployeeResponse>{
-            override fun onSuccess(data: EmployeeResponse?) {
+        employeeRepository.getEmployees(token, storeId, object: ArrayResponse<Employee>{
+            override fun onSuccess(datas: List<Employee>?) {
                 hideLoading()
-                data?.let { employees.postValue(it.employees) }
+                datas?.let { employees.postValue(it) }
             }
             override fun onFailure(err: Error) {
                 hideLoading()
