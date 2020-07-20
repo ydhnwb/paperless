@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import coil.api.load
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.ui.scanner.ShowQRActivity
-import com.ydhnwb.paperlessapp.ui.register.RegisterActivity
 import com.ydhnwb.paperlessapp.ui.manage.employee.EmployeeFragment
 import com.ydhnwb.paperlessapp.ui.manage.etalase.EtalaseFragment
 import com.ydhnwb.paperlessapp.ui.manage.history.HistoryFragment
@@ -22,7 +21,6 @@ import com.ydhnwb.paperlessapp.ui.manage.product.ProductFragment
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
-import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
 import kotlinx.android.synthetic.main.activity_manage.*
 import kotlinx.android.synthetic.main.app_bar_manage.*
 import kotlinx.android.synthetic.main.nav_header_manage.view.*
@@ -155,7 +153,7 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     private fun handleNavUser(it : User){
         with(nav_view.getHeaderView(0)){
-            user_image.load(R.drawable.ydhnwb)
+            user_image.load(it.image)
             user_name.text = it.name
             user_email.text = it.email
         }

@@ -1,21 +1,25 @@
 package com.ydhnwb.paperlessapp.ui.detail_order
 
+import android.Manifest
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.OrderHistory
 import com.ydhnwb.paperlessapp.models.OrderHistoryDetail
-import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.ui.quickupdate.QuickUpdateActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
@@ -39,12 +43,54 @@ class DetailOrderActivity : AppCompatActivity(), DetailOrderAdapterInterface {
         downloadInvoice()
         observeState()
         fill()
+        checkPermission()
     }
 
     private fun fill(){
         getOrder()?.let {
-            detail_orderId.text = "#${it.id}"
+            detail_orderId.text = "#${it.code}"
             detail_order_date.text = it.datetime.toString()
+        }
+    }
+
+    private fun openFile(file: String) {
+        try {
+            val i = Intent(Intent.ACTION_VIEW)
+            i.setDataAndType(Uri.fromFile(File(file)), "application/pdf") //this is for pdf file. Use appropreate mime type
+            startActivity(i)
+        } catch (e: Exception) {
+            Toast.makeText(this, "No pdf viewing application detected. File saved in download folder", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun checkPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(this@DetailOrderActivity, "Aplikasi tidak berjalan tanpa izin ke storage", Toast.LENGTH_LONG).show()
+            } else {
+                ActivityCompat.requestPermissions(this,  arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 20)
+            }
+        }else{
+            PaperlessUtil.getToken(this)?.let { it1 ->
+                detailOrderViewModel.downloadInvoice(it1, getOrder()?.id.toString())
+            }
+
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            20 -> {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    showInfoAlert("Aplikasi tidak berjalan tanpa izin ke storage")
+                } else {
+                    PaperlessUtil.getToken(this)?.let { it1 ->
+                        detailOrderViewModel.downloadInvoice(it1, getOrder()?.id.toString())
+                    }
+                }
+            }
         }
     }
 
@@ -59,7 +105,7 @@ class DetailOrderActivity : AppCompatActivity(), DetailOrderAdapterInterface {
 
     private fun downloadInvoice(){
         detail_order_invoice.setOnClickListener {
-            PaperlessUtil.getToken(this)?.let { it1 -> detailOrderViewModel.downloadInvoice(it1, getOrder()?.id.toString()) }
+            checkPermission()
         }
     }
 

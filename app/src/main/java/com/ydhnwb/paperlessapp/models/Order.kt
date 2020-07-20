@@ -44,6 +44,7 @@ data class OrderSend(
 @Parcelize
 data class OrderHistory(
     @SerializedName("id") var id : Int? = null,
+    @SerializedName("code") var code : String? = null,
     @SerializedName("sell_by_store") var sellByStore : Store? = null,
     @SerializedName("sell_by_user") var sellByUser : User? = null,
     @SerializedName("buy_by_store") var boughtByStore : Store? = null,

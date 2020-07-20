@@ -48,7 +48,6 @@ class RegisterViewModel (private val userRepository: UserRepository, private val
         firebaseRepo.getToken(object: SingleResponse<String>{
             override fun onSuccess(data: String?) {
                 data?.let {
-                    toast(it)
                     userRepository.register(name, email, password, it, object : SingleResponse<User>{
                         override fun onSuccess(data: User?) {
                             hideLoading()
