@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Store
@@ -52,7 +53,7 @@ class AllMyStoreActivity : AppCompatActivity(), AllMyStoreInterface {
 
     private fun setupRecyclerView(){
         store_recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@AllMyStoreActivity)
+            layoutManager = GridLayoutManager(this@AllMyStoreActivity, 2)
             adapter = AllMyStoreAdapter(mutableListOf(), this@AllMyStoreActivity)
         }
     }

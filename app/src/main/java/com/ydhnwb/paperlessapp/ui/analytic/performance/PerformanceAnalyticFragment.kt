@@ -61,8 +61,8 @@ class PerformanceAnalyticFragment : Fragment(R.layout.fragment_performance_analy
         observePerformance()
     }
 
-    private fun observeState() = performanceViewModel.getState().observer(this, Observer { handleState(it) })
-    private fun observePerformance() = performanceViewModel.getEmployeePerformance().observe(this, Observer { handlePerformance(it) })
+    private fun observeState() = performanceViewModel.getState().observer(viewLifecycleOwner, Observer { handleState(it) })
+    private fun observePerformance() = performanceViewModel.getEmployeePerformance().observe(viewLifecycleOwner, Observer { handlePerformance(it) })
     private fun isLoading(b: Boolean) = if(b) requireView().loading.visible() else requireView().loading.gone()
 
     private fun handlePerformance(employeePerformances : HashMap<User, Int>?){
