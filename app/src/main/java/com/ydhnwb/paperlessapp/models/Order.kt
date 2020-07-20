@@ -45,6 +45,7 @@ data class OrderSend(
 data class OrderHistory(
     @SerializedName("id") var id : Int? = null,
     @SerializedName("sell_by_store") var sellByStore : Store? = null,
+    @SerializedName("sell_by_user") var sellByUser : User? = null,
     @SerializedName("buy_by_store") var boughtByStore : Store? = null,
     @SerializedName("buy_by_user") var boughtByUser : User? = null,
     @SerializedName("datetime") var datetime : String? = null,

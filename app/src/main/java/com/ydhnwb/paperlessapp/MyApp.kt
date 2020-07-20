@@ -26,6 +26,7 @@ import com.ydhnwb.paperlessapp.ui.manage.product.ProductViewModel
 import com.ydhnwb.paperlessapp.ui.manage.history.list_history.ListHistoryViewModel
 import com.ydhnwb.paperlessapp.repositories.*
 import com.ydhnwb.paperlessapp.ui.all_my_store.AllMyStoreViewModel
+import com.ydhnwb.paperlessapp.ui.analytic.performance.PerformanceAnalyticViewModel
 import com.ydhnwb.paperlessapp.ui.quickupdate.QuickUpdateViewModel
 import com.ydhnwb.paperlessapp.ui.reset_password.ResetPasswordViewModel
 import com.ydhnwb.paperlessapp.ui.update_profile.UpdateProfileViewModel
@@ -54,6 +55,7 @@ val retrofitModules = module {
 }
 
 val repositoryModules = module {
+
     factory { EmployeeRepository(get()) }
     factory { UserRepository(get()) }
     factory { CategoryRepository(get()) }
@@ -93,4 +95,5 @@ val viewModelModules = module {
     viewModel { ResetPasswordViewModel(get()) }
     viewModel { UpdateProfileViewModel(get()) }
     viewModel { AllMyStoreViewModel(get()) }
+    viewModel { PerformanceAnalyticViewModel(get()) }
 }

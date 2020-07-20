@@ -7,6 +7,7 @@ import com.ydhnwb.paperlessapp.ui.analytic.customer.CustomerAnalyticFragment
 import com.ydhnwb.paperlessapp.ui.analytic.purchasement.PurchasementFragment
 import com.ydhnwb.paperlessapp.ui.analytic.selling.SellingFragment
 import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.ui.analytic.performance.PerformanceAnalyticFragment
 import com.ydhnwb.paperlessapp.utilities.CustomFragmentPagerAdapter
 import kotlinx.android.synthetic.main.activity_analytic.*
 import kotlinx.android.synthetic.main.content_analytic.*
@@ -27,6 +28,7 @@ class AnalyticActivity : AppCompatActivity() {
         fragmentAdapter.addFragment(SellingFragment.instance(getStore()), resources.getString(R.string.tab_title_selling))
         fragmentAdapter.addFragment(PurchasementFragment.instance(getStore()), resources.getString(R.string.tab_title_purchasement))
         fragmentAdapter.addFragment(CustomerAnalyticFragment.instance(getStore()), resources.getString(R.string.tab_title_customer))
+        fragmentAdapter.addFragment(PerformanceAnalyticFragment.instance(getStore()), resources.getString(R.string.tab_title_performance))
         viewpager.adapter = fragmentAdapter
         tabs.setupWithViewPager(viewpager)
     }
