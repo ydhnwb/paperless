@@ -44,7 +44,7 @@ class UpdateProfileActivity : AppCompatActivity() {
                     if(s == ""){
                         return s
                     }
-                    if(s.toString().matches("[a-zA-Z]+".toRegex())){
+                    if(s.toString().matches("[a-zA-Z\\s]+".toRegex())){
                         return s
                     }
                     return ""

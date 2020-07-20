@@ -39,13 +39,13 @@ class RegisterActivity : AppCompatActivity(){
     }
 
     private fun setupEditTextNameFilter(){
-        et_name.filters = arrayOf(object : InputFilter{
+        et_name.filters = arrayOf(object : InputFilter {
             override fun filter(source: CharSequence?, start: Int, end: Int, dest: Spanned?, dstart: Int, dend: Int): CharSequence {
                 source?.let { s ->
                     if(s == ""){
                         return s
                     }
-                    if(s.toString().matches("[a-zA-Z]+".toRegex())){
+                    if(s.toString().matches("[a-zA-Z\\s]+".toRegex())){
                         return s
                     }
                     return ""
