@@ -32,7 +32,6 @@ class DetailedProductAdapter (private val products : MutableList<Product>, priva
 
                 if(product.qty != null){
                     product_available.isChecked = false
-                    product_available.isEnabled = false
                     product_available.gone()
                 }else if(product.qty == null){
                     product_available.visible()
@@ -49,7 +48,6 @@ class DetailedProductAdapter (private val products : MutableList<Product>, priva
                 }
                 setOnClickListener {
                     productInterface.click(product)
-
                 }
             }
         }

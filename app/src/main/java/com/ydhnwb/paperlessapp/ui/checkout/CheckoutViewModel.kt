@@ -46,6 +46,7 @@ class CheckoutViewModel (private val orderRepository: OrderRepository) : ViewMod
             override fun onFailure(err: Error) {
                 hideLoading()
                 err.message?.let { toast(it) }
+                currentCustomer.value = null
             }
         })
     }

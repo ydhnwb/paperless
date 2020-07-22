@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.ui.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.ydhnwb.paperlessapp.models.User
 import com.ydhnwb.paperlessapp.repositories.FirebaseRepository
@@ -57,6 +58,7 @@ class LoginViewModel (private val userRepository: UserRepository, private val fi
     }
 
     fun login(email: String, password: String){
+        Log.d("LoginVM", "login($email, $password)")
         setLoading()
         getFirebaseToken(email, password)
     }

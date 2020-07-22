@@ -43,7 +43,6 @@ class DetailOrderActivity : AppCompatActivity(), DetailOrderAdapterInterface {
         downloadInvoice()
         observeState()
         fill()
-        checkPermission()
     }
 
     private fun fill(){

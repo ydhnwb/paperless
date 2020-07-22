@@ -26,6 +26,7 @@ class EmployeeAdapter (private val employees: MutableList<Employee>, private val
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(employee: Employee){
             with(itemView){
+                employee_image.load(employee.user?.image)
                 employee_name.text = employee.user!!.name
                 employee_role.text = if(employee.role == 0) resources.getString(R.string.cashier) else resources.getString(R.string.staff)
                 employee_more.setOnClickListener {
