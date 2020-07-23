@@ -51,7 +51,8 @@ class LoginActivityTest : KoinTest{
         setTextToView(wrongEmail, etEmail)
         setTextToView(wrongPassword, etPassword)
         onView(withId(R.id.btn_login)).perform(ViewActions.click())
-        onView(withId(R.id.input_email)).check(matches(hasTextInputLayoutErrorText("Email tidak valid")))
+        onView(withId(R.id.input_email)).check(matches(
+            hasTextInputLayoutErrorText("Email tidak valid")))
      }
 
     @Test
@@ -75,7 +76,8 @@ class LoginActivityTest : KoinTest{
         setTextToView(validEmail, etEmail)
         setTextToView(wrongPassword, etPassword)
         onView(withId(R.id.btn_login)).perform(ViewActions.click())
-        onView(withId(R.id.input_password)).check(matches(hasTextInputLayoutErrorText("Password tidak valid")))
+        onView(withId(R.id.input_password)).check(matches(
+            hasTextInputLayoutErrorText("Password tidak valid")))
     }
 
     @Test

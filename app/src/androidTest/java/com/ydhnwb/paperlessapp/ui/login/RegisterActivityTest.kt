@@ -43,7 +43,8 @@ class RegisterActivityTest {
         setTextToView(invalidName, etName)
         Espresso.onView(ViewMatchers.withId(R.id.btn_register)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(R.id.in_name))
-            .check(ViewAssertions.matches(hasTextInputLayoutErrorText("Nama setidaknya lima karakter")))
+            .check(ViewAssertions.matches(
+                hasTextInputLayoutErrorText("Nama setidaknya lima karakter")))
     }
 
     @Test
@@ -52,7 +53,8 @@ class RegisterActivityTest {
         val etName = mActivityRule.activity?.findViewById<TextInputEditText>(R.id.et_name)!!
         setTextToView(validName, etName)
         Espresso.onView(ViewMatchers.withId(R.id.btn_register)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.in_name)).check(ViewAssertions.matches(hasNoErrorText()))
+        Espresso.onView(ViewMatchers.withId(R.id.in_name))
+            .check(ViewAssertions.matches(hasNoErrorText()))
     }
 
 
@@ -66,9 +68,9 @@ class RegisterActivityTest {
         setTextToView(validName, etName)
         Espresso.onView(ViewMatchers.withId(R.id.btn_register)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(R.id.in_email))
-            .check(ViewAssertions.matches(hasTextInputLayoutErrorText("Email tidak valid")))
+            .check(ViewAssertions.matches(
+                hasTextInputLayoutErrorText("Email tidak valid")))
     }
-
     @Test
     fun testWithValidEmail(){
         val validName = "Prieyudha Akadita S"
@@ -77,9 +79,12 @@ class RegisterActivityTest {
         val etEmail = mActivityRule.activity?.findViewById<TextInputEditText>(R.id.et_email)!!
         setTextToView(validEmail, etEmail)
         setTextToView(validName, etName)
-        Espresso.onView(ViewMatchers.withId(R.id.btn_register)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.in_name)).check(ViewAssertions.matches(hasNoErrorText()))
-        Espresso.onView(ViewMatchers.withId(R.id.in_email)).check(ViewAssertions.matches(hasNoErrorText()))
+        Espresso.onView(ViewMatchers.withId(R.id.btn_register))
+            .perform(ViewActions.click())
+        Espresso.onView(ViewMatchers.withId(R.id.in_name))
+            .check(ViewAssertions.matches(hasNoErrorText()))
+        Espresso.onView(ViewMatchers.withId(R.id.in_email))
+            .check(ViewAssertions.matches(hasNoErrorText()))
     }
 
 
