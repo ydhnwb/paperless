@@ -94,12 +94,11 @@ class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
         if(sellingViewModel.listenToSellingByMonth().value != null){
             view!!.bar_chart_monthly.setProgressBar(view!!.bar_progress_bar_monthly)
             APIlib.getInstance().setActiveAnyChartView(view!!.bar_chart_monthly)
-
-
             val cartesian: Cartesian = AnyChart.column()
-
             val data: MutableList<DataEntry> = ArrayList()
-            it.forEach { (k, v) -> data.add(ValueDataEntry(k, v)) }
+
+            val temp = it.toSortedMap(reverseOrder())
+            temp.forEach { (k, v) -> data.add(ValueDataEntry(k, v)) }
 
             val column: Column = cartesian.column(data)
 
@@ -133,7 +132,8 @@ class SellingFragment : Fragment(R.layout.fragment_selling_analytic){
             val cartesian: Cartesian = AnyChart.column()
 
             val data: MutableList<DataEntry> = ArrayList()
-            it.forEach { (key, v) -> data.add(ValueDataEntry(key, v)) }
+            val temp = it.toSortedMap(reverseOrder())
+            temp.forEach { (key, v) -> data.add(ValueDataEntry(key, v)) }
 
             val column: Column = cartesian.column(data)
 
