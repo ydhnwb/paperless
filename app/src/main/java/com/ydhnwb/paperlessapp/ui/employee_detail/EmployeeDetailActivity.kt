@@ -48,11 +48,10 @@ class EmployeeDetailActivity : AppCompatActivity() {
     private fun saveChanges(){
         fab.setOnClickListener {
             val storeId = getPassedStoreId()!!
-            val selectedRole = employee_role_spinnner.selectedItemPosition != 0
-            val employeeId = getPassedEmployee()!!.id!!
-            showToast("store is is $storeId with role $selectedRole and employee id is $employeeId")
+            val selectedRole = employee_role_spinnner.selectedItemPosition
+            val userId = getPassedEmployee()!!.user!!.id
             PaperlessUtil.getToken(this@EmployeeDetailActivity)?.let { token ->
-                employeeDetailViewModel.updateRoleEmployee(token, storeId, role = selectedRole, employeeId = employeeId)
+                employeeDetailViewModel.updateRoleEmployee(token, storeId, role = selectedRole, userId = userId!!)
             }
         }
     }

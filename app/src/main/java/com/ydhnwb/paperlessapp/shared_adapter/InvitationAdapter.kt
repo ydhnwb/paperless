@@ -63,6 +63,7 @@ class InvitationAdapter (private var invitations : MutableList<Invitation>, priv
                         }.show()
                     }
                 }else{
+                    invitation_image.load(i.to?.image)
                     if(i.status == null){
                         invitation_title.text = "Anda mengundang ${i.to?.name}"
                         invitation_status.setTextColor(ContextCompat.getColor(context, R.color.colorGrey))

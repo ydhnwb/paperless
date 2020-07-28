@@ -14,18 +14,14 @@ import retrofit2.Callback
 import retrofit2.Response
 
 interface EmployeeContract {
-    fun updateEmployeeRole(token: String, storeId: String, role : Boolean, employeeId: Int, listener: SingleResponse<Employee>)
+    fun updateEmployeeRole(token: String, storeId: String, role : Int, userId: Int, listener: SingleResponse<Employee>)
     fun getEmployees(token: String, storeId: String, listener: ArrayResponse<Employee>)
     fun removeEmployee(token: String, storeId: String, employeeId: String, listener: SingleResponse<Store>)
 }
 
 class EmployeeRepository (private val api: ApiService) : EmployeeContract{
-    override fun updateEmployeeRole(token: String, storeId: String, role: Boolean, employeeId: Int, listener: SingleResponse<Employee>) {
-        println(token)
-        println(storeId)
-        println(role)
-        println(employeeId)
-        api.update_employee_role(token, storeId, role, employeeId.toString()).enqueue(object : Callback<WrappedResponse<Employee>>{
+    override fun updateEmployeeRole(token: String, storeId: String, role: Int, userId: Int, listener: SingleResponse<Employee>) {
+        api.update_employee_role(token, storeId, role, userId).enqueue(object : Callback<WrappedResponse<Employee>>{
             override fun onFailure(call: Call<WrappedResponse<Employee>>, t: Throwable) {
                 println(t.message)
                 listener.onFailure(Error(t.message))

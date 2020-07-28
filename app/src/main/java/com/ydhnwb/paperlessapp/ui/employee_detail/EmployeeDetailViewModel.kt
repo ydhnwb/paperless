@@ -25,9 +25,9 @@ class EmployeeDetailViewModel(private val employeeRepository: EmployeeRepository
         state.value = EmployeeDetailState.Success
     }
 
-    fun updateRoleEmployee(token: String, storeId : String, role : Boolean, employeeId : Int){
+    fun updateRoleEmployee(token: String, storeId : String, role : Int, userId : Int){
         setLoading()
-        employeeRepository.updateEmployeeRole(token, storeId, role, employeeId, object : SingleResponse<Employee>{
+        employeeRepository.updateEmployeeRole(token, storeId, role, userId, object : SingleResponse<Employee>{
             override fun onSuccess(data: Employee?) {
                 hideLoading()
                 data?.let {

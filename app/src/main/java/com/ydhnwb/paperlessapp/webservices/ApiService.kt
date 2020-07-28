@@ -172,7 +172,7 @@ interface ApiService {
     @PUT("v1/own/store/{id}/employee")
     fun update_employee_role(@Header("Authorization") token: String,
                              @Path("id") storeId : String,
-                             @Field("role") role: Boolean,
-                             @Field("employee_id") employeeId : String
+                             @Field("role") role: Int,
+                             @Field("user_id") userId : Int
     ) : Call<WrappedResponse<Employee>>
 }
