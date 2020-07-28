@@ -37,7 +37,8 @@ class CheckoutViewModel (private val orderRepository: OrderRepository) : ViewMod
     }
 
     fun setCustomerTarget(token: String, customer: Customer) {
-        currentCustomer.postValue(customer)
+        //comment
+//        currentCustomer.postValue(customer)
         orderRepository.setCustomerTarget(token, customer, object : SingleResponse<Customer>{
             override fun onSuccess(data: Customer?) {
                 hideLoading()

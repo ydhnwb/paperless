@@ -104,7 +104,15 @@ class CheckoutActivity : AppCompatActivity() {
             val productsToSend : List<ProductSend> = getSelectedProducts()!!.map{ p -> ProductSend(id = p.id!!, price = p.price!!, quantity = p.selectedQuantity!!) }.toList()
             val orderSend = OrderSend(sellByStore = getParentStore().id, products = productsToSend)
             if(checkoutViewModel.listenToCurrentCustomer().value == null){
-                PaperlessUtil.getToken(this)?.let { it1 -> checkoutViewModel.createOrder(it1, orderSend) }
+                AlertDialog.Builder(this).apply {
+                    setMessage(getString(R.string.ask_checkout))
+                    setPositiveButton(getString(R.string.info_create_order)){ dialog, _ ->
+                        dialog.dismiss()
+                        PaperlessUtil.getToken(this@CheckoutActivity)?.let { it1 -> checkoutViewModel.createOrder(it1, orderSend) }
+                    }
+                    setNegativeButton(getString(R.string.info_cancel)){ d, _ -> d.cancel()}
+                }.show()
+
             }else{
                 val customer = checkoutViewModel.listenToCurrentCustomer().value!!
                 if(customer.isStore){
@@ -115,8 +123,7 @@ class CheckoutActivity : AppCompatActivity() {
                             orderSend.boughtByUser = null
                             orderSend.boughtByStore = getAbsoluteId(customer.idCustomer)
                             PaperlessUtil.getToken(this@CheckoutActivity)?.let { it1 ->
-                                checkoutViewModel.createOrder(
-                                    it1, orderSend)
+                                checkoutViewModel.createOrder(it1, orderSend)
                             }
                             dialog.dismiss()
                         }

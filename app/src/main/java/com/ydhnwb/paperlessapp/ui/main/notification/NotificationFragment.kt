@@ -27,6 +27,7 @@ class NotificationFragment : Fragment(R.layout.fragment_notifications), Notifica
      }
 
     private fun handleNotif(notifications: List<Notification>){
+        showOrHideEmptyView(notifications)
         requireView().rv_notification.adapter?.let { adapter ->
             if(adapter is NotificationAdapter){
                 adapter.updateList(notifications)
@@ -52,11 +53,7 @@ class NotificationFragment : Fragment(R.layout.fragment_notifications), Notifica
     private fun setupRecyclerView(){
         requireView().rv_notification.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter =
-                NotificationAdapter(
-                    mutableListOf(),
-                    this@NotificationFragment
-                )
+            adapter = NotificationAdapter(mutableListOf(),this@NotificationFragment)
         }
     }
 
@@ -74,6 +71,14 @@ class NotificationFragment : Fragment(R.layout.fragment_notifications), Notifica
             1 -> startActivity(Intent(requireActivity(), InvitationActivity::class.java))
             2 -> println()
             else -> println()
+        }
+    }
+
+    private fun showOrHideEmptyView(notifications: List<Notification>?){
+        if(notifications.isNullOrEmpty()){
+            requireView().empty_view.visible()
+        }else{
+            requireView().empty_view.gone()
         }
     }
 }

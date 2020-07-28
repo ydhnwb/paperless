@@ -33,6 +33,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:layout_marginStart="8dp"
                 android:gravity="center_vertical"
                 android:layout_weight="0.7"
                 android:orientation="vertical"

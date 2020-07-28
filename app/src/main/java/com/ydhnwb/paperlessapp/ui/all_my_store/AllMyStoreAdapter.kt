@@ -13,9 +13,7 @@ import kotlinx.android.synthetic.main.list_item_store.view.*
 
 class AllMyStoreAdapter(private val stores : MutableList<Store>,private val allMyStoreInterface: AllMyStoreInterface) : RecyclerView.Adapter<AllMyStoreAdapter.ViewHolder>(){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_store, parent, false))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_store_all, parent, false))
 
     fun updateList(sts : List<Store>){
         stores.clear()

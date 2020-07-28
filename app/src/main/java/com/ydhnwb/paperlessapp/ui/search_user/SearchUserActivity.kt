@@ -66,10 +66,11 @@ class SearchUserActivity : AppCompatActivity() {
     }
 
     private fun handleSearchResult(it: List<User>){
-        isEmptyView(it.isEmpty())
-        rv_user.adapter?.let {adapter ->
+        val filtered = it.filter { user -> user.id != getPassedStore()?.owner_id }
+        isEmptyView(filtered.isEmpty())
+        rv_user.adapter?.let { adapter ->
             if(adapter is SearchResultUserAdapter){
-                adapter.updateList(it)
+                adapter.updateList(filtered)
             }
         }
     }

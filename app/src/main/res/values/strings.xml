@@ -273,7 +273,7 @@
     <string name="info_success_download">Invoice berhasil diunduh. Cek folder downloads anda</string>
     <string name="info_success_download_report">Report berhasil diunduh. Cek folder downloads anda</string>
     <string name="btn_download_invoice">Download invoice</string>
-    <string name="title_activity_user_history">Riawayat pembelian</string>
+    <string name="title_activity_user_history">Riwayat pembelian</string>
     <string name="pref_purchasement">Pembelian</string>
     <string name="is_promo">Produk ini sedang promo</string>
     <string name="hint_product_promo_percent">Promo dalam persen</string>
@@ -305,6 +305,7 @@
     <string name="tab_title_performance">Performa</string>
     <string name="title_activity_employee_detail">Detail karyawan</string>
     <string name="owner">Owner</string>
+    <string name="nothing_is_here">Belum ada apapun di sini</string>
     <string-array name="employee_role">
         <item>Kasir</item>
         <item>Staf</item>

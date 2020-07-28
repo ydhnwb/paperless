@@ -12,6 +12,8 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.ui.catalog.CatalogActivity
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.invisible
+import com.ydhnwb.paperlessapp.utilities.extensions.visible
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_explore.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,9 +29,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore){
     }
 
     private fun fetchPromotedProducts() = PaperlessUtil.getToken(requireActivity())?.let {
-        exploreViewModel.fetchPromotedProducts(
-            it
-        )
+        exploreViewModel.fetchPromotedProducts(it)
     }
 
     private fun observe(){
@@ -41,6 +41,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore){
     private fun observeState() = exploreViewModel.listenToUIState().observer(viewLifecycleOwner, Observer { handleCategoryState(it) })
 
     private fun setupRecyclerView(products : HashMap<String, List<Product>>){
+        showHideEmptyView(products.isNullOrEmpty())
         val sectionedAdapter = SectionedRecyclerViewAdapter()
         products.forEach { (key, value) -> sectionedAdapter.addSection(PromoSectionAdapter(key, value, requireActivity())) }
         requireView().rv_promoted_product.apply {
@@ -49,10 +50,12 @@ class ExploreFragment : Fragment(R.layout.fragment_explore){
         }
     }
 
+    private fun showHideEmptyView(isNullOrEmpty: Boolean){
+        if(isNullOrEmpty) requireView().product_promo_root.invisible() else requireView().product_promo_root.visible()
+    }
+
     private fun handlePromotedProducts(it: HashMap<String, List<Product>>?){
-        it?.let {
-            setupRecyclerView(it)
-        }
+        it?.let { setupRecyclerView(it) }
     }
 
     private fun handleCategoryState(it: ExploreState){

@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
             <TextView
                 android:textColor="@color/colorKeepWhite"
                 android:textStyle="bold"
@@ -68,26 +69,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <TextView
-                android:layout_marginTop="16dp"
-                android:textColor="@color/colorBlackSteel"
-                android:textStyle="bold"
-                android:text="@string/in_promo_alt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <ProgressBar
-                android:id="@+id/loading_category"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            <LinearLayout
+                android:id="@+id/product_promo_root"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_promoted_product"
-                android:layout_marginTop="4dp"
-                android:nestedScrollingEnabled="false"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/colorBlackSteel"
+                    android:textStyle="bold"
+                    android:text="@string/in_promo_alt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ProgressBar
+                    android:id="@+id/loading_category"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_promoted_product"
+                    android:layout_marginTop="4dp"
+                    android:nestedScrollingEnabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+         </LinearLayout>
 
     </RelativeLayout>
 

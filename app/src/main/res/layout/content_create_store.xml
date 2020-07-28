@@ -15,7 +15,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/store_image"
-            android:src="@drawable/ic_doodle_advanced"
+            android:src="@drawable/image_placeholder"
             android:scaleType="centerCrop"
             android:layout_width="128dp"
             android:layout_height="128dp"
@@ -65,6 +65,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:maxLines="1"
+                android:digits="0123456789+"
                 android:id="@+id/et_store_phone"
                 android:inputType="phone|numberSigned"
                 android:layout_height="wrap_content"/>

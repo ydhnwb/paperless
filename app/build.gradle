@@ -19,6 +19,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField 'String', 'ENDPOINT', '"https://paperless-project.herokuapp.com/api/"'
+        buildConfigField 'String', 'ENDPOINT_PRODUCTION', '"https://paperless.tugas-akhir.com/api/"'
     }
     buildTypes {
         release {

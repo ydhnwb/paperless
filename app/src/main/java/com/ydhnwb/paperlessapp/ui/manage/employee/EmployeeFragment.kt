@@ -79,7 +79,7 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee), EmployeeInterface
     }
 
     private fun addEmployee(){
-        if(getRole() == 0){
+        if(getRole() != -1){
             requireView().fab.hide()
         }else{
             requireView().fab.show()

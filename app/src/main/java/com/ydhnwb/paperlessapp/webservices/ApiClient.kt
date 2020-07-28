@@ -26,7 +26,7 @@ class ApiClient {
         private fun getClient() : Retrofit {
             return if(retrofit == null){
                 retrofit = Retrofit.Builder().apply {
-                    baseUrl(BuildConfig.ENDPOINT)
+                    baseUrl(BuildConfig.ENDPOINT_PRODUCTION)
                     client(client)
                     addConverterFactory(ScalarsConverterFactory.create())
                     addConverterFactory(GsonConverterFactory.create())

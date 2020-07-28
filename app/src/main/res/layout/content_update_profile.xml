@@ -23,7 +23,7 @@
                 android:layout_height="match_parent"/>
             <de.hdodenhof.circleimageview.CircleImageView
                 app:civ_circle_background_color="@color/colorRed"
-                android:src="@drawable/ic_arrow_back_white_24dp"
+                android:src="@drawable/ic_camera_alt_white_24dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginBottom="@dimen/margin_size_8"
                 android:layout_alignParentBottom="true"
@@ -91,6 +91,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:id="@+id/et_phone"
+                android:digits="0123456789+"
                 android:inputType="textPersonName"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>

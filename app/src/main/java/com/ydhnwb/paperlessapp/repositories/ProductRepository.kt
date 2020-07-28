@@ -27,11 +27,11 @@ interface ProductContract {
 
 class ProductRepository (private val api: ApiService) : ProductContract {
 
-    fun applyPromo(token: String, productId: String, discountValueByPercent : Float, completion: (Boolean, Error?) -> Unit){
+    /*fun applyPromo(token: String, productId: String, discountValueByPercent : Float, completion: (Boolean, Error?) -> Unit){
         api.promo_apply(token, productId, discountValueByPercent).enqueue(object : Callback<WrappedResponse<Product>>{
             override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
                 println(t.message)
-                completion(false, Error(t.message.toString()))
+                completion(false, java.lang.Error(t.message.toString()))
             }
 
             override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
@@ -51,7 +51,7 @@ class ProductRepository (private val api: ApiService) : ProductContract {
                 }
             }
         })
-    }
+    }*/
 
     override fun updateImageProductOnly(token: String, storeId: String, product: Product, listener: SingleResponse<Product>) {
         val file = File(product.image.toString())

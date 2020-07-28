@@ -22,7 +22,8 @@ object NotificationHelper {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(body))
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
 
             val mNotificationMgr = NotificationManagerCompat.from(context)
             mNotificationMgr.notify(1, mBuilder.build())

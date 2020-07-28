@@ -113,10 +113,10 @@ class UserRepository (private val api: ApiService) : UserContract {
                     response.isSuccessful -> {
                         val b = response.body()
                         b?.let {
-                            if(it.status) listener.onSuccess(it.data) else listener.onFailure(Error(it.message))
+                            if(it.status) listener.onSuccess(it.data) else listener.onFailure(Error("Tidak dapat membuat akun"))
                         }
                     }
-                    else -> listener.onFailure(Error(response.message()))
+                    else -> listener.onFailure(Error("Tidak dapat membuat akun"))
                 }
             }
         })
@@ -130,9 +130,9 @@ class UserRepository (private val api: ApiService) : UserContract {
                 when {
                     response.isSuccessful -> {
                         val b = response.body()
-                        if(b!!.status) listener.onSuccess(b.data) else listener.onFailure(Error(b.message))
+                        if(b!!.status) listener.onSuccess(b.data) else listener.onFailure(Error("Tidak dapat masuk. Pastikan email dan kata sandi benar"))
                     }
-                    else -> listener.onFailure(Error(response.message()))
+                    else -> listener.onFailure(Error("Tidak dapat masuk. Pastikan email dan kata sandi benar"))
                 }
             }
         })

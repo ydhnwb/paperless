@@ -14,6 +14,8 @@ import com.ydhnwb.paperlessapp.models.History
 import com.ydhnwb.paperlessapp.models.OrderHistory
 import com.ydhnwb.paperlessapp.ui.detail_order.DetailOrderActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.gone
+import com.ydhnwb.paperlessapp.utilities.extensions.visible
 import kotlinx.android.synthetic.main.fragment_content_history.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,8 +25,7 @@ class ListHistoryFragment : Fragment(R.layout.fragment_content_history), ListHis
         fun instance(isIn : Boolean) : ListHistoryFragment {
             val a = Bundle()
             a.putBoolean("isin", isIn)
-            return ListHistoryFragment()
-                .apply { arguments = a }
+            return ListHistoryFragment().apply { arguments = a }
         }
     }
 
@@ -55,6 +56,11 @@ class ListHistoryFragment : Fragment(R.layout.fragment_content_history), ListHis
                 a.updateList(o, isIn)
             }
         }
+        showOrHideEmptyView(o.isNullOrEmpty())
+    }
+
+    private fun showOrHideEmptyView(isNullOrEmpty: Boolean){
+        if(isNullOrEmpty) requireView().empty_view.visible() else requireView().empty_view.gone()
     }
 
     private fun handleUIState(it: ListHistoryState){
@@ -79,6 +85,4 @@ class ListHistoryFragment : Fragment(R.layout.fragment_content_history), ListHis
             putExtra("is_in", isIn)
         })
     }
-
-
 }
