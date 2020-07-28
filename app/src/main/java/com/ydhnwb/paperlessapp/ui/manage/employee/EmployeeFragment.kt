@@ -13,6 +13,7 @@ import com.ydhnwb.paperlessapp.ui.manage.ManageStoreViewModel
 import com.ydhnwb.paperlessapp.ui.search_user.SearchUserActivity
 import com.ydhnwb.paperlessapp.models.Employee
 import com.ydhnwb.paperlessapp.models.Store
+import com.ydhnwb.paperlessapp.ui.employee_detail.EmployeeDetailActivity
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
 import com.ydhnwb.paperlessapp.utilities.extensions.gone
 import com.ydhnwb.paperlessapp.utilities.extensions.showInfoAlert
@@ -99,7 +100,12 @@ class EmployeeFragment : Fragment(R.layout.fragment_employee), EmployeeInterface
     }
 
     override fun click(employee: Employee) {
-        println()
+        if(getRole() == -1){
+            startActivity(Intent(requireActivity(), EmployeeDetailActivity::class.java).apply {
+                putExtra("employee", employee)
+                putExtra("store_id", parentStoreViewModel.listenToCurrentStore().value!!.id.toString())
+            })
+        }
     }
 
     override fun moreClick(employee: Employee, v: View) {

@@ -156,6 +156,11 @@ class ManageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             user_image.load(it.image)
             user_name.text = it.name
             user_email.text = it.email
+            user_role.text = if(getRole() == -1){ getString(R.string.owner) }else if (getRole() == 0){
+                getString(R.string.cashier)
+            }else{
+                getString(R.string.staff)
+            }
         }
     }
 

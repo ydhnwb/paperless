@@ -36,6 +36,7 @@ class CreateStoreActivity : AppCompatActivity() {
         fillForm()
     }
 
+
     private fun saveChanges(){
         btn_create_store.setOnClickListener {
             store.apply {
@@ -56,7 +57,7 @@ class CreateStoreActivity : AppCompatActivity() {
             if(storeViewModel.validate(store, isUpdate)){
                 if(getPassedStore() != null){
                     PaperlessUtil.getToken(this@CreateStoreActivity)?.let { it1 ->
-                        storeViewModel.updateStore(
+                        storeViewModel.updateStoreV2(
                             it1, store)
                     }
                 }else{
@@ -80,35 +81,41 @@ class CreateStoreActivity : AppCompatActivity() {
         }
     }
 
+    private fun isLoading(b: Boolean){
+        if(b){
+            btn_create_store.isEnabled = false
+            btn_add_image.isEnabled = false
+            loading.visibility = View.VISIBLE
+        }else{
+            loading.visibility = View.GONE
+            btn_create_store.isEnabled = true
+            btn_add_image.isEnabled = true
+        }
+    }
+
+    private fun resetError(){
+        setErrorName(null)
+        setErrorDescription(null)
+        setErrorPhone(null)
+        setErrorEmail(null)
+        setErrorAddress(null)
+    }
+
+    private fun success(isCreate : Boolean){
+        if(isCreate){
+            toast(resources.getString(R.string.info_store_created))
+        }else{
+            toast(resources.getString(R.string.info_success_update_store))
+        }
+        finish()
+    }
+
     private fun handleUIState(it : CreateStoreState){
         when(it){
             is CreateStoreState.ShowToast -> toast(it.message)
-            is CreateStoreState.IsLoading -> {
-                if(it.state){
-                    btn_create_store.isEnabled = false
-                    btn_add_image.isEnabled = false
-                    loading.visibility = View.VISIBLE
-                }else{
-                    loading.visibility = View.GONE
-                    btn_create_store.isEnabled = true
-                    btn_add_image.isEnabled = true
-                }
-            }
-            is CreateStoreState.Reset -> {
-                setErrorName(null)
-                setErrorDescription(null)
-                setErrorPhone(null)
-                setErrorEmail(null)
-                setErrorAddress(null)
-            }
-            is CreateStoreState.Success -> {
-                if(it.isCreate){
-                    toast(resources.getString(R.string.info_store_created))
-                }else{
-                    toast(resources.getString(R.string.info_success_update_store))
-                }
-                finish()
-            }
+            is CreateStoreState.IsLoading -> isLoading(it.state)
+            is CreateStoreState.Reset -> resetError()
+            is CreateStoreState.Success -> success(it.isCreate)
             is CreateStoreState.Validate -> {
                 it.store_logo?.let { e -> toast(e) }
                 it.store_name?.let { e -> setErrorName(e) }

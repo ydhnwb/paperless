@@ -134,6 +134,10 @@ class UpdateProfileActivity : AppCompatActivity() {
             setNameError("Nama tidak boleh kosong")
             return false
         }
+        if(name.length >= 50){
+            setNameError("Nama maksimal lima puluh karakter")
+            return false
+        }
         if(phone.isNotEmpty()){
             if(phone.length < 13 || !phone.startsWith("+628")){
                 setPhoneError("Nomor telepon tidak valid. Gunakan format +628")

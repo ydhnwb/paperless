@@ -32,6 +32,9 @@ class EmployeeAdapter (private val employees: MutableList<Employee>, private val
                 employee_more.setOnClickListener {
                     employeeInterface.moreClick(employee, it)
                 }
+                setOnClickListener {
+                    employeeInterface.click(employee)
+                }
             }
         }
     }

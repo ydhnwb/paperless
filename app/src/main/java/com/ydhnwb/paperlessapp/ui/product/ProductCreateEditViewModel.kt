@@ -50,7 +50,7 @@ class ProductCreateEditViewModel (private val productRepository: ProductReposito
         })
     }
 
-    fun updateProduct(token: String, storeId: String, product : Product, categoryId: Int, withImage: Boolean){
+    /*fun updateProduct(token: String, storeId: String, product : Product, categoryId: Int, withImage: Boolean){
         setLoading()
         if(withImage){
             productRepository.updateProductWithImage(token, storeId, product, categoryId, object : SingleResponse<Product>{
@@ -76,6 +76,43 @@ class ProductCreateEditViewModel (private val productRepository: ProductReposito
             })
         }
 
+    }*/
+
+    private fun updateProductImage(token: String, storeId: String, product: Product){
+        setLoading()
+        productRepository.updateImageProductOnly(token, storeId, product, object : SingleResponse<Product>{
+            override fun onSuccess(data: Product?) {
+                hideLoading()
+                data?.let {
+                    success(false)
+                }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+
+        })
+    }
+
+    fun updateProduct(token: String, storeId: String, product : Product, categoryId: Int, withImage: Boolean){
+        setLoading()
+        productRepository.updateProductOnly(token, storeId, product, categoryId, object : SingleResponse<Product>{
+            override fun onSuccess(data: Product?) {
+                hideLoading()
+                data?.let {
+                    if(withImage){
+                        updateProductImage(token, storeId, product)
+                    }else{
+                        success(false)
+                    }
+                }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
     }
 
     fun deleteProduct(token: String, storeId: String, productId: String){

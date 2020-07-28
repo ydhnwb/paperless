@@ -231,7 +231,7 @@
     <string name="info_successfully_checkout">Pesanan dibuat</string>
     <string name="alert_failed">Gagal saat membuat pesanan.</string>
     <string name="alert_failed_by_code">Kesalahan dari server saat membuat pesanan</string>
-    <string name="menu_transaction">Transaksi</string>
+    <string name="menu_transaction">Riwayat transaksi</string>
     <string name="title_activity_catalog">CatalogActivity</string>
     <string name="info_empty_query">Ketikkan nama produk untuk mulai mencari</string>
     <string name="common_all">SEMUA</string>
@@ -301,7 +301,13 @@
     <string name="product_availibility">Tidak tersedia</string>
     <string name="not_available">Tidak tersedia</string>
     <string name="available">Tersedia</string>
-    <string name="title_activity_all_my_store">AllMyStoreActivity</string>
+    <string name="title_activity_all_my_store">Semua</string>
     <string name="tab_title_performance">Performa</string>
+    <string name="title_activity_employee_detail">Detail karyawan</string>
+    <string name="owner">Owner</string>
+    <string-array name="employee_role">
+        <item>Kasir</item>
+        <item>Staf</item>
+    </string-array>
 
 </resources>

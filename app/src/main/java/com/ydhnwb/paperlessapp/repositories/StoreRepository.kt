@@ -1,5 +1,6 @@
 package com.ydhnwb.paperlessapp.repositories
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.ydhnwb.paperlessapp.models.MyWorkplace
 import com.ydhnwb.paperlessapp.models.Store
@@ -15,6 +16,8 @@ import retrofit2.Response
 import java.io.File
 
 interface StoreContract {
+    fun updateStoreLogo(token: String, store: Store, listener: SingleResponse<Store>)
+    fun updateStoreInfo(token: String, store: Store, listener: SingleResponse<Store>)
     fun downloadReport(token: String,storeId: String, listener: SingleResponse<String>)
     fun fetchStorePage(token: String, storeId : String, listener: SingleResponse<Store>)
     fun storeUpdateWithoutImage(token: String, store: Store, listener: SingleResponse<Store>)
@@ -26,6 +29,50 @@ interface StoreContract {
 }
 
 class StoreRepository (private val api: ApiService) : StoreContract {
+    override fun updateStoreLogo(token: String, store: Store, listener: SingleResponse<Store>) {
+        val file = File(store.store_logo.toString())
+        val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
+        val photo = MultipartBody.Part.createFormData("store_logo", file.name, requestBodyForFile)
+        api.store_update_image(token, store.id.toString(), photo).enqueue(object : Callback<WrappedResponse<Store>>{
+            override fun onFailure(call: Call<WrappedResponse<Store>>, t: Throwable) {
+                println(t.message)
+                listener.onFailure(Error(t.message.toString()))
+            }
+
+            override fun onResponse(call: Call<WrappedResponse<Store>>, response: Response<WrappedResponse<Store>>) {
+                when{
+                    response.isSuccessful -> {
+                        val res = response.body()!!
+                        if(res.status) listener.onSuccess(res.data) else listener.onFailure(Error(res.message))
+                    }
+                    else -> listener.onFailure(Error(response.message()))
+                }
+            }
+        })
+    }
+
+    override fun updateStoreInfo(token: String, store: Store, listener: SingleResponse<Store>) {
+        val gsonBuilder = GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create()
+        val requestBody = gsonBuilder.toJson(store)
+        println(Gson().toJson(store))
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestBody)
+        api.store_update_no_image(token, store.id.toString(), body).enqueue(object : Callback<WrappedResponse<Store>>{
+            override fun onFailure(call: Call<WrappedResponse<Store>>, t: Throwable) {
+                println(t.message)
+                listener.onFailure(Error(t.message.toString()))
+            }
+
+            override fun onResponse(call: Call<WrappedResponse<Store>>, response: Response<WrappedResponse<Store>>) {
+                when{
+                    response.isSuccessful -> {
+                        val res = response.body()!!
+                        if(res.status) listener.onSuccess(res.data) else listener.onFailure(Error(res.message))
+                    }
+                    else -> listener.onFailure(Error(response.message()))
+                }
+            }
+        })
+    }
 
     override fun downloadReport(token: String, storeId: String, listener: SingleResponse<String>) {
         api.download_report(token, storeId).enqueue(object: Callback<WrappedResponse<UrlRes>>{

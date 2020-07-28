@@ -30,6 +30,13 @@ interface ApiService {
     @POST("v1/own/store/{id}")
     fun store_update(@Header("Authorization") token : String, @Path("id") id: String, @PartMap kwargs : HashMap<String, RequestBody>) : Call<WrappedResponse<Store>>
 
+    @PUT("v1/own/store/{id}")
+    fun store_update_no_image(@Header("Authorization") token : String, @Path("id") id: String, @Body body : RequestBody) : Call<WrappedResponse<Store>>
+
+    @Multipart
+    @POST("v1/own/store/{id}/logo/update")
+    fun store_update_image(@Header("Authorization") token : String, @Path("id") id: String, @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
+
     @Multipart
     @POST("v1/own/store/{id}")
     fun store_update(@Header("Authorization") token : String, @Path("id") id: String, @PartMap kwargs : HashMap<String, RequestBody>, @Part store_logo : MultipartBody.Part) : Call<WrappedResponse<Store>>
@@ -61,12 +68,20 @@ interface ApiService {
                        @Part image : MultipartBody.Part
     ) : Call<WrappedResponse<Product>>
 
+    @Multipart
+    @POST("v1/own/store/{id}/product/{productId}/image/update")
+    fun product_update_image_only(
+        @Header("Authorization") token: String,
+        @Path("id") storeId : String,
+        @Path("productId") productId : String,
+        @Part image : MultipartBody.Part
+    ) : Call<WrappedResponse<Product>>
 
     @GET("v1/promo")
     fun get_promoted_product(@Header("Authorization") token : String) : Call<WrappedListResponse<Product>>
 
 
-    @POST("v1/own/store/{id}/product/{productId}")
+    @PUT("v1/own/store/{id}/product/{productId}")
     fun product_update(@Header("Authorization") token: String,
                        @Path("id") storeId : String,
                        @Path("productId") productId : String,
@@ -152,4 +167,12 @@ interface ApiService {
     @Multipart
     @POST("v1/users/image/update")
     fun update_profile_pic(@Header("Authorization") token: String, @Part image : MultipartBody.Part) : Call<WrappedResponse<User>>
+
+    @FormUrlEncoded
+    @PUT("v1/own/store/{id}/employee")
+    fun update_employee_role(@Header("Authorization") token: String,
+                             @Path("id") storeId : String,
+                             @Field("role") role: Boolean,
+                             @Field("employee_id") employeeId : String
+    ) : Call<WrappedResponse<Employee>>
 }

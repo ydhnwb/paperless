@@ -15,6 +15,7 @@ import retrofit2.Response
 import java.io.File
 
 interface ProductContract {
+    fun updateImageProductOnly(token: String, storeId: String, product: Product, listener: SingleResponse<Product>)
     fun getPromotedProducts(token: String, listener: ArrayResponse<Product>)
     fun searchProductCatalog(token: String, q: String, listener: SingleResponse<GeneralProductSearch>)
     fun deleteProduct(token: String, storeId: String, productId : String, listener: SingleResponse<Product>)
@@ -47,6 +48,27 @@ class ProductRepository (private val api: ApiService) : ProductContract {
                         println(response.message())
                         completion(false, Error("Error ${response.message()} with status code ${response.code()}"))
                     }
+                }
+            }
+        })
+    }
+
+    override fun updateImageProductOnly(token: String, storeId: String, product: Product, listener: SingleResponse<Product>) {
+        val file = File(product.image.toString())
+        val requestBodyForFile = RequestBody.create(MediaType.parse("image/*"), file)
+        val image = MultipartBody.Part.createFormData("image", file.name, requestBodyForFile)
+        api.product_update_image_only(token, storeId, product.id.toString(), image).enqueue(object : Callback<WrappedResponse<Product>>{
+            override fun onFailure(call: Call<WrappedResponse<Product>>, t: Throwable) {
+                println(t.message)
+                listener.onFailure(Error(t.message))
+            }
+            override fun onResponse(call: Call<WrappedResponse<Product>>, response: Response<WrappedResponse<Product>>) {
+                when{
+                    response.isSuccessful -> {
+                        val res = response.body()!!
+                        if(res.status) listener.onSuccess(res.data) else listener.onFailure(Error(res.message))
+                    }
+                    else -> listener.onFailure(Error(response.message()))
                 }
             }
         })

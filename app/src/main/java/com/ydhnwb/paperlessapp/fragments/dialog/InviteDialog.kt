@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import coil.api.load
 import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.models.Store
 import com.ydhnwb.paperlessapp.models.User
@@ -43,7 +44,10 @@ class InviteDialog : DialogFragment(){
         }
     }
 
-    private fun fill(user : User){ view!!.user_name.text = user.name }
+    private fun fill(user : User){
+        view!!.user_image.load(user.image)
+        view!!.user_name.text = user.name
+    }
     private fun sendInvitationBehavior(user: User, store: Store){
         requireView().btn_add_cashier.setOnClickListener {
             PaperlessUtil.getToken(requireActivity())?.let { it1 -> invitationViewModel.invite(it1, store.id!!, false, user.id!!) }

@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
+import android.text.Spanned
 import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
@@ -15,6 +17,9 @@ import com.ydhnwb.paperlessapp.R
 import com.ydhnwb.paperlessapp.ui.scanner.ScannerActivity
 import com.ydhnwb.paperlessapp.models.*
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.gone
+import com.ydhnwb.paperlessapp.utilities.extensions.showToast
+import com.ydhnwb.paperlessapp.utilities.extensions.visible
 import kotlinx.android.synthetic.main.activity_checkout.*
 import kotlinx.android.synthetic.main.content_checkout.*
 import kotlinx.android.synthetic.main.content_checkout.customer_desc
@@ -23,40 +28,46 @@ import kotlinx.android.synthetic.main.list_item_customer.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : AppCompatActivity() {
-    companion object {
-        private const val RES_CODE = 12
-    }
     private val checkoutViewModel : CheckoutViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checkout)
         setSupportActionBar(toolbar)
-        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
-        toolbar.setNavigationOnClickListener { finish() }
+        setupToolbar()
         listenerDiscount()
         behaviorDiscount()
         watcherDiscount()
-        checkoutViewModel.listenToUIState().observer(this, Observer { handleUIState(it) })
-        checkoutViewModel.listenToDiscountValue().observe(this, Observer { handleDiscountValue(it) })
-        checkoutViewModel.listenToSelectedProduct().observe(this, Observer { calculateTotalPrice() })
-        checkoutViewModel.listenToCurrentCustomer().observe(this, Observer { handleCustomerChange(it) })
+        observe()
         fill()
         confirmOrder()
         selectCustomer()
         customerViewBehavior()
     }
 
+    private fun setupToolbar(){
+        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
+        toolbar.setNavigationOnClickListener { finish() }
+    }
 
+    private fun observe(){
+        observeState()
+        observeDiscountValue()
+        observeSelectedProduct()
+        observeCurrentCustomer()
+    }
+
+    private fun observeState() = checkoutViewModel.listenToUIState().observer(this, Observer { handleUIState(it) })
+    private fun observeDiscountValue() = checkoutViewModel.listenToDiscountValue().observe(this, Observer { handleDiscountValue(it) })
+    private fun observeSelectedProduct() = checkoutViewModel.listenToSelectedProduct().observe(this, Observer { calculateTotalPrice() })
+    private fun observeCurrentCustomer() = checkoutViewModel.listenToCurrentCustomer().observe(this, Observer { handleCustomerChange(it) })
     private fun fill() = getSelectedProducts()?.let { checkoutViewModel.setSelectedProducts(it) }
 
     private fun listenerDiscount(){
         checkout_switch_discount.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked){
-                checkout_layout_discount.visibility = View.VISIBLE
-            }else{
+            if(isChecked)checkout_layout_discount.visible() else {
                 et_discount.text?.clear()
-                checkout_layout_discount.visibility = View.GONE
+                checkout_layout_discount.gone()
             }
         }
     }
@@ -64,6 +75,17 @@ class CheckoutActivity : AppCompatActivity() {
     private fun behaviorDiscount() = checkout_btn_discount.setOnClickListener { checkout_switch_discount.isChecked = !checkout_switch_discount.isChecked }
 
     private fun watcherDiscount(){
+        et_discount.filters = arrayOf(object : InputFilter {
+            override fun filter(source: CharSequence?, start: Int, end: Int, dest: Spanned?, dstart: Int, dend: Int): CharSequence {
+                source?.let { s ->
+                    if(s == ""){ return s }
+                    if(s.toString().matches("[0-9]+".toRegex())){ return s }
+                    return ""
+                }
+                return ""
+            }
+        })
+
         et_discount.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (checkout_switch_discount.isChecked){
@@ -136,31 +158,35 @@ class CheckoutActivity : AppCompatActivity() {
         }
     }
 
+    private fun resetDiscount(){
+        if (checkout_switch_discount.isChecked){
+            et_discount.text?.clear()
+        }
+    }
+
+    private fun successCheckout(){
+        toast(resources.getString(R.string.info_successfully_checkout))
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
+
+    private fun isLoading(b: Boolean){
+        if(b){
+            loading.visible()
+            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        }else{
+            loading.gone()
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        }
+    }
+
     private fun handleUIState(it: CheckoutState){
         when(it){
-            is CheckoutState.ShowToast -> toast(it.message)
-            is CheckoutState.ResetDiscount -> {
-                if (checkout_switch_discount.isChecked){
-                    et_discount.text?.clear()
-                }
-            }
-            is CheckoutState.Success -> {
-                toast(resources.getString(R.string.info_successfully_checkout))
-                setResult(Activity.RESULT_OK)
-                finish()
-            }
-            is CheckoutState.ShowAlert -> {
-                showAlert(it.message)
-            }
-            is CheckoutState.IsLoading -> {
-                if(it.state){
-                    loading.visibility = View.VISIBLE
-                    window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                }else{
-                    loading.visibility = View.GONE
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                }
-            }
+            is CheckoutState.ShowToast -> showToast(it.message)
+            is CheckoutState.ResetDiscount -> resetDiscount()
+            is CheckoutState.Success -> successCheckout()
+            is CheckoutState.ShowAlert -> showAlert(it.message)
+            is CheckoutState.IsLoading -> isLoading(it.state)
         }
     }
 
@@ -181,9 +207,7 @@ class CheckoutActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkCustomerTarget(code : String, isStore: Boolean){
-        PaperlessUtil.getToken(this@CheckoutActivity)?.let { checkoutViewModel.setCustomerTarget(it, Customer(code, isStore)) }
-    }
+    private fun checkCustomerTarget(code : String, isStore: Boolean) = PaperlessUtil.getToken(this@CheckoutActivity)?.let { checkoutViewModel.setCustomerTarget(it, Customer(code, isStore)) }
 
     private fun customerViewBehavior(){
         customer_delete.setOnClickListener { checkoutViewModel.deleteCustomer() }

@@ -20,8 +20,12 @@ class RegisterViewModel (private val userRepository: UserRepository, private val
 
     fun validate(name : String, email: String, password: String, confirmPassword : String) : Boolean{
         resetState()
-        if(name.isEmpty() || name.length < 5){
-            state.value = RegisterState.Validate(name = "Nama setidaknya lima karakter")
+        if(name.isEmpty()){
+            state.value = RegisterState.Validate(name = "Nama tidak boleh kosong")
+            return false
+        }
+        if (name.length >= 50){
+            state.value = RegisterState.Validate(name = "Nama maksimal lima puluh karakter")
             return false
         }
         if (email.isEmpty() || !PaperlessUtil.isValidEmail(email)){
@@ -33,7 +37,7 @@ class RegisterViewModel (private val userRepository: UserRepository, private val
             return false
         }
         if (confirmPassword.isEmpty()){
-            state.value = RegisterState.ShowToast("Isi semua form terlebih dahulu")
+            state.value = RegisterState.Validate(confirmPassword = "Ketik ulang password anda")
             return false
         }
         if(!confirmPassword.equals(password)){

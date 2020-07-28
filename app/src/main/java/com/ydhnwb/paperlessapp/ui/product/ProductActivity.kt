@@ -72,7 +72,6 @@ class ProductActivity : AppCompatActivity() {
         }else{
             et_product_promo.text?.clear()
         }
-
     }
 
     private fun isLoading(b: Boolean){

@@ -19,27 +19,31 @@ class CreateStoreViewModel (private val storeRepository: StoreRepository) : View
 
     fun validate(store : Store, isUpdate : Boolean) : Boolean {
         state.value = CreateStoreState.Reset
+        if(store.name.isNullOrEmpty()){
+            state.value = CreateStoreState.Validate(store_name = "Nama toko tidak boleh kosong")
+            return false
+        }
+        if(store.description.isNullOrEmpty()){
+            state.value = CreateStoreState.Validate(store_desc = "Deskripsi toko tidak boleh kosong")
+            return false
+        }
+        if(store.phone.isNullOrEmpty() || store.phone.toString().length < 13 || !store.phone.toString().startsWith("+62")){
+            state.value = CreateStoreState.Validate(store_phone = "Nomor telepon tidak valid")
+            return false
+        }
+        if(!PaperlessUtil.isValidEmail(store.email.toString())){
+            state.value = CreateStoreState.Validate(store_email = "Email tidak valid")
+            return false
+        }
+        if(store.address.isNullOrEmpty()){
+            state.value = CreateStoreState.Validate(store_address = "Alamat toko tidak boleh kosong")
+            return false
+        }
         if(store.store_logo.isNullOrEmpty()) {
             if(!isUpdate){
                 state.value = CreateStoreState.Validate(store_logo = "Belum ada gambar toko yang dipilih. Anda wajib memberikan satu gambar untuk toko")
                 return false
             }
-        }
-        if(store.name.isNullOrEmpty()){
-            state.value = CreateStoreState.Validate(store_name = "Nama toko tidak boleh kosong")
-            return false
-        }else if(store.description.isNullOrEmpty()){
-            state.value = CreateStoreState.Validate(store_desc = "Deskripsi toko tidak boleh kosong")
-            return false
-        }else if(store.phone.isNullOrEmpty() || store.phone.toString().length < 13 || !store.phone.toString().startsWith("+62")){
-            state.value = CreateStoreState.Validate(store_phone = "Nomor telepon tidak valid")
-            return false
-        }else if(!PaperlessUtil.isValidEmail(store.email.toString())){
-            state.value = CreateStoreState.Validate(store_email = "Email tidak valid")
-            return false
-        }else if(store.address.isNullOrEmpty()){
-            state.value = CreateStoreState.Validate(store_address = "Alamat toko tidak boleh kosong")
-            return false
         }
         return true
     }
@@ -50,6 +54,40 @@ class CreateStoreViewModel (private val storeRepository: StoreRepository) : View
             override fun onSuccess(data: Store?) {
                 hideLoading()
                 data?.let { success(true) }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { toast(it) }
+            }
+        })
+    }
+
+    private fun updateStoreLogo(token: String, store: Store){
+        setLoading()
+        storeRepository.updateStoreLogo(token, store, object : SingleResponse<Store>{
+            override fun onSuccess(data: Store?) {
+                hideLoading()
+                data?.let { success(false) }
+            }
+            override fun onFailure(err: Error) {
+                hideLoading()
+                err.message?.let { m -> toast(m) }
+            }
+        })
+    }
+
+    fun updateStoreV2(token: String, store: Store){
+        setLoading()
+        storeRepository.updateStoreInfo(token, store, object : SingleResponse<Store>{
+            override fun onSuccess(data: Store?) {
+                hideLoading()
+                data?.let {
+                    if(store.store_logo != null){
+                        updateStoreLogo(token, store)
+                    }else{
+                        success(false)
+                    }
+                }
             }
             override fun onFailure(err: Error) {
                 hideLoading()

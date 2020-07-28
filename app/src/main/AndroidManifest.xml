@@ -21,9 +21,13 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".ui.employee_detail.EmployeeDetailActivity"
+            android:label="@string/title_activity_employee_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".ui.all_my_store.AllMyStoreActivity"
             android:label="@string/title_activity_all_my_store"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.update_profile.UpdateProfileActivity"
             android:label="@string/title_activity_update_profile"
