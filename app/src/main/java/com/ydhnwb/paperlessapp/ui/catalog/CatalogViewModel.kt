@@ -9,7 +9,7 @@ import com.ydhnwb.paperlessapp.utilities.SingleLiveEvent
 import com.ydhnwb.paperlessapp.utilities.SingleResponse
 
 class CatalogViewModel (private val productRepository: ProductRepository) : ViewModel() {
-    private val products = MutableLiveData<List<Product>>()
+    private val products = MutableLiveData<List<Product>>(mutableListOf())
     private val state : SingleLiveEvent<CatalogState> = SingleLiveEvent()
 
     private fun setLoading(){ state.value = CatalogState.IsLoading(true) }
@@ -26,7 +26,11 @@ class CatalogViewModel (private val productRepository: ProductRepository) : View
             override fun onSuccess(data: GeneralProductSearch?) {
                 hideLoading()
                 data?.let {
-                    products.postValue(it.allProducts)
+                    it.allProducts?.let {  x ->
+                        products.postValue(x)
+                    } ?: kotlin.run {
+                        products.postValue(mutableListOf())
+                    }
                 }
             }
         })

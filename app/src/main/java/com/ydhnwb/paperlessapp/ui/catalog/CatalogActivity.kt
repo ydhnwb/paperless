@@ -11,6 +11,8 @@ import com.ydhnwb.paperlessapp.ui.manage.etalase.CatalogFragment
 import com.ydhnwb.paperlessapp.models.Product
 import com.ydhnwb.paperlessapp.utilities.CustomFragmentPagerAdapter
 import com.ydhnwb.paperlessapp.utilities.PaperlessUtil
+import com.ydhnwb.paperlessapp.utilities.extensions.gone
+import com.ydhnwb.paperlessapp.utilities.extensions.visible
 import kotlinx.android.synthetic.main.activity_catalog.*
 import kotlinx.android.synthetic.main.content_catalog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,8 +45,7 @@ class CatalogActivity : AppCompatActivity() {
             override fun onSearchConfirmed(text: CharSequence?) {
                 if(text != null && text.isNotEmpty()){
                     PaperlessUtil.getToken(this@CatalogActivity)?.let {
-                        catalogViewModel.searchCatalog(
-                            it, text.toString())
+                        catalogViewModel.searchCatalog(it, text.toString())
                     }
                 }
             }
@@ -65,16 +66,21 @@ class CatalogActivity : AppCompatActivity() {
     }
 
     private fun handleCatalogProduct(it: List<Product>){
-        it.isNotEmpty().run {
-            val categories = it.map { product -> product.category!! }.distinctBy { category -> category.name }
-            val fragmentAdapter = CustomFragmentPagerAdapter(supportFragmentManager)
-            if(catalogViewModel.listenToCatalogs().value != null && it.isNotEmpty()){
-                fragmentAdapter.addFragment(CatalogFragment(), resources.getString(R.string.common_all))
-            }
-            for (c in categories){ fragmentAdapter.addFragment(CatalogFragment.instance(c), c.name!!.toUpperCase(Locale.getDefault())) }
-            viewpager.adapter = fragmentAdapter
-            tabs.setupWithViewPager(viewpager)
+        viewpager.removeAllViews()
+        tabs.removeAllTabs()
+        showHideEmptyView(it.isEmpty())
+        val categories = it.map { product -> product.category!! }.distinctBy { category -> category.name }
+        val fragmentAdapter = CustomFragmentPagerAdapter(supportFragmentManager)
+        if(catalogViewModel.listenToCatalogs().value != null && it.isNotEmpty()){
+            fragmentAdapter.addFragment(CatalogFragment(), resources.getString(R.string.common_all))
         }
+        for (c in categories){ fragmentAdapter.addFragment(CatalogFragment.instance(c), c.name!!.toUpperCase(Locale.getDefault())) }
+        viewpager.adapter = fragmentAdapter
+        tabs.setupWithViewPager(viewpager)
+    }
+
+    private fun showHideEmptyView(isEmpty: Boolean){
+        if(isEmpty) empty_view.visible() else empty_view.gone()
     }
 
     private fun fetchFirst(){
